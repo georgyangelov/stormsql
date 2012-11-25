@@ -3,7 +3,7 @@
 
 namespace StormSQL
 {
-	int Field::GetByteSize() const
+	unsigned int Field::GetByteSize() const
 	{
 		switch (type)
 		{

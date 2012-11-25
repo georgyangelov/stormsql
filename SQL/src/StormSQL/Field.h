@@ -25,7 +25,7 @@ namespace StormSQL
 
 		unsigned int size;
 
-		int GetByteSize() const;
+		unsigned int GetByteSize() const;
 
 		void WriteToStream(ostream&) const;
 		void ReadFromStream(istream&);

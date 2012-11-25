@@ -17,6 +17,7 @@ namespace StormSQL
 			byte* ptr = new byte[obj.buffers[i].first * elementSize];
 
 			// Copy the data
+			// Equivalent to memcpy(ptr, obj.buffers[i].second, obj.buffers[i].first * elementSize);
 			copy(obj.buffers[i].second, obj.buffers[i].second + obj.buffers[i].first * elementSize, ptr);
 
 			buffers.push_back(pair<int, byte*>(obj.buffers[i].first, ptr));
