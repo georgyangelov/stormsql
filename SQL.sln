@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQL", "SQL\SQL.vcxproj", "{54E9CE6A-9BD4-46D8-A89C-7A9300A8712B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTests", "UnitTests\UnitTests.vcxproj", "{C29CF4D5-BFA0-4E4C-A9E5-BB5DBC1C257C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SQLConsole", "SQLConsole\SQLConsole.vcxproj", "{8CB1E2AA-19A2-49B4-BC68-D3465255D94C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{54E9CE6A-9BD4-46D8-A89C-7A9300A8712B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{54E9CE6A-9BD4-46D8-A89C-7A9300A8712B}.Debug|Win32.Build.0 = Debug|Win32
+		{54E9CE6A-9BD4-46D8-A89C-7A9300A8712B}.Release|Win32.ActiveCfg = Release|Win32
+		{54E9CE6A-9BD4-46D8-A89C-7A9300A8712B}.Release|Win32.Build.0 = Release|Win32
+		{C29CF4D5-BFA0-4E4C-A9E5-BB5DBC1C257C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C29CF4D5-BFA0-4E4C-A9E5-BB5DBC1C257C}.Debug|Win32.Build.0 = Debug|Win32
+		{C29CF4D5-BFA0-4E4C-A9E5-BB5DBC1C257C}.Release|Win32.ActiveCfg = Release|Win32
+		{C29CF4D5-BFA0-4E4C-A9E5-BB5DBC1C257C}.Release|Win32.Build.0 = Release|Win32
+		{8CB1E2AA-19A2-49B4-BC68-D3465255D94C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8CB1E2AA-19A2-49B4-BC68-D3465255D94C}.Debug|Win32.Build.0 = Debug|Win32
+		{8CB1E2AA-19A2-49B4-BC68-D3465255D94C}.Release|Win32.ActiveCfg = Release|Win32
+		{8CB1E2AA-19A2-49B4-BC68-D3465255D94C}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

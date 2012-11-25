@@ -1,4 +1,6 @@
-stormsql
+StormSQL
 ========
 
-Simple SQL server in C++
+SQL server in C++
+
+Visual Studio 2012 project
