@@ -15,7 +15,7 @@ namespace StormSQL
 	class Table
 	{
 	protected:
-		char name[STORM_SQL_TABLE_NAME_SIZE];
+		//char name[STORM_SQL_TABLE_NAME_SIZE];
 		vector<Field> columns;
 
 		DynamicBuffer* data;

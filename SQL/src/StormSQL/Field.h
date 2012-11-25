@@ -23,7 +23,7 @@ namespace StormSQL
 		char name[STORM_SQL_FIELD_NAME_SIZE];
 		FieldType type;
 
-		char size;
+		unsigned int size;
 
 		int GetByteSize() const;
 

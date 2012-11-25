@@ -59,6 +59,22 @@ namespace UnitTests
 			Assert::IsTrue(schema2.HasField(f2.name));
 			Assert::IsTrue(schema2.GetNumFields() == 2);
 		}
+		
+		TEST_METHOD(CopyConstructorTest)
+		{
+			Field f1 = { "test", Field::FieldType::int32, 10 };
+			Field f2 = { "test 2 ", Field::FieldType::fixedchar, 15 };
+
+			Table schema;
+			schema.AddField(f1);
+			schema.AddField(f2);
+
+			Table schema2(schema);
+			
+			Assert::IsTrue(schema2.HasField(f1.name));
+			Assert::IsTrue(schema2.HasField(f2.name));
+			Assert::AreEqual(schema2.GetNumFields(), 2);
+		}
 
 	};
 }

@@ -11,10 +11,14 @@ namespace StormSQL
 	}
 
 	Table::Table(const Table& obj)
-		: rows(obj.rows), tableRowSize(obj.tableRowSize)
+		: rows(obj.rows), tableRowSize(obj.tableRowSize), columns(obj.columns)
 	{
+		//strcpy(name, obj.name);
+
 		if (obj.data)
 			data = new DynamicBuffer(*obj.data);
+		else
+			data = NULL;
 	}
 
 	Table::~Table()
