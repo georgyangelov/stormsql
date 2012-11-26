@@ -65,5 +65,8 @@
     <ClInclude Include="src\Queries\Insert.h">
       <Filter>Header Files\StormSQL\Queries</Filter>
     </ClInclude>
+    <ClInclude Include="src\StormSQL\Predicates.h">
+      <Filter>Header Files\StormSQL</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

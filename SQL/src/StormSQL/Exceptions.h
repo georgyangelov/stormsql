@@ -48,6 +48,16 @@ namespace StormSQL
 		}
 	};
 
+	class ColumnIndexOutOfBounds
+		: public Exception
+	{
+	public:
+		ColumnIndexOutOfBounds()
+			: Exception("Column index specified is out of bounds of the table")
+		{
+		}
+	};
+
 	class InvalidFieldType
 		: public Exception
 	{

@@ -75,7 +75,7 @@ namespace StormSQL
 		columns.push_back(field);
 
 		//TODO: Modify data
-		//createDataBuffer();
+		createDataBuffer();
 	}
 
 	void Table::RemoveField(const char* name)
@@ -87,7 +87,7 @@ namespace StormSQL
 		columns.erase(columns.begin() + index);
 
 		//TODO: Modify data
-		//createDataBuffer();
+		createDataBuffer();
 	}
 
 	void Table::AlterField(const char* name, const Field& field)
@@ -99,7 +99,7 @@ namespace StormSQL
 		columns[index] = field;
 
 		//TODO: Modify data
-		//createDataBuffer();
+		createDataBuffer();
 	}
 
 
@@ -155,5 +155,10 @@ namespace StormSQL
 
 		// Read table data array
 		in.read((char*)data, rows * tableRowSize);
+	}
+
+	TableDataIterator<TruePredicate> Table::GetIterator()
+	{
+		return TableDataIterator<TruePredicate>(this, TruePredicate());
 	}
 }

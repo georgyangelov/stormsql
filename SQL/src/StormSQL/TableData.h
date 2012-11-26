@@ -4,7 +4,6 @@
 #include "Defines.h"
 #include <vector>
 #include "Field.h"
-#include "Table.h"
 #include <istream>
 #include <ostream>
 
@@ -12,14 +11,17 @@ using namespace std;
 
 namespace StormSQL
 {
+	// Forward declarations
+	class Table;
+
 	class TableDataRow
 	{
 	protected:
-		byte* const ptr;
+		byte* ptr;
 		vector<Field> columns;
 
 	public:
-		TableDataRow(byte* const _ptr, const vector<Field>& _columns);
+		TableDataRow(byte* _ptr, const vector<Field>& _columns);
 		
 		Field::FieldType GetType(int columnIndex) const;
 
@@ -31,31 +33,81 @@ namespace StormSQL
 		string GetString(int columnIndex) const;
 	};
 
-	class ITableDataPredicate
-	{
-	public:
-		virtual bool operator () (const Table*, TableDataRow&) = 0;
-	};
-
+	template <class TPredicate>
 	class TableDataIterator
 	{
 	protected:
-		Table* const table;
-		ITableDataPredicate* const predicate;
+		bool started;
+		Table* table;
+		TPredicate predicate;
 		
 		rowIndexType rowIndex;
 
-		bool TestCurrentRow() const;
+		bool TestCurrentRow() const
+		{
+			TableDataRow row = GetFullDataRow();
 
+			return predicate(table, row);
+		}
+		
+		TableDataIterator(Table* _table, const TPredicate& _predicate)
+			: table(_table), predicate(_predicate)
+		{
+			started = false;
+			rowIndex = -1;
+		}
+
+		friend class Table;
 	public:
-		TableDataIterator(Table* const, ITableDataPredicate* const);
 
 		// Get data
-		TableDataRow GetFullDataRow() const;
+		TableDataRow GetFullDataRow() const
+		{
+			return TableDataRow(table->data->GetElementPtr(rowIndex), table->columns);
+		}
 
 		// Move pointer
-		bool NextRow();
-		bool PrevRow();
+		bool NextRow()
+		{
+			rowIndexType i;
+			if (!started)
+			{
+				i = 0;
+				started = true;
+			}
+			else
+			{
+				i = rowIndex + 1;
+			}
+
+			while (!TestCurrentRow())
+			{
+				if (i >= table->rows)
+					return false;
+
+				i++;
+			}
+
+			rowIndex = i;
+		
+			return true;
+		}
+
+		bool PrevRow()
+		{
+			rowIndexType i = rowIndex - 1;
+			while (!TestCurrentRow())
+			{
+				if (i < 0)
+					return false;
+
+				i--;
+			}
+
+			rowIndex = i;
+
+			return true;
+		}
 	};
 
 }

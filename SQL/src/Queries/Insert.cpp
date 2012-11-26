@@ -37,6 +37,9 @@ namespace StormSQL
 
 		byte* Insert::getPtr(int column) const
 		{
+			if (column >= table->columns.size())
+				throw ColumnIndexOutOfBounds();
+
 			byte* res = buffer;
 
 			for (int i = 0; i < column; i++)

@@ -1,10 +1,11 @@
 #include "TableData.h"
 #include "Exceptions.h"
+#include "Table.h"
 
 namespace StormSQL
 {
 	/* TableDataRow */
-	TableDataRow::TableDataRow(byte* const _ptr, const vector<Field>& _columns)
+	TableDataRow::TableDataRow(byte* _ptr, const vector<Field>& _columns)
 		: ptr(_ptr), columns(_columns)
 	{
 	}
@@ -56,56 +57,4 @@ namespace StormSQL
 		return (char*)GetPtr(index);
 	}
 	/* END TableDataRow */
-
-	/* TableDataIterator */
-	TableDataIterator::TableDataIterator(Table* const _data, ITableDataPredicate* const _predicate)
-		: table(_data), predicate(_predicate)
-	{
-		rowIndex = 0;
-	}
-
-	bool TableDataIterator::TestCurrentRow() const
-	{
-		TableDataRow row = GetFullDataRow();
-
-		return (*predicate)(table, row);
-	}
-
-	TableDataRow TableDataIterator::GetFullDataRow() const
-	{
-		return TableDataRow(table->data->GetElementPtr(rowIndex), table->columns);
-	}
-
-	bool TableDataIterator::NextRow()
-	{
-		rowIndexType i = rowIndex + 1;
-		while (!TestCurrentRow())
-		{
-			if (i >= table->rows)
-				return false;
-
-			i++;
-		}
-
-		rowIndex = i;
-		
-		return true;
-	}
-
-	bool TableDataIterator::PrevRow()
-	{
-		rowIndexType i = rowIndex - 1;
-		while (!TestCurrentRow())
-		{
-			if (i < 0)
-				return false;
-
-			i--;
-		}
-
-		rowIndex = i;
-
-		return true;
-	}
-	/* END TableDataIterator */
 }

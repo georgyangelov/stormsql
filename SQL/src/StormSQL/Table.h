@@ -7,6 +7,8 @@
 #include <istream>
 #include <ostream>
 #include "DynamicBuffer.h"
+#include "TableData.h"
+#include "Predicates.h"
 
 using namespace std;
 
@@ -32,6 +34,7 @@ namespace StormSQL
 		void createDataBuffer();
 		
 		// Iterator
+		template <class TPredicate>
 		friend class TableDataIterator;
 
 		// Queries
@@ -56,6 +59,15 @@ namespace StormSQL
 		// Store/Load
 		void ReadFromStream(istream& in);
 		void WriteToStream(ostream& out) const;
+
+		// Construct iterator
+		template <class TPredicate>
+		TableDataIterator<TPredicate> GetIterator(const TPredicate& predicate)
+		{
+			return TableDataIterator<TPredicate>(this, predicate);
+		}
+
+		TableDataIterator<TruePredicate> GetIterator();
 	};
 
 }
