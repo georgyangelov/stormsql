@@ -57,6 +57,36 @@ namespace StormSQL
 		{
 		}
 	};
+
+	class FieldDataTooLarge
+		: public Exception
+	{
+	public:
+		FieldDataTooLarge()
+			: Exception("The data is too large to fit in this field type")
+		{
+		}
+	};
+
+	class NotAllColumnsSet
+		: public Exception
+	{
+	public:
+		NotAllColumnsSet()
+			: Exception("Not all columns have set values")
+		{
+		}
+	};
+
+	class RowAlreadyInserted
+		: public Exception
+	{
+	public:
+		RowAlreadyInserted()
+			: Exception("This row is already inserted")
+		{
+		}
+	};
 }
 #endif
 

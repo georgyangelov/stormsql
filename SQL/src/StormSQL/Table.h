@@ -12,6 +12,12 @@ using namespace std;
 
 namespace StormSQL
 {
+	// Forward declarations
+	namespace Queries
+	{
+		class Insert;
+	}
+
 	class Table
 	{
 	protected:
@@ -25,7 +31,11 @@ namespace StormSQL
 
 		void createDataBuffer();
 		
+		// Iterator
 		friend class TableDataIterator;
+
+		// Queries
+		friend class Queries::Insert;
 	public:
 		Table();
 		Table(const Table&);

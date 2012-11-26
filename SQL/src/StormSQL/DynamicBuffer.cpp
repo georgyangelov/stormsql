@@ -27,7 +27,7 @@ namespace StormSQL
 	void DynamicBuffer::del()
 	{
 		for (unsigned int i = 0; i < buffers.size(); i++)
-			delete buffers[i].second;
+			delete [] buffers[i].second;
 	}
 
 	DynamicBuffer::~DynamicBuffer()

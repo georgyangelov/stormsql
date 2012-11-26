@@ -19,6 +19,12 @@
     <Filter Include="Source Files\StormSQL">
       <UniqueIdentifier>{803a4c37-8bb0-4c1f-b13a-c630f20a5fb0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\StormSQL\Queries">
+      <UniqueIdentifier>{cfa8593d-6336-4c2e-b8de-0d40149401be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\StormSQL\Queries">
+      <UniqueIdentifier>{00cbc100-1dcd-4213-b0fa-b2701c9e5dcc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\StormSQL\Field.cpp">
@@ -32,6 +38,9 @@
     </ClCompile>
     <ClCompile Include="src\StormSQL\DynamicBuffer.cpp">
       <Filter>Source Files\StormSQL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Queries\Insert.cpp">
+      <Filter>Source Files\StormSQL\Queries</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +61,9 @@
     </ClInclude>
     <ClInclude Include="src\StormSQL\DynamicBuffer.h">
       <Filter>Header Files\StormSQL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Queries\Insert.h">
+      <Filter>Header Files\StormSQL\Queries</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
