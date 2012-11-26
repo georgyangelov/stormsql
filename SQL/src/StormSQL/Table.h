@@ -53,6 +53,7 @@ namespace StormSQL
 
 		// Alter
 		void AddField(const Field&);
+		void AddField(int, const Field&);
 		void RemoveField(const char*);
 		void AlterField(const char*, const Field&);
 

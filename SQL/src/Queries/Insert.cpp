@@ -102,7 +102,7 @@ namespace StormSQL
 			return true;
 		}
 
-		void Insert::Commit()
+		void Insert::Commit(bool resetAfter)
 		{
 			if (!AllColumnsSet())
 				throw NotAllColumnsSet();
@@ -116,6 +116,18 @@ namespace StormSQL
 			table->rows++;
 
 			inserted = true;
+
+			if (resetAfter)
+				Reset();
+		}
+
+		void Insert::Reset()
+		{
+			inserted = false;
+			for (int i = 0; i < table->columns.size(); i++)
+			{
+				valuesSet[i] = false;
+			}
 		}
 	}
 }

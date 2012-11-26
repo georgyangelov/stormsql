@@ -1,5 +1,6 @@
 #include "Table.h"
 #include "Exceptions.h"
+#include "../Queries/Insert.h"
 
 namespace StormSQL
 {
@@ -69,13 +70,57 @@ namespace StormSQL
 
 	void Table::AddField(const Field& field)
 	{
+		AddField(columns.size(), field);
+	}
+
+	void Table::AddField(int index, const Field& field)
+	{
 		if (HasField(field.name))
 			throw FieldExists();
 
-		columns.push_back(field);
+		Table old(*this);
 
-		//TODO: Modify data
+		//columns.push_back(field);
+		columns.insert(columns.begin() + index, field);
 		createDataBuffer();
+
+		// Copy data
+		data->Expand(old.rows);
+		
+		// Calculate first part size
+		unsigned int firstSize = 0;
+		for (int i = 0; i < index; i++)
+		{
+			firstSize += columns[i].GetByteSize();
+		}
+
+		// Calculate second part size
+		unsigned int secondSize = 0;
+		for (int i = index + 1; i < columns.size(); i++)
+		{
+			secondSize += columns[i].GetByteSize();
+		}
+
+		int newColumnSize = columns[index].GetByteSize();
+
+		// Copy data
+		for (int i = 0; i < rows; i++)
+		{
+			byte* newPtr = data->GetElementPtr(i);
+			byte* oldPtr = old.data->GetElementPtr(i);
+
+			// Copy first part
+			copy(oldPtr, oldPtr + firstSize, newPtr);
+
+			// Set new column data to 0
+			for (int j = 0; j < newColumnSize; j++)
+			{
+				*(newPtr + firstSize + j) = 0;
+			}
+
+			// Copy second part
+			copy(oldPtr + firstSize, oldPtr + firstSize + secondSize, newPtr + firstSize + newColumnSize);
+		}
 	}
 
 	void Table::RemoveField(const char* name)

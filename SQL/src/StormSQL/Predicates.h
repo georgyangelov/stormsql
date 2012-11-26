@@ -1,8 +1,6 @@
 #ifndef _H_PREDICATES_INCLUDED
 #define _H_PREDICATES_INCLUDED
 
-#include "Defines.h"
-
 namespace StormSQL
 {
 	// Forward declarations

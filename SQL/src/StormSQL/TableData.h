@@ -4,6 +4,7 @@
 #include "Defines.h"
 #include <vector>
 #include "Field.h"
+#include "Predicates.h"
 #include <istream>
 #include <ostream>
 
@@ -33,7 +34,7 @@ namespace StormSQL
 		string GetString(int columnIndex) const;
 	};
 
-	template <class TPredicate>
+	template <class TPredicate = TruePredicate>
 	class TableDataIterator
 	{
 	protected:
