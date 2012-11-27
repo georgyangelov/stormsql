@@ -58,9 +58,9 @@ namespace UnitTests
 			Assert::IsTrue(row.GetString(1).compare("test string") == 0);
 
 			iter.NextRow();
-			TableDataRow row2 = iter.GetFullDataRow();
-			Assert::AreEqual(5678, row2.GetInt32(0));
-			Assert::IsTrue(row2.GetString(1).compare("another test string") == 0);
+			row = iter.GetFullDataRow();
+			Assert::AreEqual(5678, row.GetInt32(0));
+			Assert::IsTrue(row.GetString(1).compare("another test string") == 0);
 		}
 
 		TEST_METHOD(AddColumnTest)
@@ -76,14 +76,14 @@ namespace UnitTests
 			iter.NextRow();
 			TableDataRow row = iter.GetFullDataRow();
 			Assert::AreEqual(1234, row.GetInt32(0));
-			Assert::AreEqual(row.GetInt32(1), 0);
+			Assert::AreEqual(0, row.GetInt32(1));
 			Assert::IsTrue(row.GetString(2).compare("test string") == 0);
 
 			iter.NextRow();
-			TableDataRow row2 = iter.GetFullDataRow();
-			Assert::AreEqual(5678, row2.GetInt32(0));
-			Assert::AreEqual(row2.GetInt32(1), 0);
-			Assert::IsTrue(row2.GetString(2).compare("another test string") == 0);
+			row = iter.GetFullDataRow();
+			Assert::AreEqual(5678, row.GetInt32(0));
+			Assert::AreEqual(0, row.GetInt32(1));
+			Assert::IsTrue(row.GetString(2).compare("another test string") == 0);
 		}
 
 		TEST_METHOD(RemoveColumnTest)
@@ -104,8 +104,36 @@ namespace UnitTests
 			Assert::IsTrue(row.GetString(0).compare("test string") == 0);
 
 			iter.NextRow();
-			TableDataRow row2 = iter.GetFullDataRow();
-			Assert::IsTrue(row2.GetString(0).compare("another test string") == 0);
+			row = iter.GetFullDataRow();
+			Assert::IsTrue(row.GetString(0).compare("another test string") == 0);
+		}
+
+		TEST_METHOD(DataLoadSaveTest)
+		{
+			Table table = GetTable();
+
+			ofstream out("test.bin");
+			table.WriteToStream(out);
+			out.close();
+
+			Table schema;
+
+			ifstream in("test.bin");
+			schema.ReadFromStream(in);
+			in.close();
+
+			// Iterate and verify data
+			TableDataIterator<> iter = schema.GetIterator();
+
+			iter.NextRow();
+			TableDataRow row = iter.GetFullDataRow();
+			Assert::AreEqual(1234, row.GetInt32(0));
+			Assert::IsTrue(row.GetString(1).compare("test string") == 0);
+
+			iter.NextRow();
+			row = iter.GetFullDataRow();
+			Assert::AreEqual(5678, row.GetInt32(0));
+			Assert::IsTrue(row.GetString(1).compare("another test string") == 0);
 		}
 
 	};

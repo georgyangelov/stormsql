@@ -218,7 +218,7 @@ namespace StormSQL
 		out.write((char*)&rows, sizeof(rowIndexType));
 
 		// Write table data array
-		out.write((const char*)data, rows * tableRowSize);
+		data->WriteToStream(out, rows);
 	}
 
 	void Table::ReadFromStream(istream& in)
@@ -249,7 +249,7 @@ namespace StormSQL
 		in.read((char*)&rows, sizeof(rowIndexType));
 
 		// Read table data array
-		in.read((char*)data, rows * tableRowSize);
+		data->ReadFromStream(in, rows);
 	}
 
 	TableDataIterator<TruePredicate> Table::GetIterator()
