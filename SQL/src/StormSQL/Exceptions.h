@@ -37,12 +37,12 @@ namespace StormSQL
 		{
 		}
 	};
-
-	class FieldDoesntExists
+	
+	class FieldDoesntExist
 		: public Exception
 	{
 	public:
-		FieldDoesntExists()
+		FieldDoesntExist()
 			: Exception("This field doesn't exist")
 		{
 		}
@@ -94,6 +94,26 @@ namespace StormSQL
 	public:
 		RowAlreadyInserted()
 			: Exception("This row is already inserted")
+		{
+		}
+	};
+
+	class TableDoesntExist
+		: public Exception
+	{
+	public:
+		TableDoesntExist()
+			: Exception("This table doesn't exist")
+		{
+		}
+	};
+
+	class NameTooLong
+		: public Exception
+	{
+	public:
+		NameTooLong()
+			: Exception("This table doesn't exist")
 		{
 		}
 	};

@@ -8,6 +8,7 @@
 	// Table schema constraints
 	#define STORM_SQL_FIELD_NAME_SIZE 50
 	#define STORM_SQL_TABLE_NAME_SIZE 50
+	#define STORM_SQL_STRING_TERMINATOR_SIZE 1
 
 	// Typedefs
 	typedef unsigned int rowIndexType;

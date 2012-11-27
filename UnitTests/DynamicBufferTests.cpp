@@ -54,14 +54,14 @@ namespace UnitTests
 
 
 			ofstream out("test.bin");
-			obj.WriteToStream(out, 1001);
+			obj.Store(out, 1001);
 			out.close();
 
 
 			DynamicBuffer obj2(sizeof(int));
 
 			ifstream in("test.bin");
-			obj2.ReadFromStream(in, 1001);
+			obj2.Load(in, 1001);
 			in.close();
 			
 			Assert::AreEqual(*((int*)obj2.GetElementPtr(0)), 1);

@@ -67,7 +67,7 @@ namespace StormSQL
 		return GetElementPtr(index);
 	}
 
-	void DynamicBuffer::ReadFromStream(istream& in, int numElements)
+	void DynamicBuffer::Load(istream& in, int numElements)
 	{
 		del();
 		Expand(numElements);
@@ -75,7 +75,7 @@ namespace StormSQL
 		in.read((char*)GetElementPtr(0), numElements * elementSize);
 	}
 
-	void DynamicBuffer::WriteToStream(ostream& out, int numElements)
+	void DynamicBuffer::Store(ostream& out, int numElements)
 	{
 		int numLeft = numElements;
 

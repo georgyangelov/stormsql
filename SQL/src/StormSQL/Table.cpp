@@ -139,7 +139,7 @@ namespace StormSQL
 	{
 		int index;
 		if (!HasField(name, index))
-			throw FieldDoesntExists();
+			throw FieldDoesntExist();
 
 		Field deletedColumn = columns[index];
 		
@@ -189,7 +189,7 @@ namespace StormSQL
 	{
 		int index;
 		if (!HasField(name, index))
-			throw FieldDoesntExists();
+			throw FieldDoesntExist();
 		
 		columns[index] = field;
 
@@ -198,7 +198,7 @@ namespace StormSQL
 	}
 
 
-	void Table::WriteToStream(ostream& out) const
+	void Table::Store(ostream& out) const
 	{
 		// Write schema version at beginning
 		float ver = STORM_SQL_SCHEMA_VERSION;
@@ -218,10 +218,10 @@ namespace StormSQL
 		out.write((char*)&rows, sizeof(rowIndexType));
 
 		// Write table data array
-		data->WriteToStream(out, rows);
+		data->Store(out, rows);
 	}
 
-	void Table::ReadFromStream(istream& in)
+	void Table::Load(istream& in)
 	{
 		// Read schema version and verify
 		float ver;
@@ -249,7 +249,7 @@ namespace StormSQL
 		in.read((char*)&rows, sizeof(rowIndexType));
 
 		// Read table data array
-		data->ReadFromStream(in, rows);
+		data->Load(in, rows);
 	}
 
 	TableDataIterator<TruePredicate> Table::GetIterator()

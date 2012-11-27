@@ -58,8 +58,8 @@ namespace StormSQL
 		void AlterField(const char*, const Field&);
 
 		// Store/Load
-		void ReadFromStream(istream& in);
-		void WriteToStream(ostream& out) const;
+		void Load(istream& in);
+		void Store(ostream& out) const;
 
 		// Construct iterator
 		template <class TPredicate>

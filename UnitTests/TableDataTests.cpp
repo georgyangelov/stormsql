@@ -113,13 +113,13 @@ namespace UnitTests
 			Table table = GetTable();
 
 			ofstream out("test.bin");
-			table.WriteToStream(out);
+			table.Store(out);
 			out.close();
 
 			Table schema;
 
 			ifstream in("test.bin");
-			schema.ReadFromStream(in);
+			schema.Load(in);
 			in.close();
 
 			// Iterate and verify data

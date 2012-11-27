@@ -47,13 +47,13 @@ namespace UnitTests
 			schema.AddField(f1);
 			schema.AddField(f2);
 
-			schema.WriteToStream(out);
+			schema.Store(out);
 			out.close();
 
 			ifstream in("test.bin");
 			Table schema2;
 
-			schema2.ReadFromStream(in);
+			schema2.Load(in);
 
 			Assert::IsTrue(schema2.HasField(f1.name));
 			Assert::IsTrue(schema2.HasField(f2.name));

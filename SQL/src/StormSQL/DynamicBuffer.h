@@ -27,8 +27,8 @@ namespace StormSQL
 		byte* GetElementPtr(int);
 		byte* operator [](int i);
 
-		void ReadFromStream(istream&, int);
-		void WriteToStream(ostream&, int);
+		void Load(istream&, int);
+		void Store(ostream&, int);
 	};
 }
 #endif

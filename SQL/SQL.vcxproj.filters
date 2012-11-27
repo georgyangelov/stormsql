@@ -42,6 +42,9 @@
     <ClCompile Include="src\Queries\Insert.cpp">
       <Filter>Source Files\StormSQL\Queries</Filter>
     </ClCompile>
+    <ClCompile Include="src\StormSQL\Database.cpp">
+      <Filter>Source Files\StormSQL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\StormSQL\Field.h">
@@ -66,6 +69,9 @@
       <Filter>Header Files\StormSQL\Queries</Filter>
     </ClInclude>
     <ClInclude Include="src\StormSQL\Predicates.h">
+      <Filter>Header Files\StormSQL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StormSQL\Database.h">
       <Filter>Header Files\StormSQL</Filter>
     </ClInclude>
   </ItemGroup>
