@@ -20,7 +20,7 @@ namespace UnitTests
 		Table GetTableSchema()
 		{
 			Field f1 = { "test", Field::FieldType::int32, 10 };
-			Field f2 = { "test 2 ", Field::FieldType::fixedchar, 30 };
+			Field f2 = { "test2", Field::FieldType::fixedchar, 30 };
 
 			Table schema;
 			schema.AddField(f1);
@@ -28,8 +28,7 @@ namespace UnitTests
 
 			return schema;
 		}
-		
-		TEST_METHOD(InsertIterateTest)
+		Table GetTable()
 		{
 			Table schema = GetTableSchema();
 
@@ -39,14 +38,19 @@ namespace UnitTests
 			insert.SetString(1, "test string");
 			insert.Commit();
 
-			Queries::Insert insert2(&schema);
-			insert2.SetInt(0, 5678);
-			insert2.SetString(1, "another test string");
-			insert2.Commit();
+			insert.SetInt(0, 5678);
+			insert.SetString(1, "another test string");
+			insert.Commit();
+
+			return schema;
+		}
+		
+		TEST_METHOD(InsertIterateTest)
+		{
+			Table table = GetTable();
 
 			// Iterate and verify data
-			TableDataIterator<TruePredicate> iter = schema.GetIterator(TruePredicate());
-			//TableDataIterator<TruePredicate> iter(&schema, TruePredicate());
+			TableDataIterator<> iter = table.GetIterator();
 
 			iter.NextRow();
 			TableDataRow row = iter.GetFullDataRow();
@@ -57,6 +61,51 @@ namespace UnitTests
 			TableDataRow row2 = iter.GetFullDataRow();
 			Assert::AreEqual(5678, row2.GetInt32(0));
 			Assert::IsTrue(row2.GetString(1).compare("another test string") == 0);
+		}
+
+		TEST_METHOD(AddColumnTest)
+		{
+			Table schema = GetTable();
+			
+			Field f3 = { "test12", Field::FieldType::int32, 10 };
+			schema.AddField(1, f3);
+
+			// Iterate and verify data
+			TableDataIterator<> iter = schema.GetIterator();
+			
+			iter.NextRow();
+			TableDataRow row = iter.GetFullDataRow();
+			Assert::AreEqual(1234, row.GetInt32(0));
+			Assert::AreEqual(row.GetInt32(1), 0);
+			Assert::IsTrue(row.GetString(2).compare("test string") == 0);
+
+			iter.NextRow();
+			TableDataRow row2 = iter.GetFullDataRow();
+			Assert::AreEqual(5678, row2.GetInt32(0));
+			Assert::AreEqual(row2.GetInt32(1), 0);
+			Assert::IsTrue(row2.GetString(2).compare("another test string") == 0);
+		}
+
+		TEST_METHOD(RemoveColumnTest)
+		{
+			Table schema = GetTable();
+			
+			schema.RemoveField("test");
+			
+			Assert::AreEqual(1, schema.GetNumFields());
+			Assert::IsTrue(schema.HasField("test2"));
+			Assert::IsFalse(schema.HasField("test"));
+			
+			// Iterate and verify data
+			TableDataIterator<> iter = schema.GetIterator();
+			
+			iter.NextRow();
+			TableDataRow row = iter.GetFullDataRow();
+			Assert::IsTrue(row.GetString(0).compare("test string") == 0);
+
+			iter.NextRow();
+			TableDataRow row2 = iter.GetFullDataRow();
+			Assert::IsTrue(row2.GetString(0).compare("another test string") == 0);
 		}
 
 	};

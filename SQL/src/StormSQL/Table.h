@@ -23,7 +23,6 @@ namespace StormSQL
 	class Table
 	{
 	protected:
-		//char name[STORM_SQL_TABLE_NAME_SIZE];
 		vector<Field> columns;
 
 		DynamicBuffer* data;
@@ -31,7 +30,7 @@ namespace StormSQL
 
 		int tableRowSize;
 
-		void createDataBuffer();
+		void createDataBuffer(bool deleteOld = true);
 		
 		// Iterator
 		template <class TPredicate>
@@ -46,6 +45,7 @@ namespace StormSQL
 
 		// Info
 		int GetNumFields() const;
+		vector<Field> GetFields() const;
 
 		// Test
 		bool HasField(const char*) const;

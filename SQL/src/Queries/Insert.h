@@ -30,7 +30,7 @@ namespace StormSQL
 
 			bool AllColumnsSet() const;
 
-			void Commit(bool resetAfter = false);
+			void Commit(bool resetAfter = true);
 			void Reset();
 		};
 	}

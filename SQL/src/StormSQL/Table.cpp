@@ -14,8 +14,6 @@ namespace StormSQL
 	Table::Table(const Table& obj)
 		: rows(obj.rows), tableRowSize(obj.tableRowSize), columns(obj.columns)
 	{
-		//strcpy(name, obj.name);
-
 		if (obj.data)
 			data = new DynamicBuffer(*obj.data);
 		else
@@ -28,7 +26,7 @@ namespace StormSQL
 			delete data;
 	}
 
-	void Table::createDataBuffer()
+	void Table::createDataBuffer(bool deleteOld)
 	{
 		tableRowSize = 0;
 
@@ -37,7 +35,7 @@ namespace StormSQL
 			tableRowSize += columns[i].GetByteSize();
 		}
 
-		if (data)
+		if (data && deleteOld)
 			delete data;
 
 		data = new DynamicBuffer(tableRowSize);
@@ -46,6 +44,11 @@ namespace StormSQL
 	int Table::GetNumFields() const
 	{
 		return columns.size();
+	}
+
+	vector<Field> Table::GetFields() const
+	{
+		return columns;
 	}
 
 	bool Table::HasField(const char* name, int& index) const
@@ -78,14 +81,16 @@ namespace StormSQL
 		if (HasField(field.name))
 			throw FieldExists();
 
-		Table old(*this);
+		// No need to copy everything
+		// Table old(*this);
+		DynamicBuffer* oldBuffer = data;
 
 		//columns.push_back(field);
 		columns.insert(columns.begin() + index, field);
-		createDataBuffer();
+		createDataBuffer(false);
 
-		// Copy data
-		data->Expand(old.rows);
+		// Expand the new data buffer
+		data->Expand(rows);
 		
 		// Calculate first part size
 		unsigned int firstSize = 0;
@@ -106,11 +111,13 @@ namespace StormSQL
 		// Copy data
 		for (int i = 0; i < rows; i++)
 		{
-			byte* newPtr = data->GetElementPtr(i);
-			byte* oldPtr = old.data->GetElementPtr(i);
+			byte* newPtr = (*data)[i];
+			byte* oldPtr = (*oldBuffer)[i];
 
 			// Copy first part
-			copy(oldPtr, oldPtr + firstSize, newPtr);
+			copy(oldPtr, 
+				 oldPtr + firstSize, 
+				 newPtr);
 
 			// Set new column data to 0
 			for (int j = 0; j < newColumnSize; j++)
@@ -119,8 +126,13 @@ namespace StormSQL
 			}
 
 			// Copy second part
-			copy(oldPtr + firstSize, oldPtr + firstSize + secondSize, newPtr + firstSize + newColumnSize);
+			copy(oldPtr + firstSize, 
+				 oldPtr + firstSize + secondSize, 
+				 newPtr + firstSize + newColumnSize);
 		}
+
+		// Delete the old buffer
+		delete oldBuffer;
 	}
 
 	void Table::RemoveField(const char* name)
@@ -128,11 +140,49 @@ namespace StormSQL
 		int index;
 		if (!HasField(name, index))
 			throw FieldDoesntExists();
+
+		Field deletedColumn = columns[index];
 		
 		columns.erase(columns.begin() + index);
 
-		//TODO: Modify data
-		createDataBuffer();
+		// Store pointer to old data
+		DynamicBuffer* oldBuffer = data;
+
+		createDataBuffer(false);
+		data->Expand(rows);
+
+		// Calculate first part size
+		unsigned int firstSize = 0;
+		for (int i = 0; i < index; i++)
+		{
+			firstSize += columns[i].GetByteSize();
+		}
+
+		// Calculate second part size
+		unsigned int secondSize = 0;
+		for (int i = index; i < columns.size(); i++)
+		{
+			secondSize += columns[i].GetByteSize();
+		}
+
+		// Copy data
+		for (int i = 0; i < rows; i++)
+		{
+			byte* newPtr = (*data)[i];
+			byte* oldPtr = (*oldBuffer)[i];
+
+			// Copy first part
+			copy(oldPtr, 
+				 oldPtr + firstSize,
+				 newPtr);
+
+			// Copy second part
+			copy(oldPtr + firstSize + deletedColumn.GetByteSize(), 
+				 oldPtr + firstSize + deletedColumn.GetByteSize() + secondSize, 
+				 newPtr + firstSize);
+		}
+
+		delete oldBuffer;
 	}
 
 	void Table::AlterField(const char* name, const Field& field)

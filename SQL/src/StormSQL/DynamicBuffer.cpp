@@ -62,6 +62,11 @@ namespace StormSQL
 		return buffers[buffers.size() - 1].second + (index - currentIndex) * elementSize;
 	}
 
+	byte* DynamicBuffer::operator[] (int index)
+	{
+		return GetElementPtr(index);
+	}
+
 	void DynamicBuffer::ReadFromStream(istream& in, int numElements)
 	{
 		del();
