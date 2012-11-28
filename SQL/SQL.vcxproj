@@ -66,6 +66,7 @@
     <ClCompile Include="src\StormSQL\Database.cpp" />
     <ClCompile Include="src\StormSQL\DynamicBuffer.cpp" />
     <ClCompile Include="src\StormSQL\Field.cpp" />
+    <ClCompile Include="src\StormSQL\SQL\Lexer.cpp" />
     <ClCompile Include="src\StormSQL\TableData.cpp" />
     <ClCompile Include="src\StormSQL\Table.cpp" />
   </ItemGroup>
@@ -77,6 +78,7 @@
     <ClInclude Include="src\StormSQL\Exceptions.h" />
     <ClInclude Include="src\StormSQL\Field.h" />
     <ClInclude Include="src\StormSQL\Predicates.h" />
+    <ClInclude Include="src\StormSQL\SQL\Lexer.h" />
     <ClInclude Include="src\StormSQL\TableData.h" />
     <ClInclude Include="src\StormSQL\Table.h" />
   </ItemGroup>

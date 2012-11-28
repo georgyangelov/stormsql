@@ -25,6 +25,12 @@
     <Filter Include="Source Files\StormSQL\Queries">
       <UniqueIdentifier>{00cbc100-1dcd-4213-b0fa-b2701c9e5dcc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\StormSQL\SQL">
+      <UniqueIdentifier>{a0a7f15a-4ed7-4fe7-af3e-0500c27d6922}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\StormSQL\SQL">
+      <UniqueIdentifier>{87ed19f6-4b58-4e92-9066-b3b37a1c94bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\StormSQL\Field.cpp">
@@ -44,6 +50,9 @@
     </ClCompile>
     <ClCompile Include="src\StormSQL\Database.cpp">
       <Filter>Source Files\StormSQL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StormSQL\SQL\Lexer.cpp">
+      <Filter>Source Files\StormSQL\SQL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -73,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="src\StormSQL\Database.h">
       <Filter>Header Files\StormSQL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StormSQL\SQL\Lexer.h">
+      <Filter>Header Files\StormSQL\SQL</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
