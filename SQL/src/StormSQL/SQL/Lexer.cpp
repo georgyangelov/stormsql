@@ -20,6 +20,7 @@ namespace StormSQL
 		Token Lexer::getToken(const string& str, TokenType type) const
 		{
 			Token res;
+			res.strData = str;
 
 			if (type == TokenType::IntValue)
 			{
@@ -27,8 +28,11 @@ namespace StormSQL
 				stringstream strStream(str);
 				strStream >> res.longIntData;
 			}
+			else if (type == TokenType::Keyword)
+			{
+				toLower(res.strData);
+			}
 
-			res.strData = str;
 			res.type = type;
 
 			return res;
