@@ -63,7 +63,7 @@ namespace StormSQL
 		{
 			ignoreWhitespace();
 
-			char c = in->peek();
+			char c = in->get();
 			string tmp;
 
 			if (c == '(' || c == ')')
@@ -128,7 +128,7 @@ namespace StormSQL
 				case '>':
 
 					if (in->peek() == '=')
-						tmp += c;
+						tmp += in->get();
 
 					return getToken(tmp, TokenType::Operator);
 
