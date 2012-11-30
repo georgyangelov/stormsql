@@ -108,7 +108,7 @@ namespace StormSQL
 					c = in->get();
 				}
 
-				return getToken(tmp, TokenType::StringValue);
+				return getToken(tmp, TokenType::Keyword);
 			}
 			else
 			{
