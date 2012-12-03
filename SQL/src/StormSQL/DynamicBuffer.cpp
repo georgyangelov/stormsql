@@ -37,6 +37,9 @@ namespace StormSQL
 
 	void DynamicBuffer::Expand(int numElements)
 	{
+		if (numElements == 0)
+			return;
+
 		byte* ptr = new byte[numElements * elementSize];
 		buffers.push_back(pair<int, byte*>(numElements, ptr));
 	}

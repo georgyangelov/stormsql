@@ -40,6 +40,11 @@ namespace StormSQL
 
 		data = new DynamicBuffer(tableRowSize);
 	}
+	
+	int Table::GetNumRows() const
+	{
+		return rows;
+	}
 
 	int Table::GetNumFields() const
 	{
@@ -85,9 +90,11 @@ namespace StormSQL
 		// Table old(*this);
 		DynamicBuffer* oldBuffer = data;
 
-		//columns.push_back(field);
 		columns.insert(columns.begin() + index, field);
 		createDataBuffer(false);
+
+		if (oldBuffer == NULL)
+			return;
 
 		// Expand the new data buffer
 		data->Expand(rows);
@@ -143,12 +150,15 @@ namespace StormSQL
 
 		Field deletedColumn = columns[index];
 		
-		columns.erase(columns.begin() + index);
-
 		// Store pointer to old data
 		DynamicBuffer* oldBuffer = data;
 
+		columns.erase(columns.begin() + index);
 		createDataBuffer(false);
+
+		if (oldBuffer == NULL)
+			return;
+
 		data->Expand(rows);
 
 		// Calculate first part size

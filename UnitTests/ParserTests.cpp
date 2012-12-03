@@ -33,6 +33,7 @@ namespace UnitTests
 
 			Assert::IsTrue(db.HasTable("test"));
 			Assert::IsTrue(db.GetTable("test").GetNumFields() == 4);
+			Assert::IsTrue(db.GetTable("test").GetNumRows() == 0);
 
 			delete query;
 		}

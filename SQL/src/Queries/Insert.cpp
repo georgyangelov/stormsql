@@ -8,6 +8,9 @@ namespace StormSQL
 		Insert::Insert(Table* const _table)
 			: table(_table)
 		{
+			if (table->tableRowSize == 0 || table->columns.size() == 0)
+				throw NoColumnsInTable();
+
 			buffer = new byte[table->tableRowSize];
 			valuesSet = new bool[table->columns.size()];
 

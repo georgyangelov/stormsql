@@ -44,6 +44,7 @@ namespace StormSQL
 		~Table();
 
 		// Info
+		int GetNumRows() const;
 		int GetNumFields() const;
 		vector<Field> GetFields() const;
 

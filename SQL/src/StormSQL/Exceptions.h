@@ -108,6 +108,16 @@ namespace StormSQL
 		}
 	};
 
+	class NoColumnsInTable
+		: public Exception
+	{
+	public:
+		NoColumnsInTable()
+			: Exception("This table has no columns")
+		{
+		}
+	};
+
 	class NameTooLong
 		: public Exception
 	{
