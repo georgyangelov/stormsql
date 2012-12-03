@@ -89,6 +89,7 @@
     <ClCompile Include="DatabaseTests.cpp" />
     <ClCompile Include="DynamicBufferTests.cpp" />
     <ClCompile Include="LexerTests.cpp" />
+    <ClCompile Include="ParserTests.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

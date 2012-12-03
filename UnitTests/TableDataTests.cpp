@@ -36,11 +36,11 @@ namespace UnitTests
 			Queries::Insert insert(&schema);
 			insert.SetInt(0, 1234);
 			insert.SetString(1, "test string");
-			insert.Commit();
+			insert.Execute();
 
 			insert.SetInt(0, 5678);
 			insert.SetString(1, "another test string");
-			insert.Commit();
+			insert.Execute();
 
 			return schema;
 		}

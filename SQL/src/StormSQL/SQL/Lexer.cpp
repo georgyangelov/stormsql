@@ -59,6 +59,39 @@ namespace StormSQL
 			in = &_in;
 		}
 
+		Token Lexer::NextToken(TokenType expected)
+		{
+			Token t = NextToken();
+
+			// Keywords map to Identifiers (<name> vs `<name>`)
+			if (expected == TokenType::Identifier && t.type == TokenType::Keyword)
+				t.type = TokenType::Identifier;
+			
+			if (t.type != expected)
+				throw InvalidTokenException(t);
+
+			return t;
+		}
+
+		Token Lexer::NextToken(TokenType expected, string strData)
+		{
+			Token t = NextToken(expected);
+			
+			if (t.strData != strData)
+				throw InvalidTokenException(t);
+
+			return t;
+		}
+
+		inline string toString(char c)
+		{
+			char tmp[2];
+			tmp[0] = c;
+			tmp[1] = 0;
+
+			return tmp;
+		}
+
 		Token Lexer::NextToken()
 		{
 			ignoreWhitespace();
@@ -67,9 +100,9 @@ namespace StormSQL
 			string tmp;
 
 			if (c == '(' || c == ')')
-				return getToken(&c, TokenType::Parenthesis);
+				return getToken(toString(c), TokenType::Parenthesis);
 			else if (c == ',')
-				return getToken(&c, TokenType::Separator);
+				return getToken(toString(c), TokenType::Separator);
 			else if (c == '`')
 			{
 				while ((c = in->get()) != '`')
@@ -92,20 +125,20 @@ namespace StormSQL
 			}
 			else if (isNumber(c))
 			{
-				while (isNumber(c))
+				tmp += c;
+				while (isNumber(in->peek()))
 				{
-					tmp += c;
-					c = in->get();
+					tmp += in->get();
 				}
 
 				return getToken(tmp, TokenType::IntValue);
 			}
 			else if (isLetter(c))
 			{
-				while (isLetter(c))
+				tmp += c;
+				while (isLetter(in->peek()))
 				{
-					tmp += c;
-					c = in->get();
+					tmp += in->get();
 				}
 
 				return getToken(tmp, TokenType::Keyword);

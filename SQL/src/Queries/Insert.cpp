@@ -8,7 +8,6 @@ namespace StormSQL
 		Insert::Insert(Table* const _table)
 			: table(_table)
 		{
-			inserted = false;
 			buffer = new byte[table->tableRowSize];
 			valuesSet = new bool[table->columns.size()];
 
@@ -21,7 +20,6 @@ namespace StormSQL
 		Insert::Insert(const Insert& obj)
 			: table(obj.table)
 		{
-			inserted = obj.inserted;
 			buffer = new byte[table->tableRowSize];
 			valuesSet = new bool[table->columns.size()];
 
@@ -102,32 +100,34 @@ namespace StormSQL
 			return true;
 		}
 
-		void Insert::Commit(bool resetAfter)
+		string Insert::GetType() const
+		{
+			return "insert";
+		}
+
+		void Insert::Execute()
 		{
 			if (!AllColumnsSet())
 				throw NotAllColumnsSet();
-
-			if (inserted)
-				throw RowAlreadyInserted();
 
 			byte* ptr = table->data->GetElementPtr(table->rows);
 			copy(buffer, buffer + table->tableRowSize, ptr);
 
 			table->rows++;
 
-			inserted = true;
-
-			if (resetAfter)
-				Reset();
+			Reset();
 		}
 
 		void Insert::Reset()
 		{
-			inserted = false;
 			for (int i = 0; i < table->columns.size(); i++)
 			{
 				valuesSet[i] = false;
 			}
+		}
+
+		void Insert::Parse(Lexer& lex)
+		{
 		}
 	}
 }

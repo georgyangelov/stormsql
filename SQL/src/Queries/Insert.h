@@ -3,12 +3,14 @@
 
 #include "../StormSQL/Defines.h"
 #include "../StormSQL/Table.h"
+#include "Query.h"
 
 namespace StormSQL
 {
 	namespace Queries
 	{
 		class Insert
+			: public Query
 		{
 		protected:
 			Table* const table;
@@ -30,8 +32,12 @@ namespace StormSQL
 
 			bool AllColumnsSet() const;
 
-			void Commit(bool resetAfter = true);
+			string GetType() const;
+
+			void Execute();
 			void Reset();
+
+			void Parse(Lexer&);
 		};
 	}
 }

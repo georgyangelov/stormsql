@@ -113,7 +113,7 @@ namespace StormSQL
 	{
 	public:
 		NameTooLong()
-			: Exception("This table doesn't exist")
+			: Exception("The name is too long")
 		{
 		}
 	};

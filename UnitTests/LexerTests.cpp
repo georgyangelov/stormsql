@@ -20,7 +20,7 @@ namespace UnitTests
 
 		TEST_METHOD(LexerTest1)
 		{
-			stringstream stream("SELECT * FROM `tableName` WHERE `id` = 1 AND user = 'pe6o'");
+			stringstream stream("SELECT * FROM `tableName` WHERE `id` = 1, user = 'pe6o'");
 
 			Lexer lex(stream);
 
@@ -58,8 +58,8 @@ namespace UnitTests
 			Assert::AreEqual((long)1, t.longIntData);
 
 			t = lex.NextToken();
-			Assert::IsTrue(TokenType::Keyword == t.type);
-			Assert::AreEqual("and", t.strData.c_str());
+			Assert::IsTrue(TokenType::Separator == t.type);
+			Assert::AreEqual(",", t.strData.c_str());
 
 			t = lex.NextToken();
 			Assert::IsTrue(TokenType::Keyword == t.type);

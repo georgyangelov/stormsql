@@ -50,8 +50,10 @@ namespace StormSQL
 
 		public:
 			Lexer(istream&);
-
+			
 			Token NextToken();
+			Token NextToken(TokenType expected);
+			Token NextToken(TokenType expected, string strData);
 		};
 
 		class UnknownTokenException
@@ -60,6 +62,16 @@ namespace StormSQL
 		public:
 			UnknownTokenException(string token)
 				: runtime_error("Unknown token" + token)
+			{
+			}
+		};
+
+		class InvalidTokenException
+			: public runtime_error
+		{
+		public:
+			InvalidTokenException(Token token)
+				: runtime_error("Invalid token: " + token.strData)
 			{
 			}
 		};

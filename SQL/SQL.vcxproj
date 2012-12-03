@@ -62,16 +62,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Queries\CreateTable.cpp" />
     <ClCompile Include="src\Queries\Insert.cpp" />
+    <ClCompile Include="src\Queries\Select.cpp" />
     <ClCompile Include="src\StormSQL\Database.cpp" />
     <ClCompile Include="src\StormSQL\DynamicBuffer.cpp" />
     <ClCompile Include="src\StormSQL\Field.cpp" />
     <ClCompile Include="src\StormSQL\SQL\Lexer.cpp" />
+    <ClCompile Include="src\StormSQL\SQL\Parser.cpp" />
     <ClCompile Include="src\StormSQL\TableData.cpp" />
     <ClCompile Include="src\StormSQL\Table.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Queries\CreateTable.h" />
     <ClInclude Include="src\Queries\Insert.h" />
+    <ClInclude Include="src\Queries\Query.h" />
+    <ClInclude Include="src\Queries\Select.h" />
     <ClInclude Include="src\StormSQL\Database.h" />
     <ClInclude Include="src\StormSQL\Defines.h" />
     <ClInclude Include="src\StormSQL\DynamicBuffer.h" />
@@ -79,6 +85,7 @@
     <ClInclude Include="src\StormSQL\Field.h" />
     <ClInclude Include="src\StormSQL\Predicates.h" />
     <ClInclude Include="src\StormSQL\SQL\Lexer.h" />
+    <ClInclude Include="src\StormSQL\SQL\Parser.h" />
     <ClInclude Include="src\StormSQL\TableData.h" />
     <ClInclude Include="src\StormSQL\Table.h" />
   </ItemGroup>

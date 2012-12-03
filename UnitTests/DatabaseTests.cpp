@@ -9,6 +9,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 #include "StormSQL/TableData.h"
 #include "Queries/Insert.h"
 #include "StormSQL/Database.h"
+#include "Queries/CreateTable.h"
 
 using namespace std;
 using namespace StormSQL;
@@ -26,11 +27,16 @@ namespace UnitTests
 			Field f1 = { "testInt", Field::FieldType::int32, 10 };
 			Field f2 = { "testStr", Field::FieldType::fixedchar, 30 };
 
-			Table schema1;
+			/*Table schema1;
 			schema1.AddField(f1);
 			schema1.AddField(f2);
 
-			db.CreateTable("table1", schema1);
+			db.CreateTable("table1", schema1);*/
+			CreateTable create(&db);
+			create.SetName("table1");
+			create.AddField(f1);
+			create.AddField(f2);
+			create.Execute();
 
 			Assert::IsTrue(db.HasTable("table1"));
 			Assert::AreEqual(2, db.GetTable("table1").GetNumFields());
@@ -55,20 +61,20 @@ namespace UnitTests
 			Insert insert(&db.GetTable("table1"));
 			insert.SetInt(0, 1);
 			insert.SetString(1, "testString");
-			insert.Commit();
+			insert.Execute();
 
 			insert.SetInt(0, 2);
 			insert.SetString(1, "anotherTest");
-			insert.Commit();
+			insert.Execute();
 
 			Insert insert2(&db.GetTable("table2"));
 			insert2.SetString(0, "stringTest");
 			insert2.SetInt(1, 3);
-			insert2.Commit();
+			insert2.Execute();
 
 			insert2.SetString(0, "anotherTest");
 			insert2.SetInt(1, 4);
-			insert2.Commit();
+			insert2.Execute();
 		}
 
 		TEST_METHOD(DropTableTest)
