@@ -41,7 +41,7 @@ namespace StormSQL
 			// Helper functions
 			void ignoreWhitespace();
 			//Token getToken(const string&) const;
-			Token getToken(const string&, TokenType type) const;
+			Token getToken(const string&, TokenType type, bool toLower = true) const;
 			long toLong(const string&) const;
 
 			bool isLetter(char c) const;
@@ -51,27 +51,47 @@ namespace StormSQL
 		public:
 			Lexer(istream&);
 			
-			Token NextToken();
-			Token NextToken(TokenType expected);
-			Token NextToken(TokenType expected, string strData);
+			Token NextToken(bool toLower = true);
+			Token NextToken(TokenType expected, bool toLower = true);
+			Token NextToken(TokenType expected, string strData, bool toLower = true);
 		};
 
-		class UnknownTokenException
+		class LexerException
 			: public runtime_error
 		{
 		public:
+			LexerException(string msg)
+				: runtime_error(msg)
+			{
+			}
+		};
+
+		class UnknownTokenException
+			: public LexerException
+		{
+		public:
 			UnknownTokenException(string token)
-				: runtime_error("Unknown token" + token)
+				: LexerException("Unknown token" + token)
 			{
 			}
 		};
 
 		class InvalidTokenException
-			: public runtime_error
+			: public LexerException
 		{
 		public:
 			InvalidTokenException(Token token)
-				: runtime_error("Invalid token: " + token.strData)
+				: LexerException("Invalid token: " + token.strData)
+			{
+			}
+		};
+
+		class UnexpectedEndOfStreamException
+			: public LexerException
+		{
+		public:
+			UnexpectedEndOfStreamException()
+				: LexerException("Unexpected end of stream")
 			{
 			}
 		};

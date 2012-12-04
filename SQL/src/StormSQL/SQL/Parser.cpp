@@ -1,5 +1,6 @@
 #include "Parser.h"
 #include "../../Queries/CreateTable.h"
+#include "../../Queries/ShowTables.h"
 
 namespace StormSQL
 {
@@ -29,6 +30,18 @@ namespace StormSQL
 
 				if (t2.strData == "table")
 					q = new CreateTable(db);
+				else
+					throw InvalidTokenException(t2);
+			}
+			else if (t.strData == "show")
+			{
+				Token t2 = lexer.NextToken();
+
+				if (t2.type != TokenType::Keyword)
+					throw InvalidTokenException(t2);
+
+				if (t2.strData == "tables")
+					q = new ShowTables(db);
 				else
 					throw InvalidTokenException(t2);
 			}

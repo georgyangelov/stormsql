@@ -7,13 +7,16 @@ using namespace StormSQL::SQL;
 
 namespace StormSQL
 {
+	// Forward declarations
+	class Table;
+
 	namespace Queries
 	{
 		class Query
 		{
 		public:
 			virtual string GetType() const = 0;
-			virtual void Execute() = 0;
+			virtual Table* Execute() = 0;
 
 			virtual void Parse(Lexer&) = 0;
 		};

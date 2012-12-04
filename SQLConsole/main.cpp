@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <hash_map>
 #include "boost/filesystem.hpp"
@@ -73,6 +74,56 @@ void saveDatabases()
 	}
 }
 
+ostream& operator << (ostream& out, Table tbl)
+{
+	vector<Field> fields = tbl.GetFields();
+	for (int i = 0; i < fields.size(); i++)
+	{
+		cout << "| " << setw(10) << left << fields[i].name << " ";
+	}
+
+	cout << "|" << endl;
+
+	for (int i = 0; i < fields.size() * 13; i++)
+	{
+		cout << '-';
+	}
+
+	cout << '-' << endl;
+
+	TableDataIterator<> iter = tbl.GetIterator();
+	while (iter.NextRow())
+	{
+		TableDataRow row = iter.GetFullDataRow();
+
+		for (int i = 0; i < fields.size(); i++)
+		{
+			cout << "| ";
+			cout << setw(10);
+
+			switch (fields[i].type)
+			{
+			case Field::FieldType::byte:
+				cout << row.GetChar(i) << " ";
+				break;
+			case Field::FieldType::int32:
+				cout << row.GetInt32(i) << " ";
+				break;
+			case Field::FieldType::uint32:
+				cout << row.GetInt32(i) << " ";
+				break;
+			case Field::FieldType::fixedchar:
+				cout << row.GetString(i) << " ";
+				break;
+			}
+		}
+
+		 cout << "|" << endl;
+	}
+
+	return out;
+}
+
 int main()
 {
 	cout << "StormSQL v.0.1 ALPHA" << endl;
@@ -115,7 +166,14 @@ int main()
 				Parser p(strIn, dbs["test"]);
 				Query* query = p.ParseQuery();
 
-				query->Execute();
+				Table* res = query->Execute();
+
+				if (res)
+				{
+					cout << *res;
+
+					delete res;
+				}
 			}
 		}
 		catch (const runtime_error& ex)

@@ -26,9 +26,11 @@ namespace StormSQL
 			tbl.AddField(field);
 		}
 
-		void CreateTable::Execute()
+		Table* CreateTable::Execute()
 		{
 			db->CreateTable(name, tbl);
+
+			return NULL;
 		}
 
 		/*
@@ -46,7 +48,7 @@ namespace StormSQL
 			Token t;
 			
 			// <name>
-			t = lex.NextToken(TokenType::Identifier);
+			t = lex.NextToken(TokenType::Identifier, false);
 			name = t.strData;
 			
 			// (
@@ -75,7 +77,7 @@ namespace StormSQL
 			Token t;
 
 			// <columnName>
-			t = lex.NextToken(TokenType::Identifier);
+			t = lex.NextToken(TokenType::Identifier, false);
 			
 			if (t.strData.size() >= STORM_SQL_FIELD_NAME_SIZE)
 				throw NameTooLong();

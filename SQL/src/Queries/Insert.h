@@ -28,13 +28,13 @@ namespace StormSQL
 			void SetByte(int column, byte value);
 			void SetInt(int column, int value);
 			void SetUInt(int column, unsigned int value);
-			void SetString(int column, char* const value);
+			void SetString(int column, string value);
 
 			bool AllColumnsSet() const;
 
 			string GetType() const;
 
-			void Execute();
+			Table* Execute();
 			void Reset();
 
 			void Parse(Lexer&);

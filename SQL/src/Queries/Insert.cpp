@@ -79,15 +79,15 @@ namespace StormSQL
 			valuesSet[column] = true;
 		}
 
-		void Insert::SetString(int column, char* const value)
+		void Insert::SetString(int column, string value)
 		{
 			if (table->columns[column].type != Field::fixedchar)
 				throw InvalidFieldType();
 
-			if (strlen(value) >= table->columns[column].size)
+			if (value.size() >= table->columns[column].size)
 				throw FieldDataTooLarge();
 
-			strcpy((char*)getPtr(column), value);
+			strcpy((char*)getPtr(column), value.c_str());
 
 			valuesSet[column] = true;
 		}
@@ -108,7 +108,7 @@ namespace StormSQL
 			return "insert";
 		}
 
-		void Insert::Execute()
+		Table* Insert::Execute()
 		{
 			if (!AllColumnsSet())
 				throw NotAllColumnsSet();
@@ -119,6 +119,8 @@ namespace StormSQL
 			table->rows++;
 
 			Reset();
+
+			return NULL;
 		}
 
 		void Insert::Reset()

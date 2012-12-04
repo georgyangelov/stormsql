@@ -17,8 +17,8 @@ namespace UnitTests
 		
 		TEST_METHOD(AddDeleteTest)
 		{
-			Field f1 = { "test", Field::FieldType::int32, 10 };
-			Field f2 = { "test 2 ", Field::FieldType::fixedchar, 15 };
+			Field f1("test", Field::FieldType::int32, 10);
+			Field f2("test 2 ", Field::FieldType::fixedchar, 15);
 
 			Table schema;
 			schema.AddField(f1);
@@ -39,8 +39,8 @@ namespace UnitTests
 
 		TEST_METHOD(LoadSaveTest)
 		{
-			Field f1 = { "test", Field::FieldType::int32, 10 };
-			Field f2 = { "test 2 ", Field::FieldType::fixedchar, 15 };
+			Field f1("test", Field::FieldType::int32, 10);
+			Field f2("test 2 ", Field::FieldType::fixedchar, 15);
 
 			ofstream out("test.bin");
 			Table schema;
@@ -62,8 +62,8 @@ namespace UnitTests
 		
 		TEST_METHOD(CopyConstructorTest)
 		{
-			Field f1 = { "test", Field::FieldType::int32, 10 };
-			Field f2 = { "test 2 ", Field::FieldType::fixedchar, 15 };
+			Field f1("test", Field::FieldType::int32, 10);
+			Field f2("test 2 ", Field::FieldType::fixedchar, 15);
 
 			Table schema;
 			schema.AddField(f1);

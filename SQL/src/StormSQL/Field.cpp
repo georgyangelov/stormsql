@@ -3,6 +3,19 @@
 
 namespace StormSQL
 {
+	Field::Field()
+	{
+	}
+	
+	Field::Field(const char* _name, FieldType _type, unsigned int _size)
+		: type(_type), size(_size)
+	{
+		if (strlen(_name) >= STORM_SQL_FIELD_NAME_SIZE)
+			throw NameTooLong();
+
+		strcpy(name, _name);
+	}
+
 	unsigned int Field::GetByteSize() const
 	{
 		switch (type)

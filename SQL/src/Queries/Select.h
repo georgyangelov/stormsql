@@ -21,7 +21,7 @@ namespace StormSQL
 			~Select();
 
 			string GetType() const;
-			void Execute();
+			Table* Execute();
 		};
 	}
 }

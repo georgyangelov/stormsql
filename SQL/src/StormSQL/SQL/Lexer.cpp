@@ -17,7 +17,7 @@ namespace StormSQL
 			}
 		}
 
-		Token Lexer::getToken(const string& str, TokenType type) const
+		Token Lexer::getToken(const string& str, TokenType type, bool toLow) const
 		{
 			Token res;
 			res.strData = str;
@@ -30,7 +30,8 @@ namespace StormSQL
 			}
 			else if (type == TokenType::Keyword)
 			{
-				toLower(res.strData);
+				if (toLow)
+					toLower(res.strData);
 			}
 
 			res.type = type;
@@ -59,9 +60,9 @@ namespace StormSQL
 			in = &_in;
 		}
 
-		Token Lexer::NextToken(TokenType expected)
+		Token Lexer::NextToken(TokenType expected, bool toLower)
 		{
-			Token t = NextToken();
+			Token t = NextToken(toLower);
 
 			// Keywords map to Identifiers (<name> vs `<name>`)
 			if (expected == TokenType::Identifier && t.type == TokenType::Keyword)
@@ -73,9 +74,9 @@ namespace StormSQL
 			return t;
 		}
 
-		Token Lexer::NextToken(TokenType expected, string strData)
+		Token Lexer::NextToken(TokenType expected, string strData, bool toLower)
 		{
-			Token t = NextToken(expected);
+			Token t = NextToken(expected, toLower);
 			
 			if (t.strData != strData)
 				throw InvalidTokenException(t);
@@ -92,12 +93,18 @@ namespace StormSQL
 			return tmp;
 		}
 
-		//TODO: Refractor so that it returns bool false on eof
-		Token Lexer::NextToken()
+		Token Lexer::NextToken(bool toLower)
 		{
 			ignoreWhitespace();
 
-			char c = in->get();
+			if (in->eof())
+				throw UnexpectedEndOfStreamException();
+
+			int c = in->get();
+
+			if (c < 0)
+				throw UnexpectedEndOfStreamException();
+
 			string tmp;
 
 			if (c == '(' || c == ')')
@@ -142,7 +149,7 @@ namespace StormSQL
 					tmp += in->get();
 				}
 
-				return getToken(tmp, TokenType::Keyword);
+				return getToken(tmp, TokenType::Keyword, toLower);
 			}
 			else
 			{
@@ -170,6 +177,8 @@ namespace StormSQL
 					throw UnknownTokenException(tmp);
 				}
 			}
+
+			throw UnexpectedEndOfStreamException();
 		}
 	}
 }

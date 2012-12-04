@@ -81,6 +81,9 @@ namespace StormSQL
 				i = rowIndex + 1;
 			}
 
+			if (i >= table->rows)
+				return false;
+
 			while (!TestCurrentRow())
 			{
 				if (i >= table->rows)

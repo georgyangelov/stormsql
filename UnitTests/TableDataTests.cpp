@@ -19,8 +19,8 @@ namespace UnitTests
 	public:
 		Table GetTableSchema()
 		{
-			Field f1 = { "test", Field::FieldType::int32, 10 };
-			Field f2 = { "test2", Field::FieldType::fixedchar, 30 };
+			Field f1("test", Field::FieldType::int32, 10);
+			Field f2("test2", Field::FieldType::fixedchar, 30);
 
 			Table schema;
 			schema.AddField(f1);
@@ -67,7 +67,7 @@ namespace UnitTests
 		{
 			Table schema = GetTable();
 			
-			Field f3 = { "test12", Field::FieldType::int32, 10 };
+			Field f3("test12", Field::FieldType::int32, 10);
 			schema.AddField(1, f3);
 
 			// Iterate and verify data

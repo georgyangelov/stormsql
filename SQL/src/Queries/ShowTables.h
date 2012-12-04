@@ -1,5 +1,5 @@
-#ifndef _H_QUERIES_CREATETABLE_INCLUDED
-#define _H_QUERIES_CREATETABLE_INCLUDED
+#ifndef _H_QUERIES_SHOWTABLES_INCLUDED
+#define _H_QUERIES_SHOWTABLES_INCLUDED
 
 #include "../StormSQL/Defines.h"
 #include "../StormSQL/Table.h"
@@ -12,21 +12,14 @@ namespace StormSQL
 
 	namespace Queries
 	{
-		class CreateTable
+		class ShowTables
 			: public Query
 		{
 		protected:
 			Database* db;
-			string name;
-			Table tbl;
-
-			Field parseField(Lexer&);
 
 		public:
-			CreateTable(Database*);
-
-			void SetName(string name);
-			void AddField(const Field&);
+			ShowTables(Database*);
 
 			string GetType() const;
 

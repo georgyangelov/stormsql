@@ -24,8 +24,8 @@ namespace UnitTests
 		{
 			Database db;
 
-			Field f1 = { "testInt", Field::FieldType::int32, 10 };
-			Field f2 = { "testStr", Field::FieldType::fixedchar, 30 };
+			Field f1("testInt", Field::FieldType::int32, 10);
+			Field f2("testStr", Field::FieldType::fixedchar, 30);
 
 			/*Table schema1;
 			schema1.AddField(f1);
@@ -41,8 +41,8 @@ namespace UnitTests
 			Assert::IsTrue(db.HasTable("table1"));
 			Assert::AreEqual(2, db.GetTable("table1").GetNumFields());
 
-			Field f3 = { "strTest", Field::FieldType::fixedchar, 30 };
-			Field f4 = { "intTest", Field::FieldType::int32, 10 };
+			Field f3("strTest", Field::FieldType::fixedchar, 30);
+			Field f4("intTest", Field::FieldType::int32, 10);
 
 			Table schema2;
 			schema2.AddField(f3);
