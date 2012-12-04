@@ -91,12 +91,18 @@ namespace StormSQL
 		if (name.size() > STORM_SQL_TABLE_NAME_SIZE - STORM_SQL_STRING_TERMINATOR_SIZE)
 			throw NameTooLong();
 
+		if (HasTable(name))
+			throw TableExists();
+
 		// Copy table and add to database
 		tables[name] = new Table(table);
 	}
 
 	void Database::DropTable(string name)
 	{
+		if (!HasTable(name))
+			throw TableDoesntExist();
+
 		// Delete Table object
 		delete tables[name];
 

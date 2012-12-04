@@ -108,6 +108,16 @@ namespace StormSQL
 		}
 	};
 
+	class TableExists
+		: public Exception
+	{
+	public:
+		TableExists()
+			: Exception("A table with this name already exists")
+		{
+		}
+	};
+
 	class NoColumnsInTable
 		: public Exception
 	{

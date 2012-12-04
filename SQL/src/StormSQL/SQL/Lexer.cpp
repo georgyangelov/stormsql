@@ -92,6 +92,7 @@ namespace StormSQL
 			return tmp;
 		}
 
+		//TODO: Refractor so that it returns bool false on eof
 		Token Lexer::NextToken()
 		{
 			ignoreWhitespace();
@@ -136,7 +137,7 @@ namespace StormSQL
 			else if (isLetter(c))
 			{
 				tmp += c;
-				while (isLetter(in->peek()))
+				while (isLetter(in->peek()) || isNumber(in->peek()) || in->peek() == '_')
 				{
 					tmp += in->get();
 				}
