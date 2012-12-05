@@ -22,6 +22,7 @@ namespace StormSQL
 			Table* res = new Table();
 
 			res->AddField(Field("Table", Field::fixedchar, STORM_SQL_TABLE_NAME_SIZE));
+			res->AddField(Field("Rows", Field::int32, 0));
 
 			Insert ins(res);
 			
@@ -29,6 +30,7 @@ namespace StormSQL
 			for (int i = 0; i < tables.size(); i++)
 			{
 				ins.SetString(0, tables[i].c_str());
+				ins.SetInt(1, db->GetTable(tables[i]).GetNumRows());
 				ins.Execute();
 			}
 

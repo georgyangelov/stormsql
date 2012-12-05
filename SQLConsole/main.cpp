@@ -77,19 +77,19 @@ void saveDatabases()
 ostream& operator << (ostream& out, Table tbl)
 {
 	vector<Field> fields = tbl.GetFields();
+
+	cout << left;
+	cout << setw(fields.size() * 13) << setfill('-') << '+' << setfill(' ');
+	cout << '+' << endl;
+
 	for (int i = 0; i < fields.size(); i++)
 	{
-		cout << "| " << setw(10) << left << fields[i].name << " ";
+		cout << "| " << setw(10) << fields[i].name << " ";
 	}
 
 	cout << "|" << endl;
-
-	for (int i = 0; i < fields.size() * 13; i++)
-	{
-		cout << '-';
-	}
-
-	cout << '-' << endl;
+	cout << setw(fields.size() * 13) << setfill('-') << '+' << setfill(' ');
+	cout << '+' << endl;
 
 	TableDataIterator<> iter = tbl.GetIterator();
 	while (iter.NextRow())
@@ -120,6 +120,8 @@ ostream& operator << (ostream& out, Table tbl)
 
 		 cout << "|" << endl;
 	}
+	cout << setw(fields.size() * 13) << setfill('-') << '+' << setfill(' ');
+	cout << '+' << endl;
 
 	return out;
 }
