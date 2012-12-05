@@ -1,5 +1,6 @@
 #include "Parser.h"
 #include "../../Queries/CreateTable.h"
+#include "../../Queries/DropTable.h"
 #include "../../Queries/ShowTables.h"
 
 namespace StormSQL
@@ -14,19 +15,13 @@ namespace StormSQL
 
 		Query* Parser::ParseQuery()
 		{
-			Token t = lexer.NextToken();
-
-			if (t.type != TokenType::Keyword)
-				throw InvalidTokenException(t);
+			Token t = lexer.NextToken(TokenType::Keyword);
 
 			Query* q = NULL;
 
 			if (t.strData == "create")
 			{
-				Token t2 = lexer.NextToken();
-
-				if (t2.type != TokenType::Keyword)
-					throw InvalidTokenException(t2);
+				Token t2 = lexer.NextToken(TokenType::Keyword);
 
 				if (t2.strData == "table")
 					q = new CreateTable(db);
@@ -35,13 +30,19 @@ namespace StormSQL
 			}
 			else if (t.strData == "show")
 			{
-				Token t2 = lexer.NextToken();
-
-				if (t2.type != TokenType::Keyword)
-					throw InvalidTokenException(t2);
+				Token t2 = lexer.NextToken(TokenType::Keyword);
 
 				if (t2.strData == "tables")
 					q = new ShowTables(db);
+				else
+					throw InvalidTokenException(t2);
+			}
+			else if (t.strData == "drop")
+			{
+				Token t2 = lexer.NextToken(TokenType::Keyword);
+
+				if (t2.strData == "table")
+					q = new DropTable(db);
 				else
 					throw InvalidTokenException(t2);
 			}

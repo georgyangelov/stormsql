@@ -65,6 +65,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Queries\CreateTable.cpp" />
+    <ClCompile Include="src\Queries\DropTable.cpp" />
     <ClCompile Include="src\Queries\Insert.cpp" />
     <ClCompile Include="src\Queries\Select.cpp" />
     <ClCompile Include="src\Queries\ShowTables.cpp" />
@@ -78,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Queries\CreateTable.h" />
+    <ClInclude Include="src\Queries\DropTable.h" />
     <ClInclude Include="src\Queries\Insert.h" />
     <ClInclude Include="src\Queries\Query.h" />
     <ClInclude Include="src\Queries\Select.h" />
