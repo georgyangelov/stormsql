@@ -2,6 +2,8 @@
 #include "../../Queries/CreateTable.h"
 #include "../../Queries/DropTable.h"
 #include "../../Queries/ShowTables.h"
+#include "../../Queries/ShowCreate.h"
+#include "../../Queries/Insert.h"
 
 namespace StormSQL
 {
@@ -34,6 +36,8 @@ namespace StormSQL
 
 				if (t2.strData == "tables")
 					q = new ShowTables(db);
+				else if (t2.strData == "create")
+					q = new ShowCreate(db);
 				else
 					throw InvalidTokenException(t2);
 			}
@@ -45,6 +49,13 @@ namespace StormSQL
 					q = new DropTable(db);
 				else
 					throw InvalidTokenException(t2);
+			}
+			else if (t.strData == "insert")
+			{
+				lexer.NextToken(TokenType::Keyword, "into");
+				Token tblName = lexer.NextToken(TokenType::Identifier, false);
+
+				q = new Insert(&db->GetTable(tblName.strData));
 			}
 
 			if (q == NULL)

@@ -56,6 +56,22 @@ namespace StormSQL
 		return columns;
 	}
 
+	int Table::GetColumnIndex(const char* name) const
+	{
+		for (int i = 0; i < columns.size(); i++)
+		{
+			if (strcmp(columns[i].name, name) == 0)
+				return i;
+		}
+
+		throw ColumnIndexOutOfBounds();
+	}
+	
+	Field::FieldType Table::GetFieldType(int i) const
+	{
+		return columns[i].type;
+	}
+
 	bool Table::HasField(const char* name, int& index) const
 	{
 		for (unsigned int i = 0; i < columns.size(); i++)

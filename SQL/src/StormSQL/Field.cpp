@@ -34,6 +34,24 @@ namespace StormSQL
 		}
 	}
 
+	string Field::GetStringType() const
+	{
+		switch (type)
+		{
+		case byte:
+			return "byte";
+		case int32:
+			return "int";
+		case uint32:
+			return "uint";
+		case fixedchar:
+			return "char";
+
+		default:
+			throw InvalidFieldType();
+		}
+	}
+
 	void Field::WriteToStream(ostream& out) const
 	{
 		out.write(name, STORM_SQL_FIELD_NAME_SIZE);

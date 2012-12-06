@@ -47,6 +47,8 @@ namespace StormSQL
 		int GetNumRows() const;
 		int GetNumFields() const;
 		vector<Field> GetFields() const;
+		int GetColumnIndex(const char*) const;
+		Field::FieldType GetFieldType(int) const;
 
 		// Test
 		bool HasField(const char*) const;

@@ -131,8 +131,63 @@ namespace StormSQL
 			}
 		}
 
+		/*
+		 * INSERT INTO <tableName> // read by parser
+		 * VALUES (<values>)
+		 *
+		 * <columns> := <columnName> | <columnName>, <columns>
+		 * <values> := <value> | <value>, <values>
+		 * <columnName> == identifier
+		 * <value> == intValue | strValue
+		 */
 		void Insert::Parse(Lexer& lex)
 		{
+			lex.NextToken(TokenType::Keyword, "values");
+			lex.NextToken(TokenType::Parenthesis, "(");
+
+			Token t;
+			int index = 0;
+			do
+			{
+				/* BEGIN Read <value> */
+				t = lex.NextToken();
+
+				if (t.type == TokenType::IntValue)
+				{
+					switch (table->GetFieldType(index))
+					{
+					case Field::FieldType::byte:
+						SetByte(index, (byte)t.longIntData);
+						break;
+						
+					case Field::FieldType::int32:
+						SetInt(index, (int)t.longIntData);
+						break;
+						
+					case Field::FieldType::uint32:
+						SetUInt(index, (unsigned int)t.longIntData);
+						break;
+
+					default:
+						throw InvalidTokenException(t);
+					}
+				}
+				else if (t.type == TokenType::StringValue)
+				{
+					SetString(index, t.strData);
+				}
+				else
+					throw InvalidTokenException(t);
+				
+				index++;
+				/* END Read <value> */
+
+				t = lex.NextToken();
+			}
+			while (t.type == TokenType::Separator);
+
+			if (t.type != TokenType::Parenthesis || t.strData != ")")
+				throw InvalidTokenException(t);
 		}
 	}
 }

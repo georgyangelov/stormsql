@@ -29,6 +29,7 @@ namespace StormSQL
 		Field(const char*, FieldType, unsigned int);
 
 		unsigned int GetByteSize() const;
+		string GetStringType() const;
 
 		void WriteToStream(ostream&) const;
 		void ReadFromStream(istream&);

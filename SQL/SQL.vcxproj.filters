@@ -69,6 +69,9 @@
     <ClCompile Include="src\Queries\DropTable.cpp">
       <Filter>Source Files\StormSQL\Queries</Filter>
     </ClCompile>
+    <ClCompile Include="src\Queries\ShowCreate.cpp">
+      <Filter>Source Files\StormSQL\Queries</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\StormSQL\Field.h">
@@ -117,6 +120,9 @@
       <Filter>Header Files\StormSQL\Queries</Filter>
     </ClInclude>
     <ClInclude Include="src\Queries\DropTable.h">
+      <Filter>Header Files\StormSQL\Queries</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Queries\ShowCreate.h">
       <Filter>Header Files\StormSQL\Queries</Filter>
     </ClInclude>
   </ItemGroup>
