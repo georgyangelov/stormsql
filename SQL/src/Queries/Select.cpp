@@ -69,7 +69,7 @@ namespace StormSQL
 				t = lex.NextToken(false);
 				string data = t.strData;
 
-				if (t.type != TokenType::Identifier && t.strData != "*")
+				if (t.type != TokenType::Identifier && t.type != TokenType::Keyword && t.strData != "*")
 					throw InvalidTokenException(t);
 
 				t = lex.NextToken();
