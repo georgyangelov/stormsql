@@ -15,23 +15,34 @@ namespace StormSQL
 	// Forward declarations
 	class Table;
 
+	class FieldData
+	{
+	private:
+		const byte* ptr;
+		Field field;
+
+	public:
+		FieldData(const byte*, const Field&);
+
+		Field::FieldType GetType() const;
+
+		const byte* GetPtr() const;
+		
+		char GetChar() const;
+		int GetInt32() const;
+		unsigned int GetUInt32() const;
+		string GetString() const;
+	};
+
 	class TableDataRow
 	{
 	protected:
-		byte* ptr;
-		vector<Field> columns;
+		vector<FieldData> columns;
 
 	public:
 		TableDataRow(byte* _ptr, const vector<Field>& _columns);
-		
-		Field::FieldType GetType(int columnIndex) const;
 
-		const byte* GetPtr(int columnIndex) const;
-
-		char GetChar(int columnIndex) const;
-		int GetInt32(int columnIndex) const;
-		unsigned int GetUInt32(int columnIndex) const;
-		string GetString(int columnIndex) const;
+		FieldData& operator [](int);
 	};
 
 	template <class TPredicate = TruePredicate>

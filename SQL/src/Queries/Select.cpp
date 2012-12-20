@@ -40,13 +40,13 @@ namespace StormSQL
 		 * <columns>
 		 * FROM
 		 * <table>
-		 * //(WHERE <expressions>)
+		 * (WHERE <expressions>)
 		 *
 		 * <columns> := <columnName>, <columns> | <columnName>
 		 * <columnName> := identifier (AS identifier) | *
 		 * <table> := identifier
-		 * //<expressions> := <boolExpr> | <boolExpr> (AND|OR) <expressions>
-		 * //<boolExpr> := <boolValue> | <boolValue> (==|<=|<|>|>=|!=) <boolValue>
+		 * <expressions> := <boolExpr> | <boolExpr> (AND|OR) <expressions>
+		 * <boolExpr> := <boolValue> | <boolValue> (==|<=|<|>|>=|!=) <boolValue>
 		 */
 		void Select::Parse(Lexer& lex)
 		{
@@ -57,6 +57,16 @@ namespace StormSQL
 
 			t = lex.NextToken(TokenType::Identifier);
 			SetFrom(t.strData);
+
+			/*t = lex.NextToken();
+			if (t.type == TokenType::Keyword && t.strData == "where")
+			{
+				
+			}
+			else
+			{
+				lex.PutBackToken(t);
+			}*/
 		}
 
 		void Select::ReadColumns(Lexer& lex)
@@ -137,7 +147,7 @@ namespace StormSQL
 						int numCols = source->GetNumFields();
 						for (int i = 0; i < numCols; i++)
 						{
-							ins.Set(columnNum, row.GetType(i), row.GetPtr(i));
+							ins.Set(columnNum, row[i].GetType(), row[i].GetPtr());
 							
 							columnNum++;
 						}
@@ -149,7 +159,7 @@ namespace StormSQL
 
 						int index = source->GetColumnIndex(colIter->second.c_str());
 						
-						ins.Set(columnNum, row.GetType(index), row.GetPtr(index));
+						ins.Set(columnNum, row[index].GetType(), row[index].GetPtr());
 
 						columnNum++;
 					}

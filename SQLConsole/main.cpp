@@ -104,16 +104,16 @@ ostream& operator << (ostream& out, Table tbl)
 			switch (fields[i].type)
 			{
 			case Field::FieldType::byte:
-				cout << (int)row.GetChar(i) << " ";
+				cout << (int)row[i].GetChar() << " ";
 				break;
 			case Field::FieldType::int32:
-				cout << row.GetInt32(i) << " ";
+				cout << row[i].GetInt32() << " ";
 				break;
 			case Field::FieldType::uint32:
-				cout << row.GetUInt32(i) << " ";
+				cout << row[i].GetUInt32() << " ";
 				break;
 			case Field::FieldType::fixedchar:
-				cout << row.GetString(i) << " ";
+				cout << row[i].GetString() << " ";
 				break;
 			}
 		}

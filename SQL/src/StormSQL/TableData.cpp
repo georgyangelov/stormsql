@@ -4,57 +4,70 @@
 
 namespace StormSQL
 {
+	/* FieldData */
+	FieldData::FieldData(const byte* _ptr, const Field& _field)
+		: ptr(_ptr), field(_field)
+	{
+	}
+
+	Field::FieldType FieldData::GetType() const
+	{
+		return field.type;
+	}
+
+	const byte* FieldData::GetPtr() const
+	{
+		return ptr;
+	}
+
+	char FieldData::GetChar() const
+	{
+		if (field.type != Field::FieldType::byte)
+			throw InvalidFieldType();
+
+		return *(char*)ptr;
+	}
+
+	int FieldData::GetInt32() const
+	{
+		if (field.type != Field::FieldType::int32)
+			throw InvalidFieldType();
+
+		return *(int*)ptr;
+	}
+	
+	unsigned int FieldData::GetUInt32() const
+	{
+		if (field.type != Field::FieldType::uint32)
+			throw InvalidFieldType();
+
+		return *((unsigned int*)ptr);
+	}
+	
+	string FieldData::GetString() const
+	{
+		if (field.type != Field::FieldType::fixedchar)
+			throw InvalidFieldType();
+
+		return (const char*)ptr;
+	}
+	/* END FieldData */
+
 	/* TableDataRow */
 	TableDataRow::TableDataRow(byte* _ptr, const vector<Field>& _columns)
-		: ptr(_ptr), columns(_columns)
 	{
+		byte* res = _ptr;
+
+		for (int i = 0; i < _columns.size(); i++)
+		{
+			columns.push_back(FieldData(res, _columns[i]));
+			res += _columns[i].GetByteSize();
+		}
 	}
 
-	Field::FieldType TableDataRow::GetType(int index) const
+	FieldData& TableDataRow::operator [](int i)
 	{
-		return columns[index].type;
-	}
-
-	const byte* TableDataRow::GetPtr(int index) const
-	{
-		byte* res = ptr;
-
-		for (int i = 0; i < index; i++)
-			res += columns[i].GetByteSize();
-
-		return res;
-	}
-
-	char TableDataRow::GetChar(int index) const
-	{
-		if (columns[index].type != Field::FieldType::byte)
-			throw InvalidFieldType();
-
-		return *GetPtr(index);
-	}
-
-	int TableDataRow::GetInt32(int index) const
-	{
-		if (columns[index].type != Field::FieldType::int32)
-			throw InvalidFieldType();
-
-		return *((int*)GetPtr(index));
-	}
-	
-	unsigned int TableDataRow::GetUInt32(int index) const
-	{
-		if (columns[index].type != Field::FieldType::uint32)
-			throw InvalidFieldType();
-
-		return *((unsigned int*)GetPtr(index));
-	}
-	
-	string TableDataRow::GetString(int index) const
-	{
-		if (columns[index].type != Field::FieldType::fixedchar)
-			throw InvalidFieldType();
-
-		return (char*)GetPtr(index);
+		return columns[i];
 	}
 	/* END TableDataRow */
 }

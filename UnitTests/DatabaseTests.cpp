@@ -119,26 +119,26 @@ namespace UnitTests
 			
 			iter.NextRow();
 			TableDataRow row = iter.GetFullDataRow();
-			Assert::AreEqual(1, row.GetInt32(0));
-			Assert::IsTrue(row.GetString(1) == "testString");
+			Assert::AreEqual(1, row[0].GetInt32());
+			Assert::IsTrue(row[1].GetString() == "testString");
 
 			iter.NextRow();
 			row = iter.GetFullDataRow();
-			Assert::AreEqual(2, row.GetInt32(0));
-			Assert::IsTrue(row.GetString(1) == "anotherTest");
+			Assert::AreEqual(2, row[0].GetInt32());
+			Assert::IsTrue(row[1].GetString() == "anotherTest");
 
 			// Iterate and verify data
 			iter = db2.GetTable("table2").GetIterator();
 			
 			iter.NextRow();
 			row = iter.GetFullDataRow();
-			Assert::IsTrue(row.GetString(0) == "stringTest");
-			Assert::AreEqual(3, row.GetInt32(1));
+			Assert::IsTrue(row[0].GetString() == "stringTest");
+			Assert::AreEqual(3, row[1].GetInt32());
 
 			iter.NextRow();
 			row = iter.GetFullDataRow();
-			Assert::IsTrue(row.GetString(0) == "anotherTest");
-			Assert::AreEqual(4, row.GetInt32(1));
+			Assert::IsTrue(row[0].GetString() == "anotherTest");
+			Assert::AreEqual(4, row[1].GetInt32());
 		}
 
 	};
