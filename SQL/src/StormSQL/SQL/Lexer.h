@@ -2,6 +2,7 @@
 #define _H_LEXER_INCLUDED
 
 #include <string>
+#include <stack>
 
 using namespace std;
 
@@ -37,6 +38,7 @@ namespace StormSQL
 		{
 		private:
 			istream* in;
+			stack<Token> putBackTokens;
 
 			// Helper functions
 			void ignoreWhitespace();
@@ -54,6 +56,8 @@ namespace StormSQL
 			Token NextToken(bool toLower = true);
 			Token NextToken(TokenType expected, bool toLower = true);
 			Token NextToken(TokenType expected, string strData, bool toLower = true);
+
+			void PutBackToken(const Token&);
 		};
 
 		class LexerException

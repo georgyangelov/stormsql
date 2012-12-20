@@ -2,25 +2,36 @@
 #define _H_QUERIES_SELECT_INCLUDED
 
 #include "../StormSQL/Defines.h"
-#include "../StormSQL/Table.h"
+#include "../StormSQL/Database.h"
 #include "Query.h"
+#include <hash_map>
+
+using namespace std;
 
 namespace StormSQL
 {
 	namespace Queries
 	{
 		class Select
-			: Query
+			: public Query
 		{
 		protected:
-			Table* const table;
+			Database* db;
+			string tableName;
+			hash_map<string, string> columns;
+
+			void ReadColumns(Lexer&);
 			
 		public:
-			Select(Table* const);
-			Select(const Select&);
+			Select(Database*);
 			~Select();
 
+			void AddColumn(string, string);
+			void SetFrom(string);
+
 			string GetType() const;
+			void Parse(Lexer&);
+
 			Table* Execute();
 		};
 	}

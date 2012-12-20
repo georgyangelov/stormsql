@@ -31,6 +31,9 @@
     <Filter Include="Source Files\StormSQL\SQL">
       <UniqueIdentifier>{87ed19f6-4b58-4e92-9066-b3b37a1c94bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\StormSQL\Queries\Expressions">
+      <UniqueIdentifier>{63d1c358-6854-4aa6-8e8c-e3ef2144979f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\StormSQL\Field.cpp">
@@ -124,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="src\Queries\ShowCreate.h">
       <Filter>Header Files\StormSQL\Queries</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Queries\Expressions\ColumnsExpression.h">
+      <Filter>Header Files\StormSQL\Queries\Expressions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

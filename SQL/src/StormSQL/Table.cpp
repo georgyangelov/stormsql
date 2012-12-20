@@ -51,6 +51,11 @@ namespace StormSQL
 		return columns.size();
 	}
 
+	Field Table::GetField(int index) const
+	{
+		return columns[index];
+	}
+
 	vector<Field> Table::GetFields() const
 	{
 		return columns;

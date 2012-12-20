@@ -4,6 +4,7 @@
 #include "../../Queries/ShowTables.h"
 #include "../../Queries/ShowCreate.h"
 #include "../../Queries/Insert.h"
+#include "../../Queries/Select.h"
 
 namespace StormSQL
 {
@@ -56,6 +57,10 @@ namespace StormSQL
 				Token tblName = lexer.NextToken(TokenType::Identifier, false);
 
 				q = new Insert(&db->GetTable(tblName.strData));
+			}
+			else if (t.strData == "select")
+			{
+				q = new Select(db);
 			}
 
 			if (q == NULL)

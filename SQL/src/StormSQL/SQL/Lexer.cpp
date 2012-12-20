@@ -95,6 +95,14 @@ namespace StormSQL
 
 		Token Lexer::NextToken(bool toLower)
 		{
+			if (!putBackTokens.empty())
+			{
+				Token t = putBackTokens.top();
+				putBackTokens.pop();
+
+				return t;
+			}
+
 			ignoreWhitespace();
 
 			if (in->eof())
@@ -179,6 +187,11 @@ namespace StormSQL
 			}
 
 			throw UnexpectedEndOfStreamException();
+		}
+
+		void Lexer::PutBackToken(const Token& token)
+		{
+			putBackTokens.push(token);
 		}
 	}
 }
