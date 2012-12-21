@@ -43,17 +43,19 @@ namespace UnitTests
 
 		TEST_METHOD(ExpressionRPNTest)
 		{
-			stringstream stream("a + 50 = 35 AND `b` = true");
+			stringstream stream("a + 50 = 35 AND test(`b`, 'c') = true");
 			hash_map<string, operationInfo> ops;
+			// The operations themselves aren't used here
 			ops["+"] = operationInfo(new Plus(), 2, 2, true, false);
 			ops["="] = operationInfo(new Equals(), 1, 2, true, false);
 			ops["AND"] = operationInfo(new And(), 0, 2, true, false);
+			ops["test"] = operationInfo(new And(), 0, 2, true, true);
 
 			Lexer lex(stream);
 			ExpressionParser p(lex, ops);
 
 			stringstream rpn = p.GetRPN();
-			Assert::AreEqual(" a 50 + 35 = `b` true = AND", rpn.str().c_str());
+			Assert::AreEqual(" a 50 + 35 = `b` 'c' test true = AND", rpn.str().c_str());
 		}
 
 	};

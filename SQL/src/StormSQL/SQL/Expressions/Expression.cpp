@@ -22,8 +22,10 @@ stringstream ExpressionParser::GetRPN()
 		switch (t.type)
 		{
 		case TokenType::IntValue:
+			out << " " << t.longIntData;
+			break;
 		case TokenType::StringValue:
-			out << " " << t.strData;
+			out << " " << '\'' << t.strData << '\'';
 			break;
 
 		case TokenType::Identifier:
