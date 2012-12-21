@@ -21,6 +21,7 @@ namespace StormSQL
 			{
 			public:
 				virtual Value operator () (const vector<Value>&) const = 0;
+				virtual IOperation* Clone() const = 0;
 			};
 
 			struct operationInfo
@@ -43,6 +44,11 @@ namespace StormSQL
 				: public Exception
 			{
 			public:
+				InvalidNumberOfArguments(string func)
+					: Exception("Invalid number of arguments for function " + func)
+				{
+				}
+
 				InvalidNumberOfArguments(string func, string num)
 					: Exception("Invalid number of arguments for function " + func + ". " + num + " expected")
 				{
@@ -61,6 +67,11 @@ namespace StormSQL
 					Value v1 = v[0], v2 = v[1];
 					return (bool)v1 && (bool)v2;
 				}
+
+				IOperation* Clone() const
+				{
+					return new And();
+				}
 			};
 
 			class Equals
@@ -75,6 +86,11 @@ namespace StormSQL
 					Value v1 = v[0], v2 = v[1];
 					return v1 == v2;
 				}
+
+				IOperation* Clone() const
+				{
+					return new Equals();
+				}
 			};
 
 			class Plus
@@ -88,6 +104,11 @@ namespace StormSQL
 					
 					Value v1 = v[0], v2 = v[1];
 					return (int)v1 + (int)v2;
+				}
+
+				IOperation* Clone() const
+				{
+					return new Plus();
 				}
 			};
 		}

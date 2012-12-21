@@ -8,6 +8,7 @@
 #include "Operations.h"
 #include <hash_map>
 #include <sstream>
+#include <queue>
 
 using namespace StormSQL::SQL;
 using namespace std;
@@ -21,7 +22,8 @@ namespace StormSQL
 			class Expression
 			{
 			public:
-				virtual Value Compute(const hash_map<string, FieldData>&) const = 0;
+				virtual Value Compute(const hash_map<string, Value>&) const = 0;
+				virtual Expression* Clone() const = 0;
 			};
 
 			class ExpressionParser
@@ -30,9 +32,11 @@ namespace StormSQL
 				Lexer* lex;
 				hash_map<string, operationInfo> ops;
 
-
+				void ExpressionParser::InsertOp(Token t, stack<Expression*>& values);
 			public:
-				stringstream GetRPN();
+				queue<Token> GetRPN();
+				static string Implode(queue<Token>&);
+
 				ExpressionParser(Lexer&, const hash_map<string, operationInfo>&);
 
 				Expression* Parse();
@@ -42,13 +46,13 @@ namespace StormSQL
 				: public Expression
 			{
 			protected:
-				FieldData val;
+				Value val;
 
 			public:
-				ConstExpression(FieldData val);
+				ConstExpression(Value);
 
-				void SetValue(const FieldData&);
-				Value Compute(const hash_map<string, FieldData>&);
+				Value Compute(const hash_map<string, Value>&) const;
+				Expression* Clone() const;
 			};
 
 			class VarExpression
@@ -60,7 +64,8 @@ namespace StormSQL
 			public:
 				VarExpression(string);
 
-				Value Compute(const hash_map<string, FieldData>&);
+				Value Compute(const hash_map<string, Value>&) const;
+				Expression* Clone() const;
 			};
 
 			class CompExpression
@@ -68,10 +73,20 @@ namespace StormSQL
 			{
 			protected:
 				vector<Expression*> expressions;
-				string operation;
+				IOperation* operation;
+
+				void del();
+				void copy(const CompExpression&);
 
 			public:
-				Value Compute(const hash_map<string, FieldData>&);
+				CompExpression(const vector<Expression*>, IOperation*);
+				CompExpression(const CompExpression&);
+				~CompExpression();
+				
+				CompExpression& operator = (const CompExpression&);
+
+				Value Compute(const hash_map<string, Value>&) const;
+				Expression* Clone() const;
 			};
 
 			class Where

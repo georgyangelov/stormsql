@@ -34,6 +34,11 @@ namespace StormSQL
 				std::string strVal;
 
 				Type type;
+
+				Value()
+					: intVal(0), type(Type::integer)
+				{
+				}
 				
 				Value(int _int)
 					: intVal(_int), type(Type::integer)
@@ -43,6 +48,32 @@ namespace StormSQL
 				Value(std::string _str)
 					: strVal(_str), type(Type::string)
 				{
+				}
+
+				Value(FieldData field)
+				{
+					switch (field.GetType())
+					{
+					case Field::FieldType::byte:
+						intVal = field.GetChar();
+						type = Type::integer;
+						break;
+					case Field::FieldType::int32:
+						intVal = field.GetInt32();
+						type = Type::integer;
+						break;
+					case Field::FieldType::uint32:
+						//TODO: Safer conversion (no conversion at all)
+						intVal = field.GetUInt32();
+						type = Type::integer;
+						break;
+					case Field::FieldType::fixedchar:
+						strVal = field.GetString();
+						type = Type::string;
+						break;
+					default:
+						throw InvalidFieldType();
+					}
 				}
 
 				operator bool()
@@ -69,20 +100,18 @@ namespace StormSQL
 					return strVal;
 				}
 
-				
+				bool operator ==(const Value& v2)
+				{
+					if (type != v2.type)
+						return false;
 
-			bool operator ==(const Value& v2)
-			{
-				if (type != v2.type)
-					return false;
-
-				if (type == Value::integer)
-					return intVal == v2.intVal;
-				else if (type == Value::string)
-					return strVal == v2.strVal;
-				else
-					throw runtime_error("Unknown Value type");
-			}
+					if (type == Value::integer)
+						return intVal == v2.intVal;
+					else if (type == Value::string)
+						return strVal == v2.strVal;
+					else
+						throw runtime_error("Unknown Value type");
+				}
 			};
 		}
 	}

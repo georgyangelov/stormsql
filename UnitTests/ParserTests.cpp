@@ -44,6 +44,7 @@ namespace UnitTests
 		TEST_METHOD(ExpressionRPNTest)
 		{
 			stringstream stream("a + 50 = 35 AND test(`b`, 'c') = true");
+
 			hash_map<string, operationInfo> ops;
 			// The operations themselves aren't used here
 			ops["+"] = operationInfo(new Plus(), 2, 2, true, false);
@@ -54,9 +55,42 @@ namespace UnitTests
 			Lexer lex(stream);
 			ExpressionParser p(lex, ops);
 
-			stringstream rpn = p.GetRPN();
-			Assert::AreEqual(" a 50 + 35 = `b` 'c' test true = AND", rpn.str().c_str());
+			string rpn = ExpressionParser::Implode( p.GetRPN() );
+			Assert::AreEqual("a 50 + 35 = `b` 'c' test true = AND", rpn.c_str());
 		}
 
+		TEST_METHOD(ExpressionComputeTest)
+		{
+			stringstream stream("a + 50 = 35 AND 1 = true");
+
+			hash_map<string, operationInfo> ops;
+			ops["+"] = operationInfo(new Plus(), 2, 2, true, false);
+			ops["="] = operationInfo(new Equals(), 1, 2, true, false);
+			ops["AND"] = operationInfo(new And(), 0, 2, true, false);
+
+			Lexer lex(stream);
+			ExpressionParser p(lex, ops);
+
+			Expression* exp = p.Parse();
+			Assert::IsTrue(exp);
+
+			hash_map<string, Value> identifiers;
+			identifiers["a"] = -15;
+
+			Value result = exp->Compute(identifiers);
+
+			Assert::IsTrue(Value::Type::integer == result.type);
+			Assert::AreEqual(1, result.intVal);
+
+
+			identifiers["a"] = 10;
+
+			result = exp->Compute(identifiers);
+
+			Assert::IsTrue(Value::Type::integer == result.type);
+			Assert::AreEqual(0, result.intVal);
+
+			delete exp;
+		}
 	};
 }

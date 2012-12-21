@@ -18,6 +18,16 @@ namespace StormSQL
 		}
 	};
 
+	class UnknownIdentifierException
+		: public Exception
+	{
+	public:
+		UnknownIdentifierException(string type)
+			: Exception("Unknown identifier " + type)
+		{
+		}
+	};
+
 	class TableSchemaOldVersion
 		: public Exception
 	{
