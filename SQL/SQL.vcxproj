@@ -81,7 +81,6 @@
   <ItemGroup>
     <ClInclude Include="src\Queries\CreateTable.h" />
     <ClInclude Include="src\Queries\DropTable.h" />
-    <ClInclude Include="src\Queries\Expressions\Where.h" />
     <ClInclude Include="src\Queries\Insert.h" />
     <ClInclude Include="src\Queries\Query.h" />
     <ClInclude Include="src\Queries\Select.h" />
@@ -93,6 +92,9 @@
     <ClInclude Include="src\StormSQL\Exceptions.h" />
     <ClInclude Include="src\StormSQL\Field.h" />
     <ClInclude Include="src\StormSQL\Predicates.h" />
+    <ClInclude Include="src\StormSQL\SQL\Expressions\Expression.h" />
+    <ClInclude Include="src\StormSQL\SQL\Expressions\Operations.h" />
+    <ClInclude Include="src\StormSQL\SQL\Expressions\Value.h" />
     <ClInclude Include="src\StormSQL\SQL\Lexer.h" />
     <ClInclude Include="src\StormSQL\SQL\Parser.h" />
     <ClInclude Include="src\StormSQL\TableData.h" />
