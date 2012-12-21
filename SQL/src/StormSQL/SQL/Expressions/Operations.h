@@ -20,7 +20,23 @@ namespace StormSQL
 			class IOperation
 			{
 			public:
-				virtual Value operator () (const vector<Expression*>&) const = 0;
+				virtual Value operator () (const vector<Value>&) const = 0;
+			};
+
+			struct operationInfo
+			{
+				IOperation* op;
+				int priority;
+				int arguments;
+				bool leftAssoc;
+				bool isFunction;
+
+				operationInfo() { };
+				operationInfo(IOperation* _op, int _priority, int _arguments, bool _leftAssoc, bool _isFunction)
+					: op(_op), priority(_priority), arguments(_arguments), 
+					  leftAssoc(_leftAssoc), isFunction(_isFunction)
+				{
+				}
 			};
 
 			class InvalidNumberOfArguments
@@ -37,20 +53,43 @@ namespace StormSQL
 				: public IOperation
 			{
 			public:
-				Value operator()(const vector<Expression*>& v) const
+				Value operator()(const vector<Value>& v) const
 				{
 					if (v.size() != 2)
-						throw InvalidNumberOfArguments("and", "2");
+						throw InvalidNumberOfArguments("AND", "2");
 
-					return (bool)v[0] && (bool)v[1];
+					Value v1 = v[0], v2 = v[1];
+					return (bool)v1 && (bool)v2;
 				}
 			};
 
-			typedef tuple<string, IOperation*, int, int> operationInfo; 
-			operationInfo operations[] = {
-				operationInfo("and", new And(), 2, 1)
+			class Equals
+				: public IOperation
+			{
+			public:
+				Value operator()(const vector<Value>& v) const
+				{
+					if (v.size() != 2)
+						throw InvalidNumberOfArguments("=", "2");
+
+					Value v1 = v[0], v2 = v[1];
+					return v1 == v2;
+				}
 			};
-			const int numOperations = 1;
+
+			class Plus
+				: public IOperation
+			{
+			public:
+				Value operator()(const vector<Value>& v) const
+				{
+					if (v.size() != 2)
+						throw InvalidNumberOfArguments("+", "2");
+					
+					Value v1 = v[0], v2 = v[1];
+					return (int)v1 + (int)v2;
+				}
+			};
 		}
 	}
 }

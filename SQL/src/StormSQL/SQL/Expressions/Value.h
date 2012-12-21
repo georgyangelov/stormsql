@@ -8,7 +8,7 @@ using namespace std;
 
 namespace StormSQL
 {
-	namespace Queries
+	namespace SQL
 	{
 		namespace Expressions
 		{
@@ -48,14 +48,14 @@ namespace StormSQL
 				operator bool()
 				{
 					if (type == integer)
-						return intVal;
+						return intVal != 0;
 					else
 						return strVal.size() > 0;
 				}
 
 				operator int()
 				{
-					if (type != integer)
+					if (type != Value::integer)
 						throw InvalidType("int");
 
 					return intVal;
@@ -63,11 +63,26 @@ namespace StormSQL
 
 				operator std::string()
 				{
-					if (type != string)
+					if (type != Value::string)
 						throw InvalidType("str");
 
 					return strVal;
 				}
+
+				
+
+			bool operator ==(const Value& v2)
+			{
+				if (type != v2.type)
+					return false;
+
+				if (type == Value::integer)
+					return intVal == v2.intVal;
+				else if (type == Value::string)
+					return strVal == v2.strVal;
+				else
+					throw runtime_error("Unknown Value type");
+			}
 			};
 		}
 	}

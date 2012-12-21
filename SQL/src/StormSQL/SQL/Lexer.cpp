@@ -60,6 +60,13 @@ namespace StormSQL
 			in = &_in;
 		}
 
+		bool Lexer::endOfStream()
+		{
+			ignoreWhitespace();
+
+			return in->eof();
+		}
+
 		Token Lexer::NextToken(TokenType expected, bool toLower)
 		{
 			Token t = NextToken(toLower);

@@ -78,6 +78,9 @@
     <ClCompile Include="src\Queries\ShowCreate.cpp">
       <Filter>Source Files\StormSQL\Queries</Filter>
     </ClCompile>
+    <ClCompile Include="src\StormSQL\SQL\Expressions\Expression.cpp">
+      <Filter>Source Files\StormSQL\Queries\Expressions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\StormSQL\Field.h">

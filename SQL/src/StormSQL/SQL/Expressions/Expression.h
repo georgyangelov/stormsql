@@ -5,14 +5,16 @@
 #include "../Lexer.h"
 #include "../../TableData.h"
 #include "Value.h"
+#include "Operations.h"
 #include <hash_map>
+#include <sstream>
 
 using namespace StormSQL::SQL;
 using namespace std;
 
 namespace StormSQL
 {
-	namespace Queries
+	namespace SQL
 	{
 		namespace Expressions
 		{
@@ -20,6 +22,20 @@ namespace StormSQL
 			{
 			public:
 				virtual Value Compute(const hash_map<string, FieldData>&) const = 0;
+			};
+
+			class ExpressionParser
+			{
+			private:
+				Lexer* lex;
+				hash_map<string, operationInfo> ops;
+
+
+			public:
+				stringstream GetRPN();
+				ExpressionParser(Lexer&, const hash_map<string, operationInfo>&);
+
+				Expression* Parse();
 			};
 
 			class ConstExpression

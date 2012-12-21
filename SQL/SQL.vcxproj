@@ -73,6 +73,7 @@
     <ClCompile Include="src\StormSQL\Database.cpp" />
     <ClCompile Include="src\StormSQL\DynamicBuffer.cpp" />
     <ClCompile Include="src\StormSQL\Field.cpp" />
+    <ClCompile Include="src\StormSQL\SQL\Expressions\Expression.cpp" />
     <ClCompile Include="src\StormSQL\SQL\Lexer.cpp" />
     <ClCompile Include="src\StormSQL\SQL\Parser.cpp" />
     <ClCompile Include="src\StormSQL\TableData.cpp" />

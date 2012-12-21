@@ -7,10 +7,13 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 #include <fstream>
 #include "StormSQL/SQL/Parser.h"
 #include <sstream>
+#include "StormSQL/SQL/Expressions/Operations.h"
+#include "StormSQL/SQL/Expressions/Expression.h"
 
 using namespace std;
 using namespace StormSQL;
 using namespace StormSQL::SQL;
+using namespace StormSQL::SQL::Expressions;
 
 namespace UnitTests
 {		
@@ -36,6 +39,21 @@ namespace UnitTests
 			Assert::IsTrue(db.GetTable("test").GetNumRows() == 0);
 
 			delete query;
+		}
+
+		TEST_METHOD(ExpressionRPNTest)
+		{
+			stringstream stream("a + 50 = 35 AND `b` = true");
+			hash_map<string, operationInfo> ops;
+			ops["+"] = operationInfo(new Plus(), 2, 2, true, false);
+			ops["="] = operationInfo(new Equals(), 1, 2, true, false);
+			ops["AND"] = operationInfo(new And(), 0, 2, true, false);
+
+			Lexer lex(stream);
+			ExpressionParser p(lex, ops);
+
+			stringstream rpn = p.GetRPN();
+			Assert::AreEqual(" a 50 + 35 = `b` true = AND", rpn.str().c_str());
 		}
 
 	};

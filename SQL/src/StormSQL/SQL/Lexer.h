@@ -48,11 +48,12 @@ namespace StormSQL
 
 			bool isLetter(char c) const;
 			bool isNumber(char c) const;
-			void toLower(string& c) const;
 
 		public:
 			Lexer(istream&);
 			
+			void toLower(string& c) const;
+			bool endOfStream();
 			Token NextToken(bool toLower = true);
 			Token NextToken(TokenType expected, bool toLower = true);
 			Token NextToken(TokenType expected, string strData, bool toLower = true);
