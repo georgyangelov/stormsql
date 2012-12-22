@@ -2,10 +2,12 @@
 #include "../StormSQL/Database.h"
 #include "../StormSQL/Exceptions.h"
 #include "../Queries/Insert.h"
+#include "../StormSQL/SQL/Lexer.h"
 
 #include <sstream>
 
 using namespace std;
+using namespace StormSQL::SQL;
 
 namespace StormSQL
 {

@@ -4,7 +4,6 @@
 #include "Defines.h"
 #include <vector>
 #include "Field.h"
-#include "Predicates.h"
 #include <istream>
 #include <ostream>
 
@@ -14,6 +13,7 @@ namespace StormSQL
 {
 	// Forward declarations
 	class Table;
+	class ITableDataPredicate;
 
 	class FieldData
 	{
@@ -45,84 +45,37 @@ namespace StormSQL
 		FieldData& operator [](int);
 	};
 
-	template <class TPredicate = TruePredicate>
 	class TableDataIterator
 	{
 	protected:
 		bool started;
 		Table* table;
-		TPredicate predicate;
+		ITableDataPredicate* predicate;
 		
 		rowIndexType rowIndex;
 
-		bool TestCurrentRow() const
-		{
-			TableDataRow row = GetFullDataRow();
+		bool TestCurrentRow() const;
 
-			return predicate(table, row);
-		}
+		void del();
+
+		void copy(const TableDataIterator&);
 		
-		TableDataIterator(Table* _table, const TPredicate& _predicate)
-			: table(_table), predicate(_predicate)
-		{
-			started = false;
-			rowIndex = -1;
-		}
+		TableDataIterator(Table*, const ITableDataPredicate&);
 
 		friend class Table;
 	public:
+		TableDataIterator(const TableDataIterator&);
+		~TableDataIterator();
+
+		TableDataIterator& operator = (const TableDataIterator&);
 
 		// Get data
-		TableDataRow GetFullDataRow() const
-		{
-			return TableDataRow(table->data->GetElementPtr(rowIndex), table->columns);
-		}
+		TableDataRow GetFullDataRow() const;
 
 		// Move pointer
-		bool NextRow()
-		{
-			rowIndexType i;
-			if (!started)
-			{
-				i = 0;
-				started = true;
-			}
-			else
-			{
-				i = rowIndex + 1;
-			}
+		bool NextRow();
 
-			if (i >= table->rows)
-				return false;
-
-			while (!TestCurrentRow())
-			{
-				if (i >= table->rows)
-					return false;
-
-				i++;
-			}
-
-			rowIndex = i;
-		
-			return true;
-		}
-
-		bool PrevRow()
-		{
-			rowIndexType i = rowIndex - 1;
-			while (!TestCurrentRow())
-			{
-				if (i < 0)
-					return false;
-
-				i--;
-			}
-
-			rowIndex = i;
-
-			return true;
-		}
+		bool PrevRow();
 	};
 
 }

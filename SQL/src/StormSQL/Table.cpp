@@ -283,8 +283,8 @@ namespace StormSQL
 		data->Load(in, rows);
 	}
 
-	TableDataIterator<TruePredicate> Table::GetIterator()
+	TableDataIterator Table::GetIterator()
 	{
-		return TableDataIterator<TruePredicate>(this, TruePredicate());
+		return TableDataIterator(this, TruePredicate());
 	}
 }

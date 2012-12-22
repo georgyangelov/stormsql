@@ -50,7 +50,7 @@ namespace UnitTests
 			Table table = GetTable();
 
 			// Iterate and verify data
-			TableDataIterator<> iter = table.GetIterator();
+			TableDataIterator iter = table.GetIterator();
 
 			iter.NextRow();
 			TableDataRow row = iter.GetFullDataRow();
@@ -71,7 +71,7 @@ namespace UnitTests
 			schema.AddField(1, f3);
 
 			// Iterate and verify data
-			TableDataIterator<> iter = schema.GetIterator();
+			TableDataIterator iter = schema.GetIterator();
 			
 			iter.NextRow();
 			TableDataRow row = iter.GetFullDataRow();
@@ -97,7 +97,7 @@ namespace UnitTests
 			Assert::IsFalse(schema.HasField("test"));
 			
 			// Iterate and verify data
-			TableDataIterator<> iter = schema.GetIterator();
+			TableDataIterator iter = schema.GetIterator();
 			
 			iter.NextRow();
 			TableDataRow row = iter.GetFullDataRow();
@@ -123,7 +123,7 @@ namespace UnitTests
 			in.close();
 
 			// Iterate and verify data
-			TableDataIterator<> iter = schema.GetIterator();
+			TableDataIterator iter = schema.GetIterator();
 
 			iter.NextRow();
 			TableDataRow row = iter.GetFullDataRow();

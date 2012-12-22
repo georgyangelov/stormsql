@@ -22,6 +22,8 @@ namespace StormSQL
 			class Expression
 			{
 			public:
+				virtual ~Expression() { }
+
 				virtual Value Compute(const hash_map<string, Value>&) const = 0;
 				virtual Expression* Clone() const = 0;
 			};

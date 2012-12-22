@@ -91,7 +91,7 @@ ostream& operator << (ostream& out, Table tbl)
 	cout << setw(fields.size() * 13) << setfill('-') << '+' << setfill(' ');
 	cout << '+' << endl;
 
-	TableDataIterator<> iter = tbl.GetIterator();
+	TableDataIterator iter = tbl.GetIterator();
 	while (iter.NextRow())
 	{
 		TableDataRow row = iter.GetFullDataRow();

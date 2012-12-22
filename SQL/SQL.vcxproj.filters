@@ -31,11 +31,11 @@
     <Filter Include="Source Files\StormSQL\SQL">
       <UniqueIdentifier>{87ed19f6-4b58-4e92-9066-b3b37a1c94bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\StormSQL\Queries\Expressions">
-      <UniqueIdentifier>{56a8e91d-817d-4be1-9b1d-c427ad8d135f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\StormSQL\SQL\Expressions">
       <UniqueIdentifier>{8aff0349-b94a-4835-887c-3c8415740966}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\StormSQL\SQL\Expressions">
+      <UniqueIdentifier>{56a8e91d-817d-4be1-9b1d-c427ad8d135f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,7 +79,13 @@
       <Filter>Source Files\StormSQL\Queries</Filter>
     </ClCompile>
     <ClCompile Include="src\StormSQL\SQL\Expressions\Expression.cpp">
-      <Filter>Source Files\StormSQL\Queries\Expressions</Filter>
+      <Filter>Source Files\StormSQL\SQL\Expressions</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StormSQL\Predicates.cpp">
+      <Filter>Source Files\StormSQL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StormSQL\SQL\Expressions\Operations.cpp">
+      <Filter>Source Files\StormSQL\SQL\Expressions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

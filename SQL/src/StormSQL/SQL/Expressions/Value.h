@@ -2,6 +2,7 @@
 #define _H_SQL_EXPRESSIONS_VALUE_INCLUDED
 
 #include "../../Exceptions.h"
+#include "../../TableData.h"
 #include <string>
 
 using namespace std;
@@ -24,6 +25,35 @@ namespace StormSQL
 
 			struct Value
 			{
+			private:
+				void copy(const FieldData& field)
+				{
+					switch (field.GetType())
+					{
+					case Field::FieldType::byte:
+						intVal = field.GetChar();
+						type = Type::integer;
+						break;
+					case Field::FieldType::int32:
+						intVal = field.GetInt32();
+						type = Type::integer;
+						break;
+					case Field::FieldType::uint32:
+						//TODO: Safer conversion (no conversion at all)
+						intVal = field.GetUInt32();
+						type = Type::integer;
+						break;
+					case Field::FieldType::fixedchar:
+						strVal = field.GetString();
+						type = Type::string;
+						break;
+					default:
+						throw InvalidFieldType();
+					}
+				}
+
+			public:
+
 				enum Type
 				{
 					integer,
@@ -50,30 +80,16 @@ namespace StormSQL
 				{
 				}
 
-				Value(FieldData field)
+				Value(const FieldData& field)
 				{
-					switch (field.GetType())
-					{
-					case Field::FieldType::byte:
-						intVal = field.GetChar();
-						type = Type::integer;
-						break;
-					case Field::FieldType::int32:
-						intVal = field.GetInt32();
-						type = Type::integer;
-						break;
-					case Field::FieldType::uint32:
-						//TODO: Safer conversion (no conversion at all)
-						intVal = field.GetUInt32();
-						type = Type::integer;
-						break;
-					case Field::FieldType::fixedchar:
-						strVal = field.GetString();
-						type = Type::string;
-						break;
-					default:
-						throw InvalidFieldType();
-					}
+					copy(field);
+				}
+
+				const Value& operator = (const FieldData& field)
+				{
+					copy(field);
+
+					return *this;
 				}
 
 				operator bool()

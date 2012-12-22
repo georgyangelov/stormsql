@@ -55,7 +55,7 @@ namespace StormSQL
 
 		for (int i = 0; i < numFields; i++)
 		{
-			fields[table->GetField(i).name] = row[0];
+			fields[table->GetField(i).name] = row[i];
 		}
 
 		return (bool)expression->Compute(fields);

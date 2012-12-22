@@ -70,4 +70,108 @@ namespace StormSQL
 		return columns[i];
 	}
 	/* END TableDataRow */
+
+	/* TableDataIterator */
+	bool TableDataIterator::TestCurrentRow() const
+	{
+		TableDataRow row = GetFullDataRow();
+
+		return (*predicate)(table, row);
+	}
+
+	void TableDataIterator::del()
+	{
+		delete predicate;
+	}
+
+	void TableDataIterator::copy(const TableDataIterator& obj)
+	{
+		started = obj.started;
+		table = obj.table;
+		predicate = obj.predicate->Clone();
+		rowIndex = obj.rowIndex;
+	}
+		
+	TableDataIterator::TableDataIterator(Table* _table, const ITableDataPredicate& _predicate)
+		: table(_table), predicate(_predicate.Clone())
+	{
+		started = false;
+		rowIndex = -1;
+	}
+
+	TableDataIterator::TableDataIterator(const TableDataIterator& obj)
+	{
+		copy(obj);
+	}
+	TableDataIterator::~TableDataIterator()
+	{
+		del();
+	}
+
+	TableDataIterator& TableDataIterator::operator = (const TableDataIterator& obj)
+	{
+		if (this != &obj)
+		{
+			del();
+			copy(obj);
+		}
+
+		return *this;
+	}
+
+	// Get data
+	TableDataRow TableDataIterator::GetFullDataRow() const
+	{
+		return TableDataRow(table->data->GetElementPtr(rowIndex), table->columns);
+	}
+
+	// Move pointer
+	bool TableDataIterator::NextRow()
+	{
+		rowIndexType lastIndex = rowIndex;
+		if (!started)
+		{
+			rowIndex = 0;
+			started = true;
+		}
+		else
+		{
+			rowIndex++;
+		}
+
+		if (rowIndex >= table->rows)
+		{
+			rowIndex = lastIndex;
+			return false;
+		}
+
+		while (!TestCurrentRow())
+		{
+			if (rowIndex >= table->rows)
+			{
+				rowIndex = lastIndex;
+				return false;
+			}
+
+			rowIndex++;
+		}
+
+		return true;
+	}
+
+	bool TableDataIterator::PrevRow()
+	{
+		rowIndexType i = rowIndex - 1;
+		while (!TestCurrentRow())
+		{
+			if (i < 0)
+				return false;
+
+			i--;
+		}
+
+		rowIndex = i;
+
+		return true;
+	}
 }

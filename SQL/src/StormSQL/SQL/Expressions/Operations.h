@@ -17,39 +17,12 @@ namespace StormSQL
 		{
 			// Forward declarations
 			class Expression;
-
-			class IOperation
-			{
-			public:
-				static hash_map<string, OperationInfo> GetStandardOperations()
-				{
-					hash_map<string, OperationInfo> ops;
-					ops["AND"] = OperationInfo(And(), 1, 2, true, false);
-					ops["="] = OperationInfo(Equals(), 0, 2, true, false);
-					ops["+"] = OperationInfo(Equals(), 4, 2, true, false);
-
-					return ops;
-				}
-
-				virtual Value operator () (const vector<Value>&) const = 0;
-				virtual IOperation* Clone() const = 0;
-			};
+			class IOperation;
 
 			struct OperationInfo
 			{
 			private:
-				void copy(const OperationInfo& obj)
-				{
-					if (obj.op)
-						op = obj.op->Clone();
-					else
-						op = NULL;
-
-					priority = obj.priority;
-					arguments = obj.arguments;
-					leftAssoc = obj.leftAssoc;
-					isFunction = obj.isFunction;
-				}
+				void copy(const OperationInfo& obj);
 
 			public:
 				IOperation* op;
@@ -58,39 +31,21 @@ namespace StormSQL
 				bool leftAssoc;
 				bool isFunction;
 
-				OperationInfo()
-				{
-					op = NULL;
-				}
-				
-				OperationInfo(const IOperation& _op, int _priority, int _arguments, bool _leftAssoc, bool _isFunction)
-					: op(_op.Clone()), priority(_priority), arguments(_arguments), 
-					leftAssoc(_leftAssoc), isFunction(_isFunction)
-				{
-				}
+				OperationInfo();
+				OperationInfo(const IOperation& _op, int _priority, int _arguments, bool _leftAssoc, bool _isFunction);
+				OperationInfo(const OperationInfo& obj);
+				~OperationInfo();
 
-				OperationInfo(const OperationInfo& obj)
-				{
-					copy(obj);
-				}
+				OperationInfo& operator = (const OperationInfo& obj);
+			};
 
-				~OperationInfo()
-				{
-					if (op)
-						delete op;
-				}
+			class IOperation
+			{
+			public:
+				static hash_map<string, OperationInfo> GetStandardOperations();
 
-				OperationInfo& operator = (const OperationInfo& obj)
-				{
-					if (this != &obj)
-					{
-						if (op)
-							delete op;
-						copy(obj);
-					}
-
-					return *this;
-				}
+				virtual Value operator () (const vector<Value>&) const = 0;
+				virtual IOperation* Clone() const = 0;
 			};
 
 			class InvalidNumberOfArguments

@@ -33,7 +33,6 @@ namespace StormSQL
 		void createDataBuffer(bool deleteOld = true);
 		
 		// Iterator
-		template <class TPredicate>
 		friend class TableDataIterator;
 
 		// Queries
@@ -66,13 +65,12 @@ namespace StormSQL
 		void Store(ostream& out) const;
 
 		// Construct iterator
-		template <class TPredicate>
-		TableDataIterator<TPredicate> GetIterator(const TPredicate& predicate)
+		TableDataIterator GetIterator(const ITableDataPredicate& predicate)
 		{
-			return TableDataIterator<TPredicate>(this, predicate);
+			return TableDataIterator(this, predicate);
 		}
 
-		TableDataIterator<TruePredicate> GetIterator();
+		TableDataIterator GetIterator();
 	};
 
 }

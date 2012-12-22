@@ -2,7 +2,9 @@
 #define _H_PREDICATES_INCLUDED
 
 #include "SQL/Expressions/Operations.h"
+#include "SQL/Lexer.h"
 
+using namespace StormSQL::SQL;
 using namespace StormSQL::SQL::Expressions;
 
 namespace StormSQL
@@ -14,6 +16,8 @@ namespace StormSQL
 	class ITableDataPredicate
 	{
 	public:
+		virtual ~ITableDataPredicate() { }
+
 		virtual bool operator () (const Table*, TableDataRow&) const = 0;
 		virtual ITableDataPredicate* Clone() const = 0;
 	};

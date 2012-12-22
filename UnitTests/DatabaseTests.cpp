@@ -115,7 +115,7 @@ namespace UnitTests
 			in.close();
 
 			// Iterate and verify data
-			TableDataIterator<> iter = db2.GetTable("table1").GetIterator();
+			TableDataIterator iter = db2.GetTable("table1").GetIterator();
 			
 			iter.NextRow();
 			TableDataRow row = iter.GetFullDataRow();
