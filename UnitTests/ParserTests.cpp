@@ -47,10 +47,10 @@ namespace UnitTests
 
 			hash_map<string, operationInfo> ops;
 			// The operations themselves aren't used here
-			ops["+"] = operationInfo(new Plus(), 2, 2, true, false);
-			ops["="] = operationInfo(new Equals(), 1, 2, true, false);
-			ops["AND"] = operationInfo(new And(), 0, 2, true, false);
-			ops["test"] = operationInfo(new And(), 0, 2, true, true);
+			ops["+"] = operationInfo(Plus(), 2, 2, true, false);
+			ops["="] = operationInfo(Equals(), 1, 2, true, false);
+			ops["AND"] = operationInfo(And(), 0, 2, true, false);
+			ops["test"] = operationInfo(And(), 0, 2, true, true);
 
 			Lexer lex(stream);
 			ExpressionParser p(lex, ops);
@@ -64,9 +64,9 @@ namespace UnitTests
 			stringstream stream("a + 50 = 35 AND 1 = true");
 
 			hash_map<string, operationInfo> ops;
-			ops["+"] = operationInfo(new Plus(), 2, 2, true, false);
-			ops["="] = operationInfo(new Equals(), 1, 2, true, false);
-			ops["AND"] = operationInfo(new And(), 0, 2, true, false);
+			ops["+"] = operationInfo(Plus(), 2, 2, true, false);
+			ops["="] = operationInfo(Equals(), 1, 2, true, false);
+			ops["AND"] = operationInfo(And(), 0, 2, true, false);
 
 			Lexer lex(stream);
 			ExpressionParser p(lex, ops);

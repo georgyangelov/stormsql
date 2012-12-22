@@ -26,17 +26,59 @@ namespace StormSQL
 
 			struct operationInfo
 			{
+			private:
+				void copy(const operationInfo& obj)
+				{
+					if (obj.op)
+						op = obj.op->Clone();
+					else
+						op = NULL;
+
+					priority = obj.priority;
+					arguments = obj.arguments;
+					leftAssoc = obj.leftAssoc;
+					isFunction = obj.isFunction;
+				}
+
+			public:
 				IOperation* op;
 				int priority;
 				int arguments;
 				bool leftAssoc;
 				bool isFunction;
 
-				operationInfo() { };
-				operationInfo(IOperation* _op, int _priority, int _arguments, bool _leftAssoc, bool _isFunction)
-					: op(_op), priority(_priority), arguments(_arguments), 
-					  leftAssoc(_leftAssoc), isFunction(_isFunction)
+				operationInfo()
 				{
+					op = NULL;
+				}
+				
+				operationInfo(const IOperation& _op, int _priority, int _arguments, bool _leftAssoc, bool _isFunction)
+					: op(_op.Clone()), priority(_priority), arguments(_arguments), 
+					leftAssoc(_leftAssoc), isFunction(_isFunction)
+				{
+				}
+
+				operationInfo(const operationInfo& obj)
+				{
+					copy(obj);
+				}
+
+				~operationInfo()
+				{
+					if (op)
+						delete op;
+				}
+
+				operationInfo& operator = (const operationInfo& obj)
+				{
+					if (this != &obj)
+					{
+						if (op)
+							delete op;
+						copy(obj);
+					}
+
+					return *this;
 				}
 			};
 
