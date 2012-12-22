@@ -9,12 +9,75 @@ ExpressionParser::ExpressionParser(Lexer& _lex, const hash_map<string, Operation
 {
 }
 
+/*
+ * Simulates computation of rpn expression using i for the number of elements in stack.
+ * Doesn't actually compute anything, just checks if 
+ * the sequence of tokens in rpn is valid (number of arguments for each function).
+ *
+ * Before doing anything else pops everything from the operationStack to rpn
+ * to simulate encountering end of stream.
+ *
+ * This method is used to check if the whole expression has been read. That's if:
+ * 1. The GetRPN method encounters a TokenType::Keyword
+ * 2. That token is not a function
+ * 3. The current expression is valid
+ *
+ */
+bool ExpressionParser::IsValid(queue<Token> rpn, stack<Token> operationStack) const
+{
+	int i = 0;
+	Token t;
+
+	// Simulate End of stream and do operationStack -> rpn transfer
+	while (!operationStack.empty())
+	{
+		if (operationStack.top().type == TokenType::Parenthesis && operationStack.top().strData == "(")
+			// Mismatched parenthesis
+			// Not sure if here should throw exception or return false
+			return false;
+
+		rpn.push(operationStack.top());
+		operationStack.pop();
+	}
+
+	while (!rpn.empty())
+	{
+		t = rpn.front();
+		rpn.pop();
+
+		if ( ( t.type == TokenType::Operator || t.type == TokenType::Keyword ) && ops.find(t.strData) != ops.end() )
+		{
+			// Function/Operator
+			// pop number of arguments 
+			i -= ops.find(t.strData)->second.arguments;
+
+			// Check for error in number of arguments for function/operator
+			if (i < 0)
+				return false;
+
+			// push result
+			i++;
+		}
+		else
+		{
+			// Value/Identifier
+			// push
+			i++;
+		}
+	}
+
+	// We have only one expression
+	// so there should be only one thing left in the stack
+	return i == 1;
+}
+
 queue<Token> ExpressionParser::GetRPN()
 {
 	queue<Token> out;
 	stack<Token> operationStack;
+	bool readWholeExpression = false;
 
-	while (!lex->endOfStream())
+	while (!lex->endOfStream() && !readWholeExpression)
 	{
 		Token op;
 		Token t = lex->NextToken(false);
@@ -24,7 +87,20 @@ queue<Token> ExpressionParser::GetRPN()
 		case TokenType::IntValue:
 		case TokenType::StringValue:
 		case TokenType::Identifier:
-			out.push(t);
+			// Check if we have already read the whole expression (see IsValid's comment)
+			if (IsValid(out, operationStack))
+			{
+				// No more reading should be done. The expression is complete
+				readWholeExpression = true;
+
+				// Return the token to the lexer so that others can read it next
+				lex->PutBackToken(t);
+			}
+			else
+			{
+				// The value is part of this expression
+				out.push(t);
+			}
 			break;
 
 		case TokenType::Keyword:
@@ -55,27 +131,52 @@ queue<Token> ExpressionParser::GetRPN()
 			}
 			else
 			{
-				// Value or constant
-				out.push(t);
+				// Check if we have already read the whole expression (see IsValid's comment)
+				if (IsValid(out, operationStack))
+				{
+					// No more reading should be done. The expression is complete
+					readWholeExpression = true;
+
+					// Return the token to the lexer so that others can read it next
+					lex->PutBackToken(t);
+				}
+				else
+				{
+					// Value or constant
+					out.push(t);
+				}
 			}
 
 			break;
 
 		case TokenType::Separator:
 
-			if (operationStack.empty())
-				throw InvalidTokenException(t);
-
-			op = operationStack.top();
-			while (op.strData != "(")
+			// Check if we have already read the whole expression (see IsValid's comment)
+			if (IsValid(out, operationStack))
 			{
-				operationStack.pop();
-				out.push(op);
-				
+				// No more reading should be done. The expression is complete
+				readWholeExpression = true;
+
+				// Return the token to the lexer so that others can read it next
+				lex->PutBackToken(t);
+			}
+			else
+			{
+				// The token is part of the expression
 				if (operationStack.empty())
 					throw InvalidTokenException(t);
 
 				op = operationStack.top();
+				while (op.strData != "(")
+				{
+					operationStack.pop();
+					out.push(op);
+				
+					if (operationStack.empty())
+						throw InvalidTokenException(t);
+
+					op = operationStack.top();
+				}
 			}
 
 			break;
@@ -100,37 +201,52 @@ queue<Token> ExpressionParser::GetRPN()
 			break;
 
 		case TokenType::Parenthesis:
-			
-			if (t.strData == "(")
-			{
-				operationStack.push(t);
-			}
-			else 
-			{
-				if (operationStack.empty())
-				throw InvalidTokenException(t);
 
-				op = operationStack.top();
-				while (op.strData != "(")
+			// Check if we have already read the whole expression (see IsValid's comment)
+			if (IsValid(out, operationStack))
+			{
+				// No more reading should be done. The expression is complete
+				readWholeExpression = true;
+
+				// Return the token to the lexer so that others can read it next
+				lex->PutBackToken(t);
+			}
+			else
+			{
+				// The parenthesis is part of this expression
+
+				if (t.strData == "(")
 				{
-					operationStack.pop();
-					out.push(op);
-				
+					operationStack.push(t);
+				}
+				else 
+				{
 					if (operationStack.empty())
-						throw InvalidTokenException(t);
+					throw InvalidTokenException(t);
 
 					op = operationStack.top();
-				}
+					while (op.strData != "(")
+					{
+						operationStack.pop();
+						out.push(op);
+				
+						if (operationStack.empty())
+							throw InvalidTokenException(t);
 
-				// Pop (
-				operationStack.pop();
+						op = operationStack.top();
+					}
 
-				if (!operationStack.empty() && ops.find(operationStack.top().strData) != ops.end())
-				{
-					// Token at top of stack is function name
-					out.push(operationStack.top());
+					// Pop (
 					operationStack.pop();
+
+					if (!operationStack.empty() && ops.find(operationStack.top().strData) != ops.end())
+					{
+						// Token at top of stack is function name
+						out.push(operationStack.top());
+						operationStack.pop();
+					}
 				}
+			
 			}
 
 			break;

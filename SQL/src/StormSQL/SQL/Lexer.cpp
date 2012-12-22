@@ -6,6 +6,18 @@ namespace StormSQL
 {
 	namespace SQL
 	{
+		/* Token struct */
+		bool Token::operator == (const Token& obj) const
+		{
+			if (type != obj.type)
+				return false;
+
+			if (type == TokenType::IntValue)
+				return longIntData == obj.longIntData;
+			else
+				return strData == obj.strData;
+		}
+
 		/* Private */
 		void Lexer::ignoreWhitespace()
 		{

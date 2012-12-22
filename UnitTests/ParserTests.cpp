@@ -59,6 +59,56 @@ namespace UnitTests
 			Assert::AreEqual("a 50 + 35 = `b` 'c' test true = AND", rpn.c_str());
 		}
 
+		TEST_METHOD(ExpressionEndDetectionTest)
+		{
+			stringstream stream("a + 50 = 35 AND test(`b`, 'c') = true ORDER BY `test` DESC LIMIT 0, 1");
+
+			hash_map<string, OperationInfo> ops;
+			// The operations themselves aren't used here
+			ops["+"] = OperationInfo(Plus(), 2, 2, true, false);
+			ops["="] = OperationInfo(Equals(), 1, 2, true, false);
+			ops["AND"] = OperationInfo(And(), 0, 2, true, false);
+			ops["test"] = OperationInfo(And(), 0, 2, true, true);
+
+			Lexer lex(stream);
+			ExpressionParser p(lex, ops);
+
+			string rpn = ExpressionParser::Implode( p.GetRPN() );
+			Assert::AreEqual("a 50 + 35 = `b` 'c' test true = AND", rpn.c_str());
+
+			// Next token should be ORDER
+			lex.NextToken(TokenType::Keyword, "order");
+		}
+
+		TEST_METHOD(ExpressionEndDetectionTest2)
+		{
+			stringstream stream("a + 50 = 35 AND test(`b`, 'c') = true, a + 50 < 35 AND test(`b`, 'c') != true AS t FROM");
+
+			hash_map<string, OperationInfo> ops;
+			// The operations themselves aren't used here
+			ops["+"] = OperationInfo(Plus(), 2, 2, true, false);
+			ops["="] = OperationInfo(Equals(), 1, 2, true, false);
+			ops["!="] = OperationInfo(Equals(), 1, 2, true, false);
+			ops["<"] = OperationInfo(Equals(), 1, 2, true, false);
+			ops["AND"] = OperationInfo(And(), 0, 2, true, false);
+			ops["test"] = OperationInfo(And(), 0, 2, true, true);
+
+			Lexer lex(stream);
+			ExpressionParser p(lex, ops);
+
+			string rpn = ExpressionParser::Implode( p.GetRPN() );
+			Assert::AreEqual("a 50 + 35 = `b` 'c' test true = AND", rpn.c_str());
+
+			// Next token should be ,
+			lex.NextToken(TokenType::Separator);
+
+			string rpn2 = ExpressionParser::Implode( p.GetRPN() );
+			Assert::AreEqual("a 50 + 35 < `b` 'c' test true != AND", rpn2.c_str());
+
+			// Next token should be AS
+			lex.NextToken(TokenType::Keyword, "as");
+		}
+
 		TEST_METHOD(ExpressionComputeTest)
 		{
 			stringstream stream("a + 50 = 35 AND 1 = true");

@@ -33,6 +33,7 @@ namespace StormSQL
 				hash_map<string, OperationInfo> ops;
 
 				void ExpressionParser::InsertOp(Token t, stack<Expression*>& values);
+				bool ExpressionParser::IsValid(queue<Token> rpn, stack<Token> operationStack) const;
 			public:
 				queue<Token> GetRPN();
 				static string Implode(queue<Token>&);
