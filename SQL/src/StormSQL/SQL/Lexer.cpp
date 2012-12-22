@@ -76,7 +76,7 @@ namespace StormSQL
 		{
 			ignoreWhitespace();
 
-			return in->eof();
+			return putBackTokens.empty() && in->eof();
 		}
 
 		Token Lexer::NextToken(TokenType expected, bool toLower)
@@ -93,7 +93,7 @@ namespace StormSQL
 			return t;
 		}
 
-		Token Lexer::NextToken(TokenType expected, string strData, bool toLower)
+		Token Lexer::NextToken(string strData, TokenType expected, bool toLower)
 		{
 			Token t = NextToken(expected, toLower);
 			
@@ -118,6 +118,9 @@ namespace StormSQL
 			{
 				Token t = putBackTokens.top();
 				putBackTokens.pop();
+
+				if (t.type == TokenType::Keyword && toLower)
+					this->toLower(t.strData);
 
 				return t;
 			}
@@ -158,7 +161,7 @@ namespace StormSQL
 
 				return getToken(tmp, TokenType::StringValue);
 			}
-			else if (isNumber(c))
+			else if ( (c == '-' && isNumber(in->peek())) || isNumber(c))
 			{
 				tmp += c;
 				while (isNumber(in->peek()))

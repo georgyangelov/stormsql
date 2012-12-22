@@ -70,7 +70,7 @@ namespace StormSQL
 		 */
 		void ShowCreate::Parse(Lexer& lex)
 		{
-			lex.NextToken(TokenType::Keyword, "table");
+			lex.NextToken("table", TokenType::Keyword);
 
 			Token tableName = lex.NextToken(TokenType::Identifier, false);
 			SetTableName(tableName.strData);

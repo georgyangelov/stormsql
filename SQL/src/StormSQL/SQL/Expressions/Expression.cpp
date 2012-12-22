@@ -111,7 +111,7 @@ queue<Token> ExpressionParser::GetRPN()
 				if (ops[t.strData].isFunction)
 				{
 					// Function name (next token should be '(')
-					Token temp = lex->NextToken(TokenType::Parenthesis, "(");
+					Token temp = lex->NextToken("(", TokenType::Parenthesis);
 					lex->PutBackToken(temp);
 				}
 				else

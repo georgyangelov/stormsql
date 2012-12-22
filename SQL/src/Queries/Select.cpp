@@ -90,7 +90,7 @@ void Select::Parse(Lexer& lex)
 	// <columns>
 	ReadColumns(lex);
 
-	Token t = lex.NextToken(TokenType::Keyword, "from");
+	Token t = lex.NextToken("from", TokenType::Keyword);
 
 	t = lex.NextToken(TokenType::Identifier);
 	SetFrom(t.strData);

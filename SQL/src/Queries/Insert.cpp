@@ -168,8 +168,8 @@ namespace StormSQL
 		 */
 		void Insert::Parse(Lexer& lex)
 		{
-			lex.NextToken(TokenType::Keyword, "values");
-			lex.NextToken(TokenType::Parenthesis, "(");
+			lex.NextToken("values", TokenType::Keyword);
+			lex.NextToken("(", TokenType::Parenthesis);
 
 			Token t;
 			int index = 0;

@@ -58,7 +58,7 @@ namespace StormSQL
 			bool endOfStream();
 			Token NextToken(bool toLower = true);
 			Token NextToken(TokenType expected, bool toLower = true);
-			Token NextToken(TokenType expected, string strData, bool toLower = true);
+			Token NextToken(string strData, TokenType expected, bool toLower = true);
 
 			void PutBackToken(const Token&);
 		};

@@ -53,7 +53,7 @@ namespace StormSQL
 			}
 			else if (t.strData == "insert")
 			{
-				lexer.NextToken(TokenType::Keyword, "into");
+				lexer.NextToken("into", TokenType::Keyword);
 				Token tblName = lexer.NextToken(TokenType::Identifier, false);
 
 				q = new Insert(&db->GetTable(tblName.strData));
@@ -67,6 +67,10 @@ namespace StormSQL
 				throw UnknownQueryException(t.strData);
 
 			q->Parse(lexer);
+
+			if (!lexer.endOfStream())
+				throw InvalidTokenException(lexer.NextToken());
+
 			return q;
 		}
 	}

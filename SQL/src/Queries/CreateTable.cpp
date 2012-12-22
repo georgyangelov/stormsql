@@ -52,7 +52,7 @@ namespace StormSQL
 			name = t.strData;
 			
 			// (
-			lex.NextToken(TokenType::Parenthesis, "(");
+			lex.NextToken("(", TokenType::Parenthesis);
 
 			string tableName;
 			// While not )
@@ -98,9 +98,9 @@ namespace StormSQL
 				res.type = Field::FieldType::fixedchar;
 
 				// (<length>)
-				lex.NextToken(TokenType::Parenthesis, "(");
+				lex.NextToken("(", TokenType::Parenthesis);
 				t = lex.NextToken(TokenType::IntValue);
-				lex.NextToken(TokenType::Parenthesis, ")");
+				lex.NextToken(")", TokenType::Parenthesis);
 
 				res.size = t.longIntData;
 			}

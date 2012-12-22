@@ -77,7 +77,7 @@ namespace UnitTests
 			Assert::AreEqual("a 50 + 35 = `b` 'c' test true = AND", rpn.c_str());
 
 			// Next token should be ORDER
-			lex.NextToken(TokenType::Keyword, "order");
+			lex.NextToken("order", TokenType::Keyword);
 		}
 
 		TEST_METHOD(ExpressionEndDetectionTest2)
@@ -106,7 +106,7 @@ namespace UnitTests
 			Assert::AreEqual("a 50 + 35 < `b` 'c' test true != AND", rpn2.c_str());
 
 			// Next token should be AS
-			lex.NextToken(TokenType::Keyword, "as");
+			lex.NextToken("as", TokenType::Keyword);
 		}
 
 		TEST_METHOD(ExpressionComputeTest)

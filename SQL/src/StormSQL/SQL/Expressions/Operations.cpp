@@ -7,7 +7,7 @@ hash_map<string, OperationInfo> IOperation::GetStandardOperations()
 {
 	hash_map<string, OperationInfo> ops;
 	ops["AND"] = OperationInfo(And(), 1, 2, true, false);
-	ops["="] = OperationInfo(Equals(), 0, 2, true, false);
+	ops["="] = OperationInfo(Equals(), 3, 2, true, false);
 	ops["+"] = OperationInfo(Plus(), 4, 2, true, false);
 
 	return ops;
