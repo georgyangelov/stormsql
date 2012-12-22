@@ -77,6 +77,9 @@ queue<Token> ExpressionParser::GetRPN()
 	stack<Token> operationStack;
 	bool readWholeExpression = false;
 
+	// Temp for lex->toLower
+	string fname;
+
 	while (!lex->endOfStream() && !readWholeExpression)
 	{
 		Token op;
@@ -106,9 +109,12 @@ queue<Token> ExpressionParser::GetRPN()
 		case TokenType::Keyword:
 
 			// Function or operator
-			if (ops.find(t.strData) != ops.end())
+			fname = t.strData;
+			lex->toLower(fname);
+
+			if (ops.find(fname) != ops.end())
 			{
-				if (ops[t.strData].isFunction)
+				if (ops[fname].isFunction)
 				{
 					// Function name (next token should be '(')
 					Token temp = lex->NextToken("(", TokenType::Parenthesis);
@@ -117,9 +123,9 @@ queue<Token> ExpressionParser::GetRPN()
 				else
 				{
 					while (!operationStack.empty() && ( 
-						(ops[t.strData].leftAssoc && ops[t.strData].priority <= ops[operationStack.top().strData].priority) 
+						(ops[fname].leftAssoc && ops[fname].priority <= ops[operationStack.top().strData].priority) 
 								|| 
-						(ops[t.strData].priority < ops[operationStack.top().strData].priority) 
+						(ops[fname].priority < ops[operationStack.top().strData].priority) 
 							) )
 					{
 						out.push(operationStack.top());
@@ -127,6 +133,7 @@ queue<Token> ExpressionParser::GetRPN()
 					}
 				}
 
+				t.strData = fname;
 				operationStack.push(t);
 			}
 			else
