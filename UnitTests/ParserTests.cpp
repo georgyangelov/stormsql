@@ -45,12 +45,12 @@ namespace UnitTests
 		{
 			stringstream stream("a + 50 = 35 AND test(`b`, 'c') = true");
 
-			hash_map<string, operationInfo> ops;
+			hash_map<string, OperationInfo> ops;
 			// The operations themselves aren't used here
-			ops["+"] = operationInfo(Plus(), 2, 2, true, false);
-			ops["="] = operationInfo(Equals(), 1, 2, true, false);
-			ops["AND"] = operationInfo(And(), 0, 2, true, false);
-			ops["test"] = operationInfo(And(), 0, 2, true, true);
+			ops["+"] = OperationInfo(Plus(), 2, 2, true, false);
+			ops["="] = OperationInfo(Equals(), 1, 2, true, false);
+			ops["AND"] = OperationInfo(And(), 0, 2, true, false);
+			ops["test"] = OperationInfo(And(), 0, 2, true, true);
 
 			Lexer lex(stream);
 			ExpressionParser p(lex, ops);
@@ -63,10 +63,10 @@ namespace UnitTests
 		{
 			stringstream stream("a + 50 = 35 AND 1 = true");
 
-			hash_map<string, operationInfo> ops;
-			ops["+"] = operationInfo(Plus(), 2, 2, true, false);
-			ops["="] = operationInfo(Equals(), 1, 2, true, false);
-			ops["AND"] = operationInfo(And(), 0, 2, true, false);
+			hash_map<string, OperationInfo> ops;
+			ops["+"] = OperationInfo(Plus(), 2, 2, true, false);
+			ops["="] = OperationInfo(Equals(), 1, 2, true, false);
+			ops["AND"] = OperationInfo(And(), 0, 2, true, false);
 
 			Lexer lex(stream);
 			ExpressionParser p(lex, ops);

@@ -24,10 +24,10 @@ namespace StormSQL
 				virtual IOperation* Clone() const = 0;
 			};
 
-			struct operationInfo
+			struct OperationInfo
 			{
 			private:
-				void copy(const operationInfo& obj)
+				void copy(const OperationInfo& obj)
 				{
 					if (obj.op)
 						op = obj.op->Clone();
@@ -47,29 +47,29 @@ namespace StormSQL
 				bool leftAssoc;
 				bool isFunction;
 
-				operationInfo()
+				OperationInfo()
 				{
 					op = NULL;
 				}
 				
-				operationInfo(const IOperation& _op, int _priority, int _arguments, bool _leftAssoc, bool _isFunction)
+				OperationInfo(const IOperation& _op, int _priority, int _arguments, bool _leftAssoc, bool _isFunction)
 					: op(_op.Clone()), priority(_priority), arguments(_arguments), 
 					leftAssoc(_leftAssoc), isFunction(_isFunction)
 				{
 				}
 
-				operationInfo(const operationInfo& obj)
+				OperationInfo(const OperationInfo& obj)
 				{
 					copy(obj);
 				}
 
-				~operationInfo()
+				~OperationInfo()
 				{
 					if (op)
 						delete op;
 				}
 
-				operationInfo& operator = (const operationInfo& obj)
+				OperationInfo& operator = (const OperationInfo& obj)
 				{
 					if (this != &obj)
 					{

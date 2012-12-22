@@ -4,7 +4,7 @@
 using namespace std;
 using namespace StormSQL::SQL::Expressions;
 
-ExpressionParser::ExpressionParser(Lexer& _lex, const hash_map<string, operationInfo>& _ops)
+ExpressionParser::ExpressionParser(Lexer& _lex, const hash_map<string, OperationInfo>& _ops)
 	: lex(&_lex), ops(_ops)
 {
 }
@@ -183,7 +183,7 @@ string ExpressionParser::Implode(queue<Token>& q)
 
 void ExpressionParser::InsertOp(Token t, stack<Expression*>& values)
 {
-	operationInfo op = ops[t.strData];
+	OperationInfo op = ops[t.strData];
 	vector<Expression*> operands;
 
 	for (int i = 0; i < op.arguments; i++)

@@ -30,14 +30,14 @@ namespace StormSQL
 			{
 			private:
 				Lexer* lex;
-				hash_map<string, operationInfo> ops;
+				hash_map<string, OperationInfo> ops;
 
 				void ExpressionParser::InsertOp(Token t, stack<Expression*>& values);
 			public:
 				queue<Token> GetRPN();
 				static string Implode(queue<Token>&);
 
-				ExpressionParser(Lexer&, const hash_map<string, operationInfo>&);
+				ExpressionParser(Lexer&, const hash_map<string, OperationInfo>&);
 
 				Expression* Parse();
 			};
