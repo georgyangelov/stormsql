@@ -34,8 +34,9 @@ namespace StormSQL
 				Lexer* lex;
 				hash_map<string, OperationInfo> ops;
 
-				void ExpressionParser::InsertOp(Token t, stack<Expression*>& values);
-				bool ExpressionParser::IsValid(queue<Token> rpn, stack<Token> operationStack) const;
+				void ReverseVector(vector<Expression*>&) const;
+				void InsertOp(Token t, stack<Expression*>& values);
+				bool IsValid(queue<Token> rpn, stack<Token> operationStack) const;
 			public:
 				queue<Token> GetRPN();
 				static string Implode(queue<Token>&);

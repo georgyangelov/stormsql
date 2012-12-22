@@ -122,7 +122,7 @@ namespace UnitTests
 			ExpressionParser p(lex, ops);
 
 			Expression* exp = p.Parse();
-			Assert::IsTrue(exp);
+			Assert::IsTrue(exp != NULL);
 
 			hash_map<string, Value> identifiers;
 			identifiers["a"] = -15;

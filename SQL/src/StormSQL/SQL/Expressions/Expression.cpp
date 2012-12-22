@@ -304,6 +304,18 @@ string ExpressionParser::Implode(queue<Token>& q)
 	return str.str();
 }
 
+void ExpressionParser::ReverseVector(vector<Expression*>& v) const
+{
+	vector<Expression*> temp;
+
+	for (int i = v.size() - 1; i >= 0; i--)
+	{
+		temp.push_back(v[i]);
+	}
+
+	v = temp;
+}
+
 void ExpressionParser::InsertOp(Token t, stack<Expression*>& values)
 {
 	OperationInfo op = ops[t.strData];
@@ -317,6 +329,9 @@ void ExpressionParser::InsertOp(Token t, stack<Expression*>& values)
 		operands.push_back(values.top());
 		values.pop();
 	}
+
+	// The operands need to be in reversed order
+	ReverseVector(operands);
 
 	values.push(new CompExpression(operands, op.op)); // oppan gangnam style!
 

@@ -76,20 +76,27 @@ void saveDatabases()
 
 ostream& operator << (ostream& out, Table tbl)
 {
+	if (tbl.GetNumRows() == 0)
+	{
+		out << "No rows in result set" << endl;
+
+		return out;
+	}
+
 	vector<Field> fields = tbl.GetFields();
 
-	cout << left;
-	cout << setw(fields.size() * 13) << setfill('-') << '+' << setfill(' ');
-	cout << '+' << endl;
+	out << left;
+	out << setw(fields.size() * 13) << setfill('-') << '+' << setfill(' ');
+	out << '+' << endl;
 
 	for (int i = 0; i < fields.size(); i++)
 	{
-		cout << "| " << setw(10) << fields[i].name << " ";
+		out << "| " << setw(10) << fields[i].name << " ";
 	}
 
-	cout << "|" << endl;
-	cout << setw(fields.size() * 13) << setfill('-') << '+' << setfill(' ');
-	cout << '+' << endl;
+	out << "|" << endl;
+	out << setw(fields.size() * 13) << setfill('-') << '+' << setfill(' ');
+	out << '+' << endl;
 
 	TableDataIterator iter = tbl.GetIterator();
 	while (iter.NextRow())
@@ -98,30 +105,30 @@ ostream& operator << (ostream& out, Table tbl)
 
 		for (int i = 0; i < fields.size(); i++)
 		{
-			cout << "| ";
-			cout << setw(10);
+			out << "| ";
+			out << setw(10);
 
 			switch (fields[i].type)
 			{
 			case Field::FieldType::byte:
-				cout << (int)row[i].GetChar() << " ";
+				out << (int)row[i].GetChar() << " ";
 				break;
 			case Field::FieldType::int32:
-				cout << row[i].GetInt32() << " ";
+				out << row[i].GetInt32() << " ";
 				break;
 			case Field::FieldType::uint32:
-				cout << row[i].GetUInt32() << " ";
+				out << row[i].GetUInt32() << " ";
 				break;
 			case Field::FieldType::fixedchar:
-				cout << row[i].GetString() << " ";
+				out << row[i].GetString() << " ";
 				break;
 			}
 		}
 
-		 cout << "|" << endl;
+		 out << "|" << endl;
 	}
-	cout << setw(fields.size() * 13) << setfill('-') << '+' << setfill(' ');
-	cout << '+' << endl;
+	out << setw(fields.size() * 13) << setfill('-') << '+' << setfill(' ');
+	out << '+' << endl;
 
 	return out;
 }

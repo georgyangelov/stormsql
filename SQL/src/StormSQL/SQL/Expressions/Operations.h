@@ -111,7 +111,11 @@ namespace StormSQL
 						throw InvalidNumberOfArguments("+", "2");
 					
 					Value v1 = v[0], v2 = v[1];
-					return (int)v1 + (int)v2;
+					
+					if (v1.type == Value::Type::string)
+						return (string)v1 + (string)v2;
+					else
+						return (int)v1 + (int)v2;
 				}
 
 				IOperation* Clone() const
