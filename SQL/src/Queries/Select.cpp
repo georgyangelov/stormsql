@@ -2,6 +2,7 @@
 #include "../StormSQL/Exceptions.h"
 #include "../StormSQL/SQL/Lexer.h"
 #include "Insert.h"
+#include "../StormSQL/SQL/Expressions/Expression.h"
 
 #include <string>
 
@@ -11,13 +12,48 @@ namespace StormSQL
 {
 	namespace Queries
 	{
+		void Select::del()
+		{
+			if (predicate)
+				delete predicate;
+		}
+
+		void Select::copy(const Select& obj)
+		{
+			db = obj.db;
+			tableName = obj.tableName;
+			columns = obj.columns;
+
+			if (obj.predicate)
+				predicate = obj.predicate->Clone();
+			else
+				predicate = NULL;
+		}
+
 		Select::Select(Database* _db)
 			: db(_db)
 		{
 		}
 
+		Select::Select(const Select& obj)
+		{
+			copy(obj);
+		}
+
 		Select::~Select()
 		{
+			del();
+		}
+
+		Select& Select::operator = (const Select& obj)
+		{
+			if (this != &obj)
+			{
+				del();
+				copy(obj);
+			}
+
+			return *this;
 		}
 
 		string Select::GetType() const
@@ -35,18 +71,24 @@ namespace StormSQL
 			tableName = tbl;
 		}
 
+		void Select::SetWhere(const ITableDataPredicate& pred)
+		{
+			if (predicate)
+				delete predicate;
+
+			predicate = pred.Clone();
+		}
+
 		/*
 		 * SELECT // Read by parser
 		 * <columns>
 		 * FROM
 		 * <table>
-		 * (WHERE <expressions>)
+		 * (WHERE <expression>)
 		 *
 		 * <columns> := <columnName>, <columns> | <columnName>
 		 * <columnName> := identifier (AS identifier) | *
 		 * <table> := identifier
-		 * <expressions> := <boolExpr> | <boolExpr> (AND|OR) <expressions>
-		 * <boolExpr> := <boolValue> | <boolValue> (==|<=|<|>|>=|!=) <boolValue>
 		 */
 		void Select::Parse(Lexer& lex)
 		{
@@ -58,15 +100,18 @@ namespace StormSQL
 			t = lex.NextToken(TokenType::Identifier);
 			SetFrom(t.strData);
 
-			/*t = lex.NextToken();
+			if (lex.endOfStream())
+				return;
+
+			t = lex.NextToken();
 			if (t.type == TokenType::Keyword && t.strData == "where")
 			{
-				
+				SetWhere(ExpressionPredicate(lex, IOperation::GetStandardOperations()));
 			}
 			else
 			{
 				lex.PutBackToken(t);
-			}*/
+			}
 		}
 
 		void Select::ReadColumns(Lexer& lex)

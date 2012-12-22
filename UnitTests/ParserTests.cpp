@@ -115,7 +115,7 @@ namespace UnitTests
 
 			hash_map<string, OperationInfo> ops;
 			ops["+"] = OperationInfo(Plus(), 2, 2, true, false);
-			ops["="] = OperationInfo(Equals(), 1, 2, true, false);
+			ops["="] = OperationInfo(Equals(), 1, 2, false, false);
 			ops["AND"] = OperationInfo(And(), 0, 2, true, false);
 
 			Lexer lex(stream);

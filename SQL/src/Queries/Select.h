@@ -15,19 +15,28 @@ namespace StormSQL
 		class Select
 			: public Query
 		{
+		private:
+			void del();
+			void copy(const Select&);
+
 		protected:
 			Database* db;
 			string tableName;
 			hash_map<string, string> columns;
+			ITableDataPredicate* predicate;
 
 			void ReadColumns(Lexer&);
-			
+
 		public:
 			Select(Database*);
+			Select(const Select&);
 			~Select();
+
+			Select& operator=(const Select&);
 
 			void AddColumn(string, string);
 			void SetFrom(string);
+			void SetWhere(const ITableDataPredicate&);
 
 			string GetType() const;
 			void Parse(Lexer&);

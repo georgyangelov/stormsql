@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <tuple>
+#include <hash_map>
 #include "Value.h"
 #include "../../Exceptions.h"
 
@@ -20,6 +21,16 @@ namespace StormSQL
 			class IOperation
 			{
 			public:
+				static hash_map<string, OperationInfo> GetStandardOperations()
+				{
+					hash_map<string, OperationInfo> ops;
+					ops["AND"] = OperationInfo(And(), 1, 2, true, false);
+					ops["="] = OperationInfo(Equals(), 0, 2, true, false);
+					ops["+"] = OperationInfo(Equals(), 4, 2, true, false);
+
+					return ops;
+				}
+
 				virtual Value operator () (const vector<Value>&) const = 0;
 				virtual IOperation* Clone() const = 0;
 			};
