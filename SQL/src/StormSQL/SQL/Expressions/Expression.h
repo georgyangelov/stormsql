@@ -25,6 +25,7 @@ namespace StormSQL
 				virtual ~Expression() { }
 
 				virtual Value Compute(const hash_map<string, Value>&) const = 0;
+				virtual Field GetSuitableField(const string& name, const hash_map<string, Field>&) const = 0;
 				virtual Expression* Clone() const = 0;
 			};
 
@@ -56,6 +57,7 @@ namespace StormSQL
 				ConstExpression(Value);
 
 				Value Compute(const hash_map<string, Value>&) const;
+				Field GetSuitableField(const string& name, const hash_map<string, Field>&) const;
 				Expression* Clone() const;
 			};
 
@@ -69,6 +71,7 @@ namespace StormSQL
 				VarExpression(string);
 
 				Value Compute(const hash_map<string, Value>&) const;
+				Field GetSuitableField(const string& name, const hash_map<string, Field>&) const;
 				Expression* Clone() const;
 			};
 
@@ -90,6 +93,7 @@ namespace StormSQL
 				CompExpression& operator = (const CompExpression&);
 
 				Value Compute(const hash_map<string, Value>&) const;
+				Field GetSuitableField(const string& name, const hash_map<string, Field>&) const;
 				Expression* Clone() const;
 			};
 

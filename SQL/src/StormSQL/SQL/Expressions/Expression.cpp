@@ -2,6 +2,7 @@
 #include <stack>
 
 using namespace std;
+using namespace StormSQL;
 using namespace StormSQL::SQL::Expressions;
 
 ExpressionParser::ExpressionParser(Lexer& _lex, const hash_map<string, OperationInfo>& _ops)
@@ -417,6 +418,11 @@ ConstExpression::ConstExpression(Value _val)
 {
 }
 
+Field ConstExpression::GetSuitableField(const string& name, const hash_map<string, Field>& v) const
+{
+	return val.GetSuitableField(name);
+}
+
 Value ConstExpression::Compute(const hash_map<string, Value>& vars) const
 {
 	return val;
@@ -438,6 +444,14 @@ Value VarExpression::Compute(const hash_map<string, Value>& vars) const
 		throw UnknownIdentifierException(name);
 
 	return vars.find(name)->second;
+}
+
+Field VarExpression::GetSuitableField(const string& name, const hash_map<string, Field>& v) const
+{
+	if (v.find(name) == v.end())
+		throw UnknownIdentifierException(name);
+
+	return v.find(name)->second;
 }
 
 Expression* VarExpression::Clone() const
@@ -506,6 +520,18 @@ Value CompExpression::Compute(const hash_map<string, Value>& vars) const
 	}
 
 	return (*operation)(values);
+}
+
+Field CompExpression::GetSuitableField(const string& name, const hash_map<string, Field>& v) const
+{
+	vector<Field> fields;
+
+	for (int i = 0; i < expressions.size(); i++)
+	{
+		fields.push_back(expressions[i]->GetSuitableField(name, v));
+	}
+
+	return operation->GetSuitableField(name, fields);
 }
 
 Expression* CompExpression::Clone() const

@@ -161,6 +161,16 @@ namespace StormSQL
 				{
 					return !(*this < v2);
 				}
+
+				Field GetSuitableField(std::string name) const
+				{
+					if (type == Type::integer)
+						return Field(name.c_str(), Field::FieldType::int32, 0);
+					else if (type == Type::string)
+						return Field(name.c_str(), Field::FieldType::fixedchar, name.length() + 1);
+					else
+						throw runtime_error("Unknown Value type");
+				}
 			};
 		}
 	}

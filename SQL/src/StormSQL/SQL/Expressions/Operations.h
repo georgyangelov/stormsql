@@ -46,6 +46,7 @@ namespace StormSQL
 				static hash_map<string, OperationInfo> GetStandardOperations();
 
 				virtual Value operator () (const vector<Value>&) const = 0;
+				virtual Field GetSuitableField(const string& name, const vector<Field>&) const = 0;
 				virtual IOperation* Clone() const = 0;
 			};
 
@@ -77,6 +78,11 @@ namespace StormSQL
 					return (bool)v1 && (bool)v2;
 				}
 
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					return Field(name.c_str(), Field::FieldType::byte, 0);
+				}
+
 				IOperation* Clone() const
 				{
 					return new And();
@@ -95,6 +101,11 @@ namespace StormSQL
 					return (bool)v1 || (bool)v2;
 				}
 
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					return Field(name.c_str(), Field::FieldType::byte, 0);
+				}
+
 				IOperation* Clone() const
 				{
 					return new Or();
@@ -111,6 +122,11 @@ namespace StormSQL
 
 					Value v1 = v[0];
 					return !(bool)v1;
+				}
+
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					return Field(name.c_str(), Field::FieldType::byte, 0);
 				}
 
 				IOperation* Clone() const
@@ -132,6 +148,11 @@ namespace StormSQL
 					return v1 == v2;
 				}
 
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					return Field(name.c_str(), Field::FieldType::byte, 0);
+				}
+
 				IOperation* Clone() const
 				{
 					return new Equals();
@@ -149,6 +170,11 @@ namespace StormSQL
 					Value v1 = v[0], v2 = v[1];
 
 					return v1 < v2;
+				}
+
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					return Field(name.c_str(), Field::FieldType::byte, 0);
 				}
 
 				IOperation* Clone() const
@@ -170,6 +196,11 @@ namespace StormSQL
 					return v1 <= v2;
 				}
 
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					return Field(name.c_str(), Field::FieldType::byte, 0);
+				}
+
 				IOperation* Clone() const
 				{
 					return new LowerThanEqual();
@@ -187,6 +218,11 @@ namespace StormSQL
 					Value v1 = v[0], v2 = v[1];
 
 					return v1 > v2;
+				}
+
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					return Field(name.c_str(), Field::FieldType::byte, 0);
 				}
 
 				IOperation* Clone() const
@@ -208,6 +244,11 @@ namespace StormSQL
 					return v1 >= v2;
 				}
 
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					return Field(name.c_str(), Field::FieldType::byte, 0);
+				}
+
 				IOperation* Clone() const
 				{
 					return new GreaterThanEqual();
@@ -227,6 +268,11 @@ namespace StormSQL
 					return v1 != v2;
 				}
 
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					return Field(name.c_str(), Field::FieldType::byte, 0);
+				}
+
 				IOperation* Clone() const
 				{
 					return new NotEqual();
@@ -244,10 +290,12 @@ namespace StormSQL
 					
 					Value v1 = v[0], v2 = v[1];
 					
-					if (v1.type == Value::Type::string)
-						return (string)v1 + (string)v2;
-					else
-						return (int)v1 + (int)v2;
+					return (int)v1 + (int)v2;
+				}
+
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					return Field(name.c_str(), Field::FieldType::int32, 0);
 				}
 
 				IOperation* Clone() const
@@ -269,6 +317,11 @@ namespace StormSQL
 					return (int)v1 - (int)v2;
 				}
 
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					return Field(name.c_str(), Field::FieldType::int32, 0);
+				}
+
 				IOperation* Clone() const
 				{
 					return new Minus();
@@ -288,6 +341,11 @@ namespace StormSQL
 					return (int)v1 * (int)v2;
 				}
 
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					return Field(name.c_str(), Field::FieldType::int32, 0);
+				}
+
 				IOperation* Clone() const
 				{
 					return new Multiply();
@@ -305,6 +363,11 @@ namespace StormSQL
 					Value v1 = v[0], v2 = v[1];
 					
 					return (int)v1 / (int)v2;
+				}
+
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					return Field(name.c_str(), Field::FieldType::int32, 0);
 				}
 
 				IOperation* Clone() const
@@ -334,6 +397,11 @@ namespace StormSQL
 					return tmp;
 				}
 
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					return Field(name.c_str(), Field::FieldType::int32, 0);
+				}
+
 				IOperation* Clone() const
 				{
 					return new ToInt();
@@ -359,6 +427,14 @@ namespace StormSQL
 					return str.str();
 				}
 
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					if (v.size() != 1)
+						throw InvalidNumberOfArguments("toStr", "1");
+
+					return Field(name.c_str(), Field::FieldType::fixedchar, v[0].size);
+				}
+
 				IOperation* Clone() const
 				{
 					return new ToStr();
@@ -376,6 +452,11 @@ namespace StormSQL
 					Value v1 = v[0];
 
 					return (bool)v1;
+				}
+
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					return Field(name.c_str(), Field::FieldType::byte, 0);
 				}
 
 				IOperation* Clone() const
@@ -398,6 +479,14 @@ namespace StormSQL
 					return (string)v1 + (string)v2;
 				}
 
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					if (v.size() != 2)
+						throw InvalidNumberOfArguments("strcat", "2");
+
+					return Field(name.c_str(), Field::FieldType::fixedchar, v[0].size + v[1].size);
+				}
+
 				IOperation* Clone() const
 				{
 					return new StrCat();
@@ -415,6 +504,11 @@ namespace StormSQL
 					Value v1 = v[0];
 
 					return ((string)v1).length();
+				}
+
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					return Field(name.c_str(), Field::FieldType::int32, 0);
 				}
 
 				IOperation* Clone() const
@@ -441,6 +535,14 @@ namespace StormSQL
 					{
 						return "";
 					}
+				}
+
+				Field GetSuitableField(const string& name, const vector<Field>& v) const
+				{
+					if (v.size() != 3)
+						throw InvalidNumberOfArguments("substr", "3");
+
+					return Field(name.c_str(), Field::FieldType::int32, v[0].size);
 				}
 
 				IOperation* Clone() const
