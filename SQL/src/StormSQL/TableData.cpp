@@ -147,13 +147,13 @@ namespace StormSQL
 
 		while (!TestCurrentRow())
 		{
+			rowIndex++;
+
 			if (rowIndex >= table->rows)
 			{
 				rowIndex = lastIndex;
 				return false;
 			}
-
-			rowIndex++;
 		}
 
 		return true;
@@ -161,16 +161,24 @@ namespace StormSQL
 
 	bool TableDataIterator::PrevRow()
 	{
-		rowIndexType i = rowIndex - 1;
-		while (!TestCurrentRow())
-		{
-			if (i < 0)
-				return false;
+		rowIndex--;
 
-			i--;
+		if (rowIndex < 0)
+		{
+			rowIndex = 0;
+			return false;
 		}
 
-		rowIndex = i;
+		while (!TestCurrentRow())
+		{
+			rowIndex--;
+			
+			if (rowIndex < 0)
+			{
+				rowIndex = 0;
+				return false;
+			}
+		}
 
 		return true;
 	}

@@ -97,7 +97,7 @@ namespace StormSQL
 					if (type == integer)
 						return intVal != 0;
 					else
-						return strVal.size() > 0;
+						return strVal.length() > 0;
 				}
 
 				operator int()
@@ -127,6 +127,39 @@ namespace StormSQL
 						return strVal == v2.strVal;
 					else
 						throw runtime_error("Unknown Value type");
+				}
+
+				bool operator < (const Value& v2)
+				{
+					if (type != v2.type)
+						return false;
+
+					if (type == Value::integer)
+						return intVal < v2.intVal;
+					else if (type == Value::string)
+						return strVal.compare(v2.strVal) == -1;
+					else
+						throw runtime_error("Unknown Value type");
+				}
+
+				bool operator != (const Value& v2)
+				{
+					return !(*this == v2);
+				}
+
+				bool operator <= (const Value& v2)
+				{
+					return *this < v2 || *this == v2;
+				}
+
+				bool operator > (const Value& v2)
+				{
+					return !(*this < v2 || *this == v2);
+				}
+
+				bool operator >= (const Value& v2)
+				{
+					return !(*this < v2);
 				}
 			};
 		}
