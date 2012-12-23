@@ -150,4 +150,7 @@
       <Filter>Header Files\StormSQL\SQL\Expressions</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
 </Project>

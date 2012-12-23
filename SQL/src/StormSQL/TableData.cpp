@@ -161,23 +161,21 @@ namespace StormSQL
 
 	bool TableDataIterator::PrevRow()
 	{
-		rowIndex--;
-
-		if (rowIndex < 0)
+		if (rowIndex == 0)
 		{
-			rowIndex = 0;
 			return false;
 		}
+		
+		rowIndex--;
 
 		while (!TestCurrentRow())
 		{
-			rowIndex--;
-			
-			if (rowIndex < 0)
+			if (rowIndex == 0)
 			{
-				rowIndex = 0;
 				return false;
 			}
+
+			rowIndex--;
 		}
 
 		return true;
