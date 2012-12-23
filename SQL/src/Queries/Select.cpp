@@ -20,6 +20,7 @@ void Select::copy(const Select& obj)
 	db = obj.db;
 	tableName = obj.tableName;
 	columns = obj.columns;
+	includeAllColumns = obj.includeAllColumns;
 
 	predicate = obj.predicate->Clone();
 }
@@ -27,6 +28,7 @@ void Select::copy(const Select& obj)
 Select::Select(Database* _db)
 	: db(_db)
 {
+	includeAllColumns = false;
 	predicate = new TruePredicate();
 }
 
@@ -175,7 +177,10 @@ Table* Select::Execute()
 	hash_map<string, Field> fields = source->GetFields();
 	for (hash_map<string, Expression*>::iterator colIter = columns.begin(); colIter != columns.end(); colIter++)
 	{
-		data->AddField(colIter->second->GetSuitableField(colIter->first, fields));
+		Field suitableField = colIter->second->GetSuitableField(colIter->first, fields);
+		data->AddField(suitableField);
+
+		fields[suitableField.name] = suitableField;
 	}
 
 	TableDataIterator iter = source->GetIterator(*predicate);
@@ -206,7 +211,10 @@ Table* Select::Execute()
 
 		for (hash_map<string, Expression*>::iterator colIter = columns.begin(); colIter != columns.end(); colIter++)
 		{
-			ins.Set(columnNum, colIter->second->Compute(fieldsData));
+			Value val = colIter->second->Compute(fieldsData);
+			ins.Set(columnNum, val);
+
+			fieldsData[colIter->first] = val;
 
 			columnNum++;
 		}
