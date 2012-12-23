@@ -18,6 +18,19 @@ namespace StormSQL
 				return strData == obj.strData;
 		}
 
+		Token::operator string() const
+		{
+			switch (type)
+			{
+			case TokenType::StringValue:
+				return (string)"'" + strData + "'";
+			case TokenType::Identifier:
+				return (string)"`" + strData + "`";
+			default:
+				return strData;
+			}
+		}
+
 		/* Private */
 		void Lexer::ignoreWhitespace()
 		{

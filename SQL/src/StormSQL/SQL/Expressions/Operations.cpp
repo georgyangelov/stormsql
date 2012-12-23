@@ -24,7 +24,7 @@ hash_map<string, OperationInfo> IOperation::GetStandardOperations()
 	ops["!="] = OperationInfo(NotEqual(), 3, 2, true, false);
 
 	/* Mathematical */
-	ops["+"] = OperationInfo(Plus(), 4, 2, true, false); // Can also concatenate strings
+	ops["+"] = OperationInfo(Plus(), 4, 2, true, false);
 	ops["-"] = OperationInfo(Minus(), 4, 2, true, false);
 	ops["*"] = OperationInfo(Multiply(), 5, 2, true, false);
 	ops["/"] = OperationInfo(Divide(), 5, 2, true, false);

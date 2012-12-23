@@ -33,6 +33,7 @@ namespace StormSQL
 			{
 			private:
 				Lexer* lex;
+				string lastExpression;
 				hash_map<string, OperationInfo> ops;
 
 				void ReverseVector(vector<Expression*>&) const;
@@ -45,6 +46,7 @@ namespace StormSQL
 				ExpressionParser(Lexer&, const hash_map<string, OperationInfo>&);
 
 				Expression* Parse();
+				string GetLastExpression() const;
 			};
 
 			class ConstExpression

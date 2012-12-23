@@ -22,7 +22,8 @@ namespace StormSQL
 		protected:
 			Database* db;
 			string tableName;
-			hash_map<string, string> columns;
+			bool includeAllColumns;
+			hash_map<string, Expression*> columns;
 			ITableDataPredicate* predicate;
 
 			void ReadColumns(Lexer&);
@@ -34,7 +35,6 @@ namespace StormSQL
 
 			Select& operator=(const Select&);
 
-			void AddColumn(string, string);
 			void SetFrom(string);
 			void SetWhere(const ITableDataPredicate&);
 

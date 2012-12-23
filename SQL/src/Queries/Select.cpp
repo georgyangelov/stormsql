@@ -56,11 +56,6 @@ string Select::GetType() const
 	return "select";
 }
 
-void Select::AddColumn(string name, string column)
-{
-	columns[name] = column;
-}
-
 void Select::SetFrom(string tbl)
 {
 	tableName = tbl;
@@ -112,6 +107,7 @@ void Select::Parse(Lexer& lex)
 void Select::ReadColumns(Lexer& lex)
 {
 	Token t;
+	includeAllColumns = false;
 
 	do
 	{
@@ -119,8 +115,24 @@ void Select::ReadColumns(Lexer& lex)
 		t = lex.NextToken(false);
 		string data = t.strData;
 
-		if (t.type != TokenType::Identifier && t.type != TokenType::Keyword && t.strData != "*")
-			throw InvalidTokenException(t);
+		if (t.type == TokenType::Operator && t.strData == "*")
+		{
+			includeAllColumns = true;
+			
+			// Should be separator if there are other columns
+			t = lex.NextToken(false);
+
+			continue;
+		}
+		else
+		{
+			lex.PutBackToken(t);
+		}
+
+		// Expression
+		// Read the expression
+		ExpressionParser p(lex, IOperation::GetStandardOperations());
+		Expression* expr = p.Parse();
 
 		t = lex.NextToken();
 
@@ -129,13 +141,13 @@ void Select::ReadColumns(Lexer& lex)
 			t = lex.NextToken(TokenType::Identifier, false);
 			string name = t.strData;
 
-			AddColumn(name, data);
+			columns[name] = expr;
 
 			t = lex.NextToken();
 		}
 		else
 		{
-			AddColumn(data, data);
+			columns[p.GetLastExpression()] = expr;
 		}
 
 	}
@@ -149,28 +161,21 @@ Table* Select::Execute()
 	Table* source = &db->GetTable(tableName);
 	Table* data = new Table();
 
-	for (hash_map<string, string>::iterator colIter = columns.begin(); colIter != columns.end(); colIter++)
+	if (includeAllColumns)
 	{
-		if (colIter->second == "*")
+		int numCols = source->GetNumFields();
+		for (int i = 0; i < numCols; i++)
 		{
-			int numCols = source->GetNumFields();
-			for (int i = 0; i < numCols; i++)
-			{
-				Field f = source->GetField(i);
+			Field f = source->GetField(i);
 
-				data->AddField(f);
-			}
+			data->AddField(f);
 		}
-		else
-		{
-			if (!source->HasField(colIter->second.c_str()))
-				throw UnknownTokenException(colIter->second);
+	}
 
-			int index = source->GetColumnIndex(colIter->second.c_str());
-			Field f = source->GetField(index);
-
-			data->AddField(Field(colIter->first.c_str(), f.type, f.size));
-		}
+	hash_map<string, Field> fields = source->GetFields();
+	for (hash_map<string, Expression*>::iterator colIter = columns.begin(); colIter != columns.end(); colIter++)
+	{
+		data->AddField(colIter->second->GetSuitableField(colIter->first, fields));
 	}
 
 	TableDataIterator iter = source->GetIterator(*predicate);
@@ -180,29 +185,30 @@ Table* Select::Execute()
 		Insert ins(data);
 		int columnNum = 0;
 
-		for (hash_map<string, string>::iterator colIter = columns.begin(); colIter != columns.end(); colIter++)
+		if (includeAllColumns)
 		{
-			if (colIter->second == "*")
+			int numCols = source->GetNumFields();
+			for (int i = 0; i < numCols; i++)
 			{
-				int numCols = source->GetNumFields();
-				for (int i = 0; i < numCols; i++)
-				{
-					ins.Set(columnNum, row[i].GetType(), row[i].GetPtr());
+				ins.Set(columnNum, source->GetFieldType(i), row[i].GetPtr());
 							
-					columnNum++;
-				}
-			}
-			else
-			{
-				if (!source->HasField(colIter->second.c_str()))
-					throw UnknownTokenException(colIter->second);
-
-				int index = source->GetColumnIndex(colIter->second.c_str());
-						
-				ins.Set(columnNum, row[index].GetType(), row[index].GetPtr());
-
 				columnNum++;
 			}
+		}
+
+		hash_map<string, Value> fieldsData;
+		int numFields = source->GetNumFields();
+
+		for (int i = 0; i < numFields; i++)
+		{
+			fieldsData[source->GetField(i).name] = row[i];
+		}
+
+		for (hash_map<string, Expression*>::iterator colIter = columns.begin(); colIter != columns.end(); colIter++)
+		{
+			ins.Set(columnNum, colIter->second->Compute(fieldsData));
+
+			columnNum++;
 		}
 
 		ins.Execute();

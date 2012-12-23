@@ -78,14 +78,19 @@ queue<Token> ExpressionParser::GetRPN()
 	stack<Token> operationStack;
 	bool readWholeExpression = false;
 
+	lastExpression = "";
+
 	// Temp for lex->toLower
 	string fname;
+	// Temp for adding to lastExpression
+	string exprText = "";
 
 	while (!lex->endOfStream() && !readWholeExpression)
 	{
 		Token op;
 		Token t = lex->NextToken(false);
-		
+		exprText = t;
+
 		switch (t.type)
 		{
 		case TokenType::IntValue:
@@ -99,6 +104,9 @@ queue<Token> ExpressionParser::GetRPN()
 
 				// Return the token to the lexer so that others can read it next
 				lex->PutBackToken(t);
+
+				// Nothing should be added to lastExpression
+				exprText = "";
 			}
 			else
 			{
@@ -147,6 +155,9 @@ queue<Token> ExpressionParser::GetRPN()
 
 					// Return the token to the lexer so that others can read it next
 					lex->PutBackToken(t);
+
+					// Nothing should be added to lastExpression
+					exprText = "";
 				}
 				else
 				{
@@ -167,6 +178,9 @@ queue<Token> ExpressionParser::GetRPN()
 
 				// Return the token to the lexer so that others can read it next
 				lex->PutBackToken(t);
+
+				// Nothing should be added to lastExpression
+				exprText = "";
 			}
 			else
 			{
@@ -218,6 +232,9 @@ queue<Token> ExpressionParser::GetRPN()
 
 				// Return the token to the lexer so that others can read it next
 				lex->PutBackToken(t);
+
+				// Nothing should be added to lastExpression
+				exprText = "";
 			}
 			else
 			{
@@ -262,6 +279,10 @@ queue<Token> ExpressionParser::GetRPN()
 		default:
 			throw InvalidTokenException(t);
 		}
+
+		// Add exprText to lastExpression
+		if (exprText.length() > 0)
+			lastExpression += " " + exprText;
 	}
 
 	while (!operationStack.empty())
@@ -366,6 +387,7 @@ Expression* ExpressionParser::Parse()
 		case TokenType::Identifier:
 			// Identifier
 			values.push(new VarExpression(t.strData));
+			break;
 		case TokenType::Keyword:
 			// Function (operator) or Identifier
 			if (ops.find(t.strData) != ops.end())
@@ -413,6 +435,11 @@ Expression* ExpressionParser::Parse()
 	return exp;
 }
 
+string ExpressionParser::GetLastExpression() const
+{
+	return lastExpression;
+}
+
 ConstExpression::ConstExpression(Value _val)
 	: val(_val)
 {
@@ -446,12 +473,13 @@ Value VarExpression::Compute(const hash_map<string, Value>& vars) const
 	return vars.find(name)->second;
 }
 
-Field VarExpression::GetSuitableField(const string& name, const hash_map<string, Field>& v) const
+Field VarExpression::GetSuitableField(const string& fieldName, const hash_map<string, Field>& v) const
 {
 	if (v.find(name) == v.end())
 		throw UnknownIdentifierException(name);
 
-	return v.find(name)->second;
+	Field f = v.find(name)->second;
+	return Field(fieldName.c_str(), f.type, f.size);
 }
 
 Expression* VarExpression::Clone() const

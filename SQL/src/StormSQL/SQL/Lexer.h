@@ -34,6 +34,7 @@ namespace StormSQL
 			long longIntData;
 
 			bool operator==(const Token&) const;
+			operator string() const;
 		};
 
 		class Lexer

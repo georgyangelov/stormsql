@@ -56,9 +56,16 @@ namespace StormSQL
 		return columns[index];
 	}
 
-	vector<Field> Table::GetFields() const
+	hash_map<string, Field> Table::GetFields() const
 	{
-		return columns;
+		hash_map<string, Field> ret;
+
+		for (int i = 0; i < columns.size(); i++)
+		{
+			ret[columns[i].name] = columns[i];
+		}
+
+		return ret;
 	}
 
 	int Table::GetColumnIndex(const char* name) const

@@ -542,7 +542,7 @@ namespace StormSQL
 					if (v.size() != 3)
 						throw InvalidNumberOfArguments("substr", "3");
 
-					return Field(name.c_str(), Field::FieldType::int32, v[0].size);
+					return Field(name.c_str(), Field::FieldType::fixedchar, v[0].size);
 				}
 
 				IOperation* Clone() const

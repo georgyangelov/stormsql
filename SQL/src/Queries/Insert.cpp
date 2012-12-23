@@ -49,6 +49,27 @@ namespace StormSQL
 			return res;
 		}
 
+		void Insert::Set(int column, Value value)
+		{
+			switch (table->columns[column].type)
+			{
+			case Field::FieldType::byte:
+				SetByte(column, (int)value);
+				break;
+			case Field::FieldType::int32:
+				SetInt(column, (int)value);
+				break;
+			case Field::FieldType::uint32:
+				SetUInt(column, (int)value);
+				break;
+			case Field::FieldType::fixedchar:
+				SetString(column, (string)value);
+				break;
+			default:
+				throw InvalidFieldType();
+			}
+		}
+
 		void Insert::Set(int column, Field::FieldType type, const byte* ptr)
 		{
 			if (table->columns[column].type != type)

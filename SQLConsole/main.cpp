@@ -83,19 +83,19 @@ ostream& operator << (ostream& out, Table tbl)
 		return out;
 	}
 
-	vector<Field> fields = tbl.GetFields();
+	int num = tbl.GetNumFields();
 
 	out << left;
-	out << setw(fields.size() * 13) << setfill('-') << '+' << setfill(' ');
+	out << setw(num * 13) << setfill('-') << '+' << setfill(' ');
 	out << '+' << endl;
 
-	for (int i = 0; i < fields.size(); i++)
+	for (int i = 0; i < num; i++)
 	{
-		out << "| " << setw(10) << fields[i].name << " ";
+		out << "| " << setw(10) << tbl.GetField(i).name << " ";
 	}
 
 	out << "|" << endl;
-	out << setw(fields.size() * 13) << setfill('-') << '+' << setfill(' ');
+	out << setw(num * 13) << setfill('-') << '+' << setfill(' ');
 	out << '+' << endl;
 
 	TableDataIterator iter = tbl.GetIterator();
@@ -103,12 +103,12 @@ ostream& operator << (ostream& out, Table tbl)
 	{
 		TableDataRow row = iter.GetFullDataRow();
 
-		for (int i = 0; i < fields.size(); i++)
+		for (int i = 0; i < num; i++)
 		{
 			out << "| ";
 			out << setw(10);
 
-			switch (fields[i].type)
+			switch (tbl.GetField(i).type)
 			{
 			case Field::FieldType::byte:
 				out << (int)row[i].GetChar() << " ";
@@ -127,7 +127,7 @@ ostream& operator << (ostream& out, Table tbl)
 
 		 out << "|" << endl;
 	}
-	out << setw(fields.size() * 13) << setfill('-') << '+' << setfill(' ');
+	out << setw(num * 13) << setfill('-') << '+' << setfill(' ');
 	out << '+' << endl;
 
 	return out;
