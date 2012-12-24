@@ -53,7 +53,7 @@ namespace UnitTests
 			ops["test"] = OperationInfo(And(), 0, 2, true, true);
 
 			Lexer lex(stream);
-			ExpressionParser p(lex, ops);
+			ExpressionParser p(&lex, ops);
 
 			string rpn = ExpressionParser::Implode( p.GetRPN() );
 			Assert::AreEqual("a 50 + 35 = `b` 'c' test true = and", rpn.c_str());
@@ -71,7 +71,7 @@ namespace UnitTests
 			ops["test"] = OperationInfo(And(), 0, 2, true, true);
 
 			Lexer lex(stream);
-			ExpressionParser p(lex, ops);
+			ExpressionParser p(&lex, ops);
 
 			string rpn = ExpressionParser::Implode( p.GetRPN() );
 			Assert::AreEqual("a 50 + 35 = `b` 'c' test true = and", rpn.c_str());
@@ -94,7 +94,7 @@ namespace UnitTests
 			ops["test"] = OperationInfo(And(), 0, 2, true, true);
 
 			Lexer lex(stream);
-			ExpressionParser p(lex, ops);
+			ExpressionParser p(&lex, ops);
 
 			string rpn = ExpressionParser::Implode( p.GetRPN() );
 			Assert::AreEqual("a 50 + 35 = `b` 'c' test true = and", rpn.c_str());
@@ -119,7 +119,7 @@ namespace UnitTests
 			ops["AND"] = OperationInfo(And(), 0, 2, true, false);
 
 			Lexer lex(stream);
-			ExpressionParser p(lex, ops);
+			ExpressionParser p(&lex, ops);
 
 			Expression* exp = p.Parse();
 			Assert::IsTrue(exp != NULL);

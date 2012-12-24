@@ -43,7 +43,7 @@ namespace StormSQL
 				queue<Token> GetRPN();
 				static string Implode(queue<Token>&);
 
-				ExpressionParser(Lexer&, const hash_map<string, OperationInfo>&);
+				ExpressionParser(Lexer*, const hash_map<string, OperationInfo>&);
 
 				Expression* Parse();
 				string GetLastExpression() const;

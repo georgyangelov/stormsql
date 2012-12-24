@@ -18,7 +18,7 @@ namespace StormSQL
 
 	ExpressionPredicate::ExpressionPredicate(Lexer& lex, const hash_map<string, OperationInfo>& ops)
 	{
-		ExpressionParser parser(lex, ops);
+		ExpressionParser parser(&lex, ops);
 		expression = parser.Parse();
 	}
 

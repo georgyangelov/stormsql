@@ -92,6 +92,7 @@
   <ItemGroup>
     <ClCompile Include="DatabaseTests.cpp" />
     <ClCompile Include="DynamicBufferTests.cpp" />
+    <ClCompile Include="OperationTests.cpp" />
     <ClCompile Include="LexerTests.cpp" />
     <ClCompile Include="ParserTests.cpp" />
     <ClCompile Include="QueryTests.cpp" />

@@ -133,7 +133,7 @@ void Select::ReadColumns(Lexer& lex)
 
 		// Expression
 		// Read the expression
-		ExpressionParser p(lex, IOperation::GetStandardOperations());
+		ExpressionParser p(&lex, IOperation::GetStandardOperations());
 		Expression* expr = p.Parse();
 
 		t = lex.NextToken();

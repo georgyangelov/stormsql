@@ -137,6 +137,7 @@ namespace UnitTests
 
 			Table* res = select->Execute();
 			Assert::IsNotNull(res);
+			Assert::AreEqual(db.GetTable("tests").GetNumRows(), res->GetNumRows());
 
 			TableDataIterator iter = res->GetIterator();
 			Assert::IsTrue(iter.NextRow());
@@ -172,6 +173,48 @@ namespace UnitTests
 			VerifyDataRow(row, -123, "Georgy Angelov", 1233344, -126);
 
 			Assert::IsFalse(iter.PrevRow());
+		}
+
+		TEST_METHOD(SelectWhere)
+		{
+			Database db = GetDatabase();
+			InsertTestRows(db);
+
+			stringstream query("SELECT * FROM tests WHERE `student` = 'Georgy Angelov'");
+			Parser p(query, &db);
+
+			Query* select = p.ParseQuery();
+			Assert::AreEqual("select", select->GetType().c_str());
+
+			Table* res = select->Execute();
+			Assert::IsNotNull(res);
+			Assert::AreEqual(1, res->GetNumRows());
+
+			TableDataIterator iter = res->GetIterator();
+			Assert::IsTrue(iter.NextRow());
+			TableDataRow row = iter.GetFullDataRow();
+			VerifyDataRow(row, -123, "Georgy Angelov", 1233344, -126);
+		}
+
+		TEST_METHOD(SelectWhere2)
+		{
+			Database db = GetDatabase();
+			InsertTestRows(db);
+
+			stringstream query("SELECT * FROM tests WHERE strlen(student) > 1 OR id OR fnum OR grade");
+			Parser p(query, &db);
+
+			Query* select = p.ParseQuery();
+			Assert::AreEqual("select", select->GetType().c_str());
+
+			Table* res = select->Execute();
+			Assert::IsNotNull(res);
+			Assert::AreEqual(db.GetTable("tests").GetNumRows(), res->GetNumRows());
+
+			TableDataIterator iter = res->GetIterator();
+			Assert::IsTrue(iter.NextRow());
+			TableDataRow row = iter.GetFullDataRow();
+			VerifyDataRow(row, -123, "Georgy Angelov", 1233344, -126);
 		}
 	};
 }

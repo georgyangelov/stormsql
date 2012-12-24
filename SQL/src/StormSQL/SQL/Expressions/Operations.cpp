@@ -14,6 +14,7 @@ hash_map<string, OperationInfo> IOperation::GetStandardOperations()
 	/* Logic */
 	ops["or"] = OperationInfo(Or(), 0, 2, true, false);
 	ops["and"] = OperationInfo(And(), 1, 2, true, false);
+	ops["!"] = OperationInfo(Not(), 6, 1, false, false);
 
 	/* Comparison */
 	ops["<"] = OperationInfo(LowerThan(), 3, 2, true, false);

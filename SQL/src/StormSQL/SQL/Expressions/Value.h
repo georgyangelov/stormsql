@@ -92,7 +92,7 @@ namespace StormSQL
 					return *this;
 				}
 
-				operator bool()
+				operator bool() const
 				{
 					if (type == integer)
 						return intVal != 0;
@@ -100,7 +100,7 @@ namespace StormSQL
 						return strVal.length() > 0;
 				}
 
-				operator int()
+				operator int() const
 				{
 					if (type != Value::integer)
 						throw InvalidType("int");
@@ -108,7 +108,7 @@ namespace StormSQL
 					return intVal;
 				}
 
-				operator std::string()
+				operator std::string() const
 				{
 					if (type != Value::string)
 						throw InvalidType("str");
@@ -116,7 +116,7 @@ namespace StormSQL
 					return strVal;
 				}
 
-				bool operator ==(const Value& v2)
+				bool operator ==(const Value& v2) const
 				{
 					if (type != v2.type)
 						return false;
@@ -129,7 +129,7 @@ namespace StormSQL
 						throw runtime_error("Unknown Value type");
 				}
 
-				bool operator < (const Value& v2)
+				bool operator < (const Value& v2) const
 				{
 					if (type != v2.type)
 						return false;
@@ -142,22 +142,22 @@ namespace StormSQL
 						throw runtime_error("Unknown Value type");
 				}
 
-				bool operator != (const Value& v2)
+				bool operator != (const Value& v2) const
 				{
 					return !(*this == v2);
 				}
 
-				bool operator <= (const Value& v2)
+				bool operator <= (const Value& v2) const
 				{
 					return *this < v2 || *this == v2;
 				}
 
-				bool operator > (const Value& v2)
+				bool operator > (const Value& v2) const
 				{
 					return !(*this < v2 || *this == v2);
 				}
 
-				bool operator >= (const Value& v2)
+				bool operator >= (const Value& v2) const
 				{
 					return !(*this < v2);
 				}

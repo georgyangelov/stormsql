@@ -5,8 +5,8 @@ using namespace std;
 using namespace StormSQL;
 using namespace StormSQL::SQL::Expressions;
 
-ExpressionParser::ExpressionParser(Lexer& _lex, const hash_map<string, OperationInfo>& _ops)
-	: lex(&_lex), ops(_ops)
+ExpressionParser::ExpressionParser(Lexer* _lex, const hash_map<string, OperationInfo>& _ops)
+	: lex(_lex), ops(_ops)
 {
 }
 

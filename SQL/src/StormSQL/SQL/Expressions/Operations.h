@@ -74,8 +74,7 @@ namespace StormSQL
 					if (v.size() != 2)
 						throw InvalidNumberOfArguments("and", "2");
 
-					Value v1 = v[0], v2 = v[1];
-					return (bool)v1 && (bool)v2;
+					return (bool)v[0] && (bool)v[1];
 				}
 
 				Field GetSuitableField(const string& name, const vector<Field>& v) const
@@ -97,8 +96,7 @@ namespace StormSQL
 					if (v.size() != 2)
 						throw InvalidNumberOfArguments("or", "2");
 
-					Value v1 = v[0], v2 = v[1];
-					return (bool)v1 || (bool)v2;
+					return (bool)v[0] || (bool)v[1];
 				}
 
 				Field GetSuitableField(const string& name, const vector<Field>& v) const
@@ -120,8 +118,7 @@ namespace StormSQL
 					if (v.size() != 1)
 						throw InvalidNumberOfArguments("!", "1");
 
-					Value v1 = v[0];
-					return !(bool)v1;
+					return !(bool)v[0];
 				}
 
 				Field GetSuitableField(const string& name, const vector<Field>& v) const
@@ -144,8 +141,7 @@ namespace StormSQL
 					if (v.size() != 2)
 						throw InvalidNumberOfArguments("=", "2");
 
-					Value v1 = v[0], v2 = v[1];
-					return v1 == v2;
+					return v[0] == v[1];
 				}
 
 				Field GetSuitableField(const string& name, const vector<Field>& v) const
@@ -167,9 +163,7 @@ namespace StormSQL
 					if (v.size() != 2)
 						throw InvalidNumberOfArguments("<", "2");
 
-					Value v1 = v[0], v2 = v[1];
-
-					return v1 < v2;
+					return v[0] < v[1];
 				}
 
 				Field GetSuitableField(const string& name, const vector<Field>& v) const
@@ -191,9 +185,7 @@ namespace StormSQL
 					if (v.size() != 2)
 						throw InvalidNumberOfArguments("<=", "2");
 
-					Value v1 = v[0], v2 = v[1];
-
-					return v1 <= v2;
+					return v[0] <= v[1];
 				}
 
 				Field GetSuitableField(const string& name, const vector<Field>& v) const
@@ -215,9 +207,7 @@ namespace StormSQL
 					if (v.size() != 2)
 						throw InvalidNumberOfArguments(">", "2");
 
-					Value v1 = v[0], v2 = v[1];
-
-					return v1 > v2;
+					return v[0] > v[1];
 				}
 
 				Field GetSuitableField(const string& name, const vector<Field>& v) const
@@ -239,9 +229,7 @@ namespace StormSQL
 					if (v.size() != 2)
 						throw InvalidNumberOfArguments(">=", "2");
 
-					Value v1 = v[0], v2 = v[1];
-
-					return v1 >= v2;
+					return v[0] >= v[1];
 				}
 
 				Field GetSuitableField(const string& name, const vector<Field>& v) const
@@ -263,9 +251,7 @@ namespace StormSQL
 					if (v.size() != 2)
 						throw InvalidNumberOfArguments("!=", "2");
 
-					Value v1 = v[0], v2 = v[1];
-
-					return v1 != v2;
+					return v[0] != v[1];
 				}
 
 				Field GetSuitableField(const string& name, const vector<Field>& v) const
@@ -288,9 +274,7 @@ namespace StormSQL
 					if (v.size() != 2)
 						throw InvalidNumberOfArguments("+", "2");
 					
-					Value v1 = v[0], v2 = v[1];
-					
-					return (int)v1 + (int)v2;
+					return (int)v[0] + (int)v[1];
 				}
 
 				Field GetSuitableField(const string& name, const vector<Field>& v) const
@@ -312,9 +296,7 @@ namespace StormSQL
 					if (v.size() != 2)
 						throw InvalidNumberOfArguments("-", "2");
 					
-					Value v1 = v[0], v2 = v[1];
-					
-					return (int)v1 - (int)v2;
+					return (int)v[0] - (int)v[1];
 				}
 
 				Field GetSuitableField(const string& name, const vector<Field>& v) const
@@ -336,9 +318,7 @@ namespace StormSQL
 					if (v.size() != 2)
 						throw InvalidNumberOfArguments("*", "2");
 					
-					Value v1 = v[0], v2 = v[1];
-					
-					return (int)v1 * (int)v2;
+					return (int)v[0] * (int)v[1];
 				}
 
 				Field GetSuitableField(const string& name, const vector<Field>& v) const
@@ -360,9 +340,7 @@ namespace StormSQL
 					if (v.size() != 2)
 						throw InvalidNumberOfArguments("/", "2");
 					
-					Value v1 = v[0], v2 = v[1];
-					
-					return (int)v1 / (int)v2;
+					return (int)v[0] / (int)v[1];
 				}
 
 				Field GetSuitableField(const string& name, const vector<Field>& v) const
@@ -385,12 +363,10 @@ namespace StormSQL
 					if (v.size() != 1)
 						throw InvalidNumberOfArguments("toInt", "1");
 
-					Value v1 = v[0];
+					if (v[0].type == Value::integer)
+						return v[0];
 
-					if (v1.type == Value::integer)
-						return v1;
-
-					stringstream str((string)v1);
+					stringstream str((string)v[0]);
 					int tmp;
 					str >> tmp;
 
@@ -416,13 +392,11 @@ namespace StormSQL
 					if (v.size() != 1)
 						throw InvalidNumberOfArguments("toStr", "1");
 
-					Value v1 = v[0];
-
-					if (v1.type == Value::string)
-						return v1;
+					if (v[0].type == Value::string)
+						return v[0];
 
 					stringstream str;
-					str << (int)v1;
+					str << (int)v[0];
 
 					return str.str();
 				}
@@ -448,10 +422,8 @@ namespace StormSQL
 				{
 					if (v.size() != 1)
 						throw InvalidNumberOfArguments("toBool", "1");
-
-					Value v1 = v[0];
-
-					return (bool)v1;
+					
+					return (bool)v[0];
 				}
 
 				Field GetSuitableField(const string& name, const vector<Field>& v) const
@@ -474,9 +446,7 @@ namespace StormSQL
 					if (v.size() != 2)
 						throw InvalidNumberOfArguments("strcat", "2");
 
-					Value v1 = v[0], v2 = v[1];
-
-					return (string)v1 + (string)v2;
+					return (string)v[0] + (string)v[1];
 				}
 
 				Field GetSuitableField(const string& name, const vector<Field>& v) const
@@ -501,9 +471,7 @@ namespace StormSQL
 					if (v.size() != 1)
 						throw InvalidNumberOfArguments("strlen", "1");
 
-					Value v1 = v[0];
-
-					return ((string)v1).length();
+					return ((string)v[0]).length();
 				}
 
 				Field GetSuitableField(const string& name, const vector<Field>& v) const
@@ -525,11 +493,9 @@ namespace StormSQL
 					if (v.size() != 3)
 						throw InvalidNumberOfArguments("substr", "3");
 
-					Value v1 = v[0], v2 = v[1], v3 = v[2];
-
 					try
 					{
-						return ((string)v1).substr((int)v2, (int)v3);
+						return ((string)v[0]).substr((int)v[1], (int)v[2]);
 					}
 					catch (out_of_range&)
 					{
