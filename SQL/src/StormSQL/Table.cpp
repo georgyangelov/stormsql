@@ -104,6 +104,15 @@ namespace StormSQL
 		return HasField(name, tmp);
 	}
 
+	void Table::DeleteBufferIndex(rowIndexType index)
+	{
+		if (index >= GetNumRows())
+			throw out_of_range("The row index to delete is out of bounds of the table buffer");
+
+		data->Remove(index);
+		rows--;
+	}
+
 	void Table::AddField(const Field& field)
 	{
 		AddField(columns.size(), field);

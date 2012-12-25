@@ -54,6 +54,9 @@ namespace StormSQL
 		bool HasField(const char*) const;
 		bool HasField(const char*, int&) const;
 
+		// Data
+		void DeleteBufferIndex(rowIndexType);
+
 		// Alter
 		void AddField(const Field&);
 		void AddField(int, const Field&);

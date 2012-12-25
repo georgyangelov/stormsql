@@ -125,6 +125,11 @@ namespace StormSQL
 		return TableDataRow(table->data->GetElementPtr(rowIndex), table->columns);
 	}
 
+	rowIndexType TableDataIterator::GetRowIndex() const
+	{
+		return rowIndex;
+	}
+
 	// Move pointer
 	bool TableDataIterator::NextRow()
 	{

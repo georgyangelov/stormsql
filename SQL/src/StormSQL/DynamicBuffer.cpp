@@ -136,7 +136,6 @@ namespace StormSQL
 		in.read((char*)GetElementPtr(0), numElements * elementSize);
 	}
 
-	//TODO: Store without removed indices
 	void DynamicBuffer::Store(ostream& out, int numElements)
 	{
 		int numLeft = numElements;

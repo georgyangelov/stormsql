@@ -71,6 +71,7 @@ namespace StormSQL
 
 		// Get data
 		TableDataRow GetFullDataRow() const;
+		rowIndexType GetRowIndex() const;
 
 		// Move pointer
 		bool NextRow();
