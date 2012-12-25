@@ -3,18 +3,20 @@
 #include <iomanip>
 #include <sstream>
 #include <hash_map>
-#include "boost/filesystem.hpp"
+//#include "boost/filesystem.hpp"
+#include <fstream>
 #include "StormSQL/Database.h"
 #include "StormSQL/SQL/Parser.h"
 
 using namespace std;
 using namespace StormSQL;
 using namespace StormSQL::SQL;
-using namespace boost::filesystem;
+//using namespace boost::filesystem;
 
-hash_map<string, Database*> dbs;
+//hash_map<string, Database*> dbs;
+Database db;
 
-void loadDBs()
+/*void loadDBs()
 {
 	dbs.clear();
 
@@ -52,6 +54,12 @@ void loadDBs()
 
 		cout << endl;
 	}
+}*/
+
+void loadTestDatabase()
+{
+	ifstream in("data/test.stormdb");
+	db.Load(in);
 }
 
 void ignoreWhitespace()
@@ -66,12 +74,16 @@ void ignoreWhitespace()
 
 void saveDatabases()
 {
-	for (hash_map<string, Database*>::iterator iter = dbs.begin(); iter != dbs.end(); iter++)
+	/*for (hash_map<string, Database*>::iterator iter = dbs.begin(); iter != dbs.end(); iter++)
 	{
 		ofstream out("data/" + iter->first + ".stormdb");
 		iter->second->Store(out);
 		out.close();
-	}
+	}*/
+
+	ofstream out("data/test.stormdb");
+	db.Store(out);
+	out.close();
 }
 
 int getMaxW(const Field& f)
@@ -188,17 +200,10 @@ ostream& operator << (ostream& out, Table tbl)
 
 int main()
 {
-	cout << "StormSQL v.0.1 ALPHA" << endl;
+	cout << "StormSQL v.0.2" << endl;
+	loadTestDatabase();
 
-	cout << "Loading database..." << endl;
-	loadDBs();
-
-	if (dbs.size() == 0)
-	{
-		// Create test database
-		Database* db = new Database();
-		dbs["test"] = db;
-	}
+	cout << "Loaded test database" << endl;
 
 	char str[1000];
 	while (true)
@@ -225,7 +230,7 @@ int main()
 			{
 				stringstream strIn(str);
 
-				Parser p(strIn, dbs["test"]);
+				Parser p(strIn, &db);
 				Query* query = p.ParseQuery();
 
 				Table* res = query->Execute();
