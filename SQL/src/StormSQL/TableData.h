@@ -15,15 +15,26 @@ namespace StormSQL
 	class Table;
 	class ITableDataPredicate;
 
+	namespace SQL
+	{
+		namespace Expressions
+		{
+			struct Value;
+		}
+	}
+	
+	using namespace StormSQL::SQL::Expressions;
+
 	class FieldData
 	{
 	private:
-		const byte* ptr;
+		byte* ptr;
 		Field field;
 
 	public:
-		FieldData(const byte*, const Field&);
+		FieldData(byte*, const Field&);
 
+		/* Getters */
 		Field::FieldType GetType() const;
 
 		const byte* GetPtr() const;
@@ -32,6 +43,14 @@ namespace StormSQL
 		int GetInt32() const;
 		unsigned int GetUInt32() const;
 		string GetString() const;
+
+		/* Setters */
+		void Set(const Value& value);
+		void Set(Field::FieldType type, const byte* ptr);
+		void SetByte(byte value);
+		void SetInt(int value);
+		void SetUInt(unsigned int value);
+		void SetString(string value);
 	};
 
 	class TableDataRow

@@ -33,24 +33,22 @@ namespace StormSQL
 			stringstream create;
 			create << "CREATE TABLE `" << tableName << "` (\n";
 
-			hash_map<string, Field> columns = db->GetTable(tableName).GetFields();
-			int n = 0;
-			for (hash_map<string, Field>::iterator i = columns.begin(); i != columns.end(); i++)
+			int numFields = db->GetTable(tableName).GetNumFields();
+			for (int i = 0; i < numFields; i++)
 			{
-				create << i->second.name;
+				Field f = db->GetTable(tableName).GetField(i);
+				create << "`" << f.name << "`";
 				create << " ";
-				create << i->second.GetStringType();
+				create << f.GetStringType();
 				
-				if (i->second.type == Field::fixedchar)
+				if (f.type == Field::fixedchar)
 				{
 					create << "(";
-					create << i->second.size;
+					create << f.size;
 					create << ")";
 				}
 
-				n++;
-
-				if (n < columns.size())
+				if (i < numFields - 1)
 					create << ", \n";
 			}
 

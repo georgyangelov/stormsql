@@ -77,6 +77,7 @@
     <ClCompile Include="src\Queries\Select.cpp" />
     <ClCompile Include="src\Queries\ShowCreate.cpp" />
     <ClCompile Include="src\Queries\ShowTables.cpp" />
+    <ClCompile Include="src\Queries\Update.cpp" />
     <ClCompile Include="src\StormSQL\Database.cpp" />
     <ClCompile Include="src\StormSQL\DynamicBuffer.cpp" />
     <ClCompile Include="src\StormSQL\Field.cpp" />
@@ -97,6 +98,7 @@
     <ClInclude Include="src\Queries\Select.h" />
     <ClInclude Include="src\Queries\ShowCreate.h" />
     <ClInclude Include="src\Queries\ShowTables.h" />
+    <ClInclude Include="src\Queries\Update.h" />
     <ClInclude Include="src\StormSQL\Database.h" />
     <ClInclude Include="src\StormSQL\Defines.h" />
     <ClInclude Include="src\StormSQL\DynamicBuffer.h" />

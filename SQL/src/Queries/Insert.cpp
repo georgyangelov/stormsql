@@ -1,4 +1,5 @@
 #include "Insert.h"
+#include "../StormSQL/TableData.h"
 #include "../StormSQL/Exceptions.h"
 
 namespace StormSQL
@@ -36,105 +37,57 @@ namespace StormSQL
 			delete [] valuesSet;
 		}
 
-		byte* Insert::getPtr(int column) const
+		FieldData Insert::getColumn(int column) const
 		{
 			if (column >= table->columns.size())
 				throw ColumnIndexOutOfBounds();
 
-			byte* res = buffer;
+			byte* ptr = buffer;
 
 			for (int i = 0; i < column; i++)
-				res += table->columns[i].GetByteSize();
+				ptr += table->columns[i].GetByteSize();
 
-			return res;
+			return FieldData(ptr, table->columns[column]);
 		}
 
 		void Insert::Set(int column, Value value)
 		{
-			switch (table->columns[column].type)
-			{
-			case Field::FieldType::byte:
-				SetByte(column, (int)value);
-				break;
-			case Field::FieldType::int32:
-				SetInt(column, (int)value);
-				break;
-			case Field::FieldType::uint32:
-				SetUInt(column, (int)value);
-				break;
-			case Field::FieldType::fixedchar:
-				SetString(column, (string)value);
-				break;
-			default:
-				throw InvalidFieldType();
-			}
+			getColumn(column).Set(value);
+
+			valuesSet[column] = true;
 		}
 
 		void Insert::Set(int column, Field::FieldType type, const byte* ptr)
 		{
-			if (table->columns[column].type != type)
-				throw InvalidFieldType();
-
-			switch (type)
-			{
-			case Field::FieldType::byte:
-				*(byte*)getPtr(column) = *(byte*)ptr;
-				break;
-			case Field::FieldType::int32:
-				*(int*)getPtr(column) = *(int*)ptr;
-				break;
-			case Field::FieldType::uint32:
-				*(unsigned int*)getPtr(column) = *(unsigned int*)ptr;
-				break;
-			case Field::FieldType::fixedchar:
-				strcpy((char*)getPtr(column), (const char*)ptr);
-				break;
-			default:
-				throw InvalidFieldType();
-			}
+			getColumn(column).Set(type, ptr);
 
 			valuesSet[column] = true;
 		}
 		
 		void Insert::SetByte(int column, byte value)
 		{
-			if (table->columns[column].type != Field::byte)
-				throw InvalidFieldType();
-
-			*getPtr(column) = value;
+			getColumn(column).Set(value);
 
 			valuesSet[column] = true;
 		}
 
 		void Insert::SetInt(int column, int value)
 		{
-			if (table->columns[column].type != Field::int32)
-				throw InvalidFieldType();
-
-			*((int*)getPtr(column)) = value;
+			getColumn(column).Set(value);
 
 			valuesSet[column] = true;
 		}
 		
 		void Insert::SetUInt(int column, unsigned int value)
 		{
-			if (table->columns[column].type != Field::uint32)
-				throw InvalidFieldType();
-
-			*((unsigned int*)getPtr(column)) = value;
+			getColumn(column).Set(value);
 
 			valuesSet[column] = true;
 		}
 
 		void Insert::SetString(int column, string value)
 		{
-			if (table->columns[column].type != Field::fixedchar)
-				throw InvalidFieldType();
-
-			if (value.size() >= table->columns[column].size)
-				throw FieldDataTooLarge();
-
-			strcpy((char*)getPtr(column), value.c_str());
+			getColumn(column).Set(value);
 
 			valuesSet[column] = true;
 		}

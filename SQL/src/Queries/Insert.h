@@ -18,7 +18,7 @@ namespace StormSQL
 			bool* valuesSet;
 			bool inserted;
 
-			byte* getPtr(int column) const;
+			FieldData getColumn(int column) const;
 
 		public:
 			Insert(Table* const);

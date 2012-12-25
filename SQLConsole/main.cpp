@@ -74,6 +74,22 @@ void saveDatabases()
 	}
 }
 
+int getMaxW(const Field& f)
+{
+	switch (f.type)
+	{
+	case Field::FieldType::byte:
+		return max(4, (int)strlen(f.name));
+	case Field::FieldType::int32:
+	case Field::FieldType::uint32:
+		return max(11, (int)strlen(f.name));
+	case Field::FieldType::fixedchar:
+		return max((int)f.size, (int)strlen(f.name));
+	default:
+		return max(10, (int)strlen(f.name));
+	}
+}
+
 ostream& operator << (ostream& out, Table tbl)
 {
 	if (tbl.GetNumRows() == 0)
@@ -82,20 +98,57 @@ ostream& operator << (ostream& out, Table tbl)
 
 		return out;
 	}
+	else if (tbl.GetNumRows() == 1 && tbl.GetNumFields() == 1)
+	{
+		out << "-- Only one field in result (" << tbl.GetField(0).name << ") --" << endl;
+		
+		TableDataIterator iter = tbl.GetIterator();
+		iter.NextRow();
+		TableDataRow row = iter.GetFullDataRow();
+		FieldData data = row[0];
+
+		switch (tbl.GetField(0).type)
+		{
+		case Field::FieldType::byte:
+			out << (int)data.GetChar();
+			break;
+		case Field::FieldType::int32:
+			out << data.GetInt32();
+			break;
+		case Field::FieldType::uint32:
+			out << data.GetUInt32();
+			break;
+		case Field::FieldType::fixedchar:
+			out << data.GetString();
+			break;
+		}
+
+		return out;
+	}
 
 	int num = tbl.GetNumFields();
 
+	int tableWidth = 0;
+	vector<int> widths;
+
+	for (int i = 0; i < num; i++)
+	{
+		int s = getMaxW(tbl.GetField(i));
+		widths.push_back(s);
+		tableWidth += s;
+	}
+
 	out << left;
-	out << setw(num * 13) << setfill('-') << '+' << setfill(' ');
+	out << setw(tableWidth + num * 3) << setfill('-') << '+' << setfill(' ');
 	out << '+' << endl;
 
 	for (int i = 0; i < num; i++)
 	{
-		out << "| " << setw(10) << tbl.GetField(i).name << " ";
+		out << "| " << setw(widths[i]) << tbl.GetField(i).name << " ";
 	}
 
 	out << "|" << endl;
-	out << setw(num * 13) << setfill('-') << '+' << setfill(' ');
+	out << setw(tableWidth + num * 3) << setfill('-') << '+' << setfill(' ');
 	out << '+' << endl;
 
 	TableDataIterator iter = tbl.GetIterator();
@@ -106,7 +159,7 @@ ostream& operator << (ostream& out, Table tbl)
 		for (int i = 0; i < num; i++)
 		{
 			out << "| ";
-			out << setw(10);
+			out << setw(widths[i]);
 
 			switch (tbl.GetField(i).type)
 			{
@@ -127,7 +180,7 @@ ostream& operator << (ostream& out, Table tbl)
 
 		 out << "|" << endl;
 	}
-	out << setw(num * 13) << setfill('-') << '+' << setfill(' ');
+	out << setw(tableWidth + num * 3) << setfill('-') << '+' << setfill(' ');
 	out << '+' << endl;
 
 	return out;

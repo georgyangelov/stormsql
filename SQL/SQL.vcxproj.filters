@@ -90,6 +90,9 @@
     <ClCompile Include="src\Queries\Delete.cpp">
       <Filter>Source Files\StormSQL\Queries</Filter>
     </ClCompile>
+    <ClCompile Include="src\Queries\Update.cpp">
+      <Filter>Source Files\StormSQL\Queries</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\StormSQL\Field.h">
@@ -153,6 +156,9 @@
       <Filter>Header Files\StormSQL\SQL\Expressions</Filter>
     </ClInclude>
     <ClInclude Include="src\Queries\Delete.h">
+      <Filter>Header Files\StormSQL\Queries</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Queries\Update.h">
       <Filter>Header Files\StormSQL\Queries</Filter>
     </ClInclude>
   </ItemGroup>

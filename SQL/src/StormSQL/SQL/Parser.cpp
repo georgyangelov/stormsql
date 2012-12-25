@@ -6,6 +6,7 @@
 #include "../../Queries/Insert.h"
 #include "../../Queries/Select.h"
 #include "../../Queries/Delete.h"
+#include "../../Queries/Update.h"
 
 namespace StormSQL
 {
@@ -66,6 +67,10 @@ namespace StormSQL
 			else if (t.strData == "delete")
 			{
 				q = new Delete(db);
+			}
+			else if (t.strData == "update")
+			{
+				q = new Update(db);
 			}
 
 			if (q == NULL)

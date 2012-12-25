@@ -276,5 +276,38 @@ namespace UnitTests
 
 			delete del;
 		}
+
+		TEST_METHOD(Update)
+		{
+			Database db = GetDatabase();
+			InsertTestRows(db);
+
+			stringstream query("UPDATE tests SET student = 'Go6oooo', fnum = fnum + 1 WHERE student = 'Pe6ooooooo'");
+			Parser p(query, &db);
+
+			Query* update = p.ParseQuery();
+			Assert::AreEqual("update", update->GetType().c_str());
+
+			update->Execute();
+
+			TableDataIterator iter = db.GetTable("tests").GetIterator();
+			Assert::IsTrue(iter.NextRow());
+			TableDataRow row = iter.GetFullDataRow();
+			VerifyDataRow(row, -123, "Georgy Angelov", 1233344, -126);
+
+			Assert::IsTrue(iter.NextRow());
+			row = iter.GetFullDataRow();
+			VerifyDataRow(row, 333123, "Sa6o", 0, 128);
+			
+			Assert::IsTrue(iter.NextRow());
+			row = iter.GetFullDataRow();
+			VerifyDataRow(row, 0, "Go6oooo", 11345, 0);
+			
+			Assert::IsTrue(iter.NextRow());
+			row = iter.GetFullDataRow();
+			VerifyDataRow(row, 23, "Elvisaaa", 34234, 1);
+
+			delete update;
+		}
 	};
 }

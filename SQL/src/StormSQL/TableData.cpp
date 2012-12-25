@@ -5,7 +5,7 @@
 namespace StormSQL
 {
 	/* FieldData */
-	FieldData::FieldData(const byte* _ptr, const Field& _field)
+	FieldData::FieldData(byte* _ptr, const Field& _field)
 		: ptr(_ptr), field(_field)
 	{
 	}
@@ -50,6 +50,86 @@ namespace StormSQL
 			throw InvalidFieldType();
 
 		return (const char*)ptr;
+	}
+
+	void FieldData::Set(const Value& value)
+	{
+		switch (field.type)
+		{
+		case Field::FieldType::byte:
+			SetByte((int)value);
+			break;
+		case Field::FieldType::int32:
+			SetInt((int)value);
+			break;
+		case Field::FieldType::uint32:
+			SetUInt((int)value);
+			break;
+		case Field::FieldType::fixedchar:
+			SetString((string)value);
+			break;
+		default:
+			throw InvalidFieldType();
+		}
+	}
+
+	void FieldData::Set(Field::FieldType type, const byte* ptr)
+	{
+		if (field.type != type)
+			throw InvalidFieldType();
+
+		switch (type)
+		{
+		case Field::FieldType::byte:
+			SetByte(*(char*)ptr);
+			break;
+		case Field::FieldType::int32:
+			SetInt(*(int*)ptr);
+			break;
+		case Field::FieldType::uint32:
+			SetUInt(*(unsigned int*)ptr);
+			break;
+		case Field::FieldType::fixedchar:
+			SetString((const char*)ptr);
+			break;
+		default:
+			throw InvalidFieldType();
+		}
+	}
+
+	void FieldData::SetByte(byte value)
+	{
+		if (field.type != Field::byte)
+			throw InvalidFieldType();
+
+		*ptr = value;
+	}
+
+	void FieldData::SetInt(int value)
+	{
+		if (field.type != Field::int32)
+			throw InvalidFieldType();
+
+		*((int*)ptr) = value;
+	}
+		
+	void FieldData::SetUInt(unsigned int value)
+	{
+		if (field.type != Field::uint32)
+			throw InvalidFieldType();
+
+		*((unsigned int*)ptr) = value;
+	}
+
+	void FieldData::SetString(string value)
+	{
+		if (field.type != Field::fixedchar)
+			throw InvalidFieldType();
+
+		if (value.size() >= field.size)
+			throw FieldDataTooLarge();
+
+		strcpy((char*)ptr, value.c_str());
 	}
 	/* END FieldData */
 

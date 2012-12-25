@@ -156,7 +156,7 @@ namespace StormSQL
 				return getToken(toString(c), TokenType::Separator);
 			else if (c == '`')
 			{
-				while ((c = in->get()) != '`')
+				while ((c = in->get()) != '`' && c != -1)
 					tmp += c;
 
 				return getToken(tmp, TokenType::Identifier);
@@ -166,7 +166,7 @@ namespace StormSQL
 				char endP = c;
 				char last = endP;
 
-				while ((c = in->get()) != endP && last != '\\')
+				while ((c = in->get()) != endP && c != -1 && last != '\\')
 				{
 					tmp += c;
 					last = c;
