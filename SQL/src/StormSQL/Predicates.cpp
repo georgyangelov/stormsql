@@ -48,14 +48,14 @@ namespace StormSQL
 		return *this;
 	}
 
-	bool ExpressionPredicate::operator () (const Table* table, TableDataRow& row) const
+	bool ExpressionPredicate::operator () (TableDataRow& row) const
 	{
 		hash_map<string, Value> fields;
-		int numFields = table->GetNumFields();
+		int numFields = row.GetNumFields();
 
 		for (int i = 0; i < numFields; i++)
 		{
-			fields[table->GetField(i).name] = row[i];
+			fields[row[i].GetField().name] = row[i];
 		}
 
 		return (bool)expression->Compute(fields);

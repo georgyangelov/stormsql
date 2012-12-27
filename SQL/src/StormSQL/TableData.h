@@ -36,6 +36,7 @@ namespace StormSQL
 
 		/* Getters */
 		Field::FieldType GetType() const;
+		const Field& GetField() const;
 
 		const byte* GetPtr() const;
 		
@@ -45,6 +46,7 @@ namespace StormSQL
 		string GetString() const;
 
 		/* Setters */
+		void Set(const FieldData& value);
 		void Set(const Value& value);
 		void Set(Field::FieldType type, const byte* ptr);
 		void SetByte(byte value);
@@ -57,10 +59,13 @@ namespace StormSQL
 	{
 	protected:
 		vector<FieldData> columns;
-
+		
+		void AppendRow(byte* _ptr, const vector<Field>& _columns);
 	public:
 		TableDataRow(byte* _ptr, const vector<Field>& _columns);
+		void Append(const TableDataRow&);
 
+		int GetNumFields() const;
 		FieldData& operator [](int);
 	};
 
@@ -93,8 +98,9 @@ namespace StormSQL
 		rowIndexType GetRowIndex() const;
 
 		// Move pointer
-		bool NextRow();
+		bool Seek(rowIndexType);
 
+		bool NextRow();
 		bool PrevRow();
 	};
 

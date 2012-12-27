@@ -24,9 +24,13 @@ namespace StormSQL
 			string tableName;
 			bool includeAllColumns;
 			hash_map<string, Expression*> columns;
+			vector< pair< Table*, Expression* > > joins;
 			ITableDataPredicate* predicate;
 
 			void ReadColumns(Lexer&);
+			void ReadJoins(Lexer&);
+			string GetHashableData(Table&, TableDataRow&, const vector< pair<string, string> >&, bool firstTable) const;
+			Table* Join(Table&, Table&, const Expression&, bool filterOnJoin = false) const;
 
 		public:
 			Select(Database*);

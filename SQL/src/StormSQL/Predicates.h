@@ -18,7 +18,7 @@ namespace StormSQL
 	public:
 		virtual ~ITableDataPredicate() { }
 
-		virtual bool operator () (const Table*, TableDataRow&) const = 0;
+		virtual bool operator () (TableDataRow&) const = 0;
 		virtual ITableDataPredicate* Clone() const = 0;
 	};
 
@@ -27,7 +27,7 @@ namespace StormSQL
 		: public ITableDataPredicate
 	{
 	public:
-		bool operator () (const Table* table, TableDataRow& row) const
+		bool operator () (TableDataRow& row) const
 		{
 			return true;
 		}
@@ -55,7 +55,7 @@ namespace StormSQL
 		~ExpressionPredicate();
 		ExpressionPredicate& operator = (const ExpressionPredicate&);
 
-		bool operator () (const Table* table, TableDataRow& row) const;
+		bool operator () (TableDataRow& row) const;
 
 		ITableDataPredicate* Clone() const;
 	};

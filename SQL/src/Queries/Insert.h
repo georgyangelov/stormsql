@@ -25,7 +25,8 @@ namespace StormSQL
 			Insert(const Insert&);
 			~Insert();
 			
-			void Set(int column, Value value);
+			void Set(int column, const FieldData& row);
+			void Set(int column, const Value& value);
 			void Set(int column, Field::FieldType type, const byte* ptr);
 			void SetByte(int column, byte value);
 			void SetInt(int column, int value);

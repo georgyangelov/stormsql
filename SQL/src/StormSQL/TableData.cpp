@@ -15,6 +15,11 @@ namespace StormSQL
 		return field.type;
 	}
 
+	const Field& FieldData::GetField() const
+	{
+		return field;
+	}
+
 	const byte* FieldData::GetPtr() const
 	{
 		return ptr;
@@ -50,6 +55,30 @@ namespace StormSQL
 			throw InvalidFieldType();
 
 		return (const char*)ptr;
+	}
+
+	void FieldData::Set(const FieldData& value)
+	{
+		if (field.type != value.field.type)
+			throw InvalidFieldType();
+
+		switch (field.type)
+		{
+		case Field::FieldType::byte:
+			SetByte(value.GetChar());
+			break;
+		case Field::FieldType::int32:
+			SetInt(value.GetInt32());
+			break;
+		case Field::FieldType::uint32:
+			SetUInt(value.GetUInt32());
+			break;
+		case Field::FieldType::fixedchar:
+			SetString(value.GetString());
+			break;
+		default:
+			throw InvalidFieldType();
+		}
 	}
 
 	void FieldData::Set(const Value& value)
@@ -136,6 +165,11 @@ namespace StormSQL
 	/* TableDataRow */
 	TableDataRow::TableDataRow(byte* _ptr, const vector<Field>& _columns)
 	{
+		AppendRow(_ptr, _columns);
+	}
+
+	void TableDataRow::AppendRow(byte* _ptr, const vector<Field>& _columns)
+	{
 		byte* res = _ptr;
 
 		for (int i = 0; i < _columns.size(); i++)
@@ -143,6 +177,19 @@ namespace StormSQL
 			columns.push_back(FieldData(res, _columns[i]));
 			res += _columns[i].GetByteSize();
 		}
+	}
+
+	void TableDataRow::Append(const TableDataRow& row)
+	{
+		for (int i = 0; i < row.columns.size(); i++)
+		{
+			columns.push_back(row.columns[i]);
+		}
+	}
+
+	int TableDataRow::GetNumFields() const
+	{
+		return columns.size();
 	}
 
 	FieldData& TableDataRow::operator [](int i)
@@ -156,7 +203,7 @@ namespace StormSQL
 	{
 		TableDataRow row = GetFullDataRow();
 
-		return (*predicate)(table, row);
+		return (*predicate)(row);
 	}
 
 	void TableDataIterator::del()
@@ -211,6 +258,16 @@ namespace StormSQL
 	}
 
 	// Move pointer
+	bool TableDataIterator::Seek(rowIndexType index)
+	{
+		if (index < 0 || index >= table->rows)
+			throw out_of_range("The index is out of bounds of the table");
+
+		rowIndex = index;
+
+		return TestCurrentRow();
+	}
+
 	bool TableDataIterator::NextRow()
 	{
 		rowIndexType lastIndex = rowIndex;

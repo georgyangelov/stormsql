@@ -50,7 +50,14 @@ namespace StormSQL
 			return FieldData(ptr, table->columns[column]);
 		}
 
-		void Insert::Set(int column, Value value)
+		void Insert::Set(int column, const FieldData& data)
+		{
+			getColumn(column).Set(data);
+
+			valuesSet[column] = true;
+		}
+
+		void Insert::Set(int column, const Value& value)
 		{
 			getColumn(column).Set(value);
 
