@@ -29,7 +29,7 @@ namespace StormSQL
 
 			void ReadColumns(Lexer&);
 			void ReadJoins(Lexer&);
-			string GetHashableData(Table&, TableDataRow&, const vector< pair<string, string> >&, bool firstTable) const;
+			//string GetHashableData(Table&, TableDataRow&, const vector< pair<string, string> >&, bool firstTable) const;
 			Table* Join(Table&, Table&, const Expression&, bool filterOnJoin = false) const;
 
 		public:

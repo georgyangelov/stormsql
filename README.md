@@ -34,7 +34,7 @@ the core of the SQL server
 * **SQLConsole** is a console interface to the **SQL** library.
 It loads/stores a single database in a file, reads queries
 from the console, executes them against the database and shows
-the results. 
+the results.
 **When entering queries in the console you NEED TO
 end each query with ';'** I made it this way so you can span a
 query multiple lines (as in the mysql console).
@@ -55,7 +55,7 @@ Some notes
 == select == sElECT)_.
 * The identifiers can be enclosed with
 backticks but it's not needed _(\`students` == students)_.
-* The identifiers (table names, column names etc.) and 
+* The identifiers (table names, column names etc.) and
 the data in char(*) columns are case sensitive.
 * In string literals the single and double quotes are interchangable as
 long as the opening and closing quotes are the same. The backward slash
@@ -63,7 +63,7 @@ escapes a quote of the same type. _('test' == "test")_
 
 Create
 ------
-For the next examples lets assume that we've created a table with: 
+For the next examples lets assume that we've created a table with:
 
 	CREATE TABLE students (fnum int, firstName char(25), lastName char(25), age byte, semester byte);
 
@@ -100,16 +100,16 @@ Select
 ------
 	SELECT * FROM students;
 	SELECT * FROM students WHERE firstName = 'Georgy' AND lastName = 'Angelov';
-	
+
 	-- Expressions in where clause
 	SELECT * FROM students WHERE strcat(strcat(firstName, " "), lastName) = 'Georgy Angelov';
-	
+
 	-- Expressions in result table (computed columns) in addition to the actual columns
 	SELECT *, strlen(firstName) + strlen(lastName) + 1 AS nameLength FROM students WHERE ...;
-	
+
 	-- Chained expressions
 	SELECT substr(firstName, 0, 1) AS firstLetterF, substr(lastName, 0, 1) as firstLetterL, strcat(firstLetterF, firstLetterL) AS initials FROM students;
-	
+
 	-- Comparison operators (<, <=, >, >=, =, !=) work on integers and strings
 	SELECT * FROM students WHERE lastName > 'Angelov';
 
@@ -127,7 +127,7 @@ Example:
 	-- Without the toStr an error will be shown because the return type of strlen is int
 	SELECT strcat(firstName, toStr(strlen(firstName)) AS nameWithLen FROM students ...;
 
-**JOINs are in the works!**
+**JOINs are also supported!**
 
 Insert
 ------
@@ -165,8 +165,8 @@ As with UPDATE - the WHERE clause here is also required.
 	DELETE FROM students WHERE true;
 
 
-Want more information? 
+Want more information?
 ======================
 Then email me - georgyangelov@gmail.com
 
-I will be writing more about how it works internally in a month.
+See the `StormSQL internals.pdf` file.
